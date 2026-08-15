@@ -1,0 +1,202 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f7f7f3;
+  --paper: #ffffff;
+  --text: #20242b;
+  --muted: #5f6866;
+  --line: #d9ddd5;
+  --accent: #0f766e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.55;
+}
+
+main {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 28px;
+}
+
+.hero,
+.section,
+.chapter,
+.card {
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.hero {
+  padding: clamp(28px, 5vw, 56px);
+}
+
+.section {
+  margin-top: 18px;
+  padding: clamp(22px, 3vw, 34px);
+}
+
+.note {
+  border-left: 4px solid var(--accent);
+  background: #edf7f4;
+  padding: 12px 14px;
+}
+
+.label {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  overflow-wrap: anywhere;
+}
+
+h1 {
+  max-width: 900px;
+  margin: 0;
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+
+h2 {
+  margin: 0 0 16px;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  line-height: 1.05;
+}
+
+h3 {
+  margin: 0;
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+h4 {
+  margin: 22px 0 8px;
+  font-size: 1rem;
+}
+
+.hero p {
+  max-width: 850px;
+  font-size: 1.08rem;
+}
+
+.grid {
+  display: grid;
+  gap: 12px;
+}
+
+.grid.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.card {
+  padding: 18px;
+}
+
+.card p {
+  margin: 8px 0 0;
+}
+
+.steps {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 24px;
+}
+
+.chapter-list {
+  display: grid;
+  gap: 16px;
+}
+
+.chapter {
+  padding: clamp(18px, 3vw, 28px);
+}
+
+.chapter-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+ul {
+  margin: 0;
+  padding-left: 22px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.tags li {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fafaf7;
+  padding: 6px 10px;
+  font-size: 0.92rem;
+}
+
+.practice-list {
+  display: grid;
+  gap: 8px;
+}
+
+.practice {
+  border: 1px solid var(--line);
+  background: #fbfbf8;
+  padding: 12px 14px;
+}
+
+.practice summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.practice p {
+  margin: 10px 0 0;
+}
+
+code {
+  display: block;
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  background: #f5f6f1;
+  padding: 10px;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  white-space: normal;
+}
+
+@media (max-width: 760px) {
+  main {
+    padding: 12px;
+  }
+
+  .grid.two,
+  .grid.three {
+    grid-template-columns: 1fr;
+  }
+}
