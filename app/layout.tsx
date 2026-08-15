@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Quantitative Finance Interview Study Site",
+  title: "Quant Interview Prep Lab",
   description:
     "A content-first study website based on the topic structure of A Practical Guide to Quantitative Finance Interviews.",
   icons: {
@@ -10,14 +10,14 @@ export const metadata: Metadata = {
     shortcut: "/favicon.svg",
   },
   openGraph: {
-    title: "Quantitative Finance Interview Study Site",
+    title: "Quant Interview Prep Lab",
     description:
       "Chapter map, study plan, practice prompts, and answer frameworks for quant finance interviews.",
     images: ["/og.png"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Quantitative Finance Interview Study Site",
+    title: "Quant Interview Prep Lab",
     description:
       "Chapter map, study plan, practice prompts, and answer frameworks for quant finance interviews.",
     images: ["/og.png"],
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#f7f7f3",
+  themeColor: "#000000",
 };
 
 export default function RootLayout({
@@ -37,6 +37,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body>{children}</body>
     </html>
   );

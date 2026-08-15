@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 type Chapter = {
   title: string;
   pages: string;
@@ -279,6 +283,112 @@ const chapters: Chapter[] = [
   },
 ];
 
+const flowerOfLifePoints: [number, number][] = (() => {
+  const dirs = Array.from({ length: 6 }, (_, k) => {
+    const angle = (Math.PI / 3) * k;
+    return [Math.cos(angle), Math.sin(angle)] as [number, number];
+  });
+  const points: [number, number][] = [[0, 0]];
+  dirs.forEach(([x, y]) => points.push([x, y]));
+  dirs.forEach(([x, y]) => points.push([x * 2, y * 2]));
+  dirs.forEach(([x, y], k) => {
+    const [nx, ny] = dirs[(k + 1) % 6];
+    points.push([x + nx, y + ny]);
+  });
+  return points;
+})();
+
+type BrainTeaser = {
+  category: string;
+  prompt: string;
+  approach: string;
+  resolution: string;
+};
+
+const brainTeasers: BrainTeaser[] = [
+  {
+    category: "Invariants",
+    prompt:
+      "Several ants walk at the same constant speed along a finite straight stick, each moving left or right. Whenever two ants collide, both instantly reverse direction. How would you find the time until the last ant falls off, without tracking any single ant's path?",
+    approach:
+      "A collision-and-reverse between two identical ants looks exactly like the two ants passing through each other and swapping labels.",
+    resolution:
+      "Replace every collision with a pass-through. The set of paths is now just ants walking straight to an edge, so the last ant off is whichever original ant had the longest straight-line distance to travel.",
+  },
+  {
+    category: "Symmetry",
+    prompt:
+      "You flip a fair coin repeatedly and stop the first time you see HH or the first time you see HT. Without computing either expectation directly, argue why the average wait for HH is longer than for HT.",
+    approach:
+      "Compare what happens right after the first heads. HT only needs one more flip to finish; HH can be knocked back to needing two heads again by an intervening tail.",
+    resolution:
+      "After the first H, HT succeeds on the very next flip regardless of outcome-ish reasoning, while HH restarts its clock whenever a T appears. That asymmetry in how failures are punished makes HH's expected wait longer, even though both patterns have equal probability on any single pair of flips.",
+  },
+  {
+    category: "Pigeonhole",
+    prompt:
+      "Show that at any gathering of 6 people, you can always find 3 people who all know each other or 3 people who are all mutual strangers.",
+    approach:
+      "Fix one person and sort the other 5 by whether they know that person or not.",
+    resolution:
+      "By pigeonhole, that person has at least 3 acquaintances or at least 3 strangers among the other 5. Look inside whichever group of 3 exists: if any two of them know each other, they plus the fixed person form a matching triangle; if none do, those 3 are mutual strangers. Either way the claim holds.",
+  },
+  {
+    category: "Modular Arithmetic",
+    prompt:
+      "A vending machine only accepts exact change using 3-cent and 5-cent tokens. Argue which amounts above a certain threshold can always be made exactly, using a modular argument instead of checking every case.",
+    approach:
+      "Once you can make k, k+1, ..., k+2 consecutive amounts, adding a 3-cent token reaches every later amount, so you only need to clear a short run of residues.",
+    resolution:
+      "Check amounts 8, 9, 10: 8 = 3+5, 9 = 3+3+3, 10 = 5+5. That is 3 consecutive integers, and adding threes shifts each one forward by 3 forever, covering every residue class mod 3 from that point on. So every amount from 8 cents upward is achievable; the only failures are below that run.",
+  },
+  {
+    category: "Induction",
+    prompt:
+      "A chessboard of size 2^n by 2^n has exactly one square removed, anywhere on the board. Explain how to tile the rest with L-shaped trominoes (3-square pieces).",
+    approach:
+      "Base case n = 1 is a 2x2 board minus one square, which is exactly one L-tromino. For the inductive step, quarter the board.",
+    resolution:
+      "Split the 2^n board into four 2^(n-1) quadrants. The missing square sits in one quadrant, which is tileable by the inductive hypothesis. Place one L-tromino at the center covering one cell from each of the other three quadrants; that turns each of them into a smaller board with one square missing, so all four quadrants are now tileable by induction.",
+  },
+  {
+    category: "Contradiction",
+    prompt:
+      "Give an interview-length proof that there is no largest prime number.",
+    approach:
+      "Assume a largest prime exists and build a number that forces a contradiction.",
+    resolution:
+      "Suppose p is the largest prime. Let N = (product of every prime up to p) + 1. N is not divisible by any prime up to p, since each leaves remainder 1. So N is either prime itself or divisible by a prime larger than p. Both cases produce a prime bigger than p, contradicting that p was the largest.",
+  },
+  {
+    category: "Case Reduction",
+    prompt:
+      "You have two ropes, each of which takes exactly 60 minutes to burn end to end, but each burns unevenly along its length. Using only matches, measure exactly 45 minutes.",
+    approach:
+      "Uneven burning ruins any argument based on length, so only argue about the two ends of a rope burning simultaneously in 30 minutes.",
+    resolution:
+      "Light rope A at both ends and rope B at one end simultaneously. Rope A finishes in 30 minutes regardless of how unevenly it burns. At that moment, light the other end of rope B too; the remaining unburned portion of B, now burning from both ends, finishes in half of whatever time was left, which is 15 more minutes. Total: 30 + 15 = 45.",
+  },
+  {
+    category: "Series Summation",
+    prompt:
+      "Without recalling the closed-form formula, explain why the sum of the first n odd numbers equals n^2.",
+    approach:
+      "Picture growing a square one L-shaped layer at a time.",
+    resolution:
+      "An n by n square of dots can be built by starting with a single dot, then wrapping it with an L-shaped border of 3 dots to get a 2x2 square, then a border of 5 dots to get 3x3, and so on. Each new border adds the next odd number, and after n borders the square is n by n, so the first n odd numbers sum to n^2.",
+  },
+  {
+    category: "Search Strategy",
+    prompt:
+      "You have 12 coins, identical in appearance. Exactly one is counterfeit and weighs differently from the rest, but you do not know if it is heavier or lighter. Using a balance scale only 3 times, describe how you would find it.",
+    approach:
+      "Each weighing has 3 outcomes, so 3 weighings can distinguish at most 3^3 = 27 possibilities. With 12 coins that could each be heavy or light, plus the all-genuine case, you are within budget only if every weighing is designed to be maximally informative.",
+    resolution:
+      "Split coins into three groups of 4 and weigh two groups against each other. A balanced result isolates the fault to the untouched group; an imbalance isolates it to one pan while also revealing a heavy/light hypothesis for each coin in it. Carry that partial information into the second weighing, mixing known-genuine coins in to keep every outcome informative, and the third weighing pins down the exact coin and direction.",
+  },
+];
+
 const weeklyPlan = [
   "Week 1: Read the general principles and do one spoken solution per day.",
   "Week 2: Work brain teasers by method: invariants, symmetry, contradiction, induction.",
@@ -299,12 +409,84 @@ const answerChecklist = [
   "Summarize the result in interview language.",
 ];
 
+const teaserCategories = Array.from(new Set(brainTeasers.map((teaser) => teaser.category)));
+
 export default function Home() {
+  const [hasStarted, setHasStarted] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<string>("All");
+  const [flippedTeasers, setFlippedTeasers] = useState<Set<number>>(new Set());
+  const [spotlightIndex, setSpotlightIndex] = useState(0);
+  const [spotlightRevealed, setSpotlightRevealed] = useState(false);
+
+  const startLab = () => setHasStarted(true);
+
+  const toggleTeaser = (index: number) => {
+    setFlippedTeasers((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
+      return next;
+    });
+  };
+
+  const shuffleSpotlight = () => {
+    setSpotlightRevealed(false);
+    setSpotlightIndex((prev) => {
+      if (brainTeasers.length <= 1) return prev;
+      let next = Math.floor(Math.random() * brainTeasers.length);
+      while (next === prev) {
+        next = Math.floor(Math.random() * brainTeasers.length);
+      }
+      return next;
+    });
+  };
+
+  const spotlightTeaser = brainTeasers[spotlightIndex];
+  const filteredTeasers = brainTeasers
+    .map((teaser, index) => ({ teaser, index }))
+    .filter(({ teaser }) => activeCategory === "All" || teaser.category === activeCategory);
+
   return (
-    <main>
+    <>
+      {!hasStarted && (
+        <div
+          className="intro-screen"
+          role="button"
+          tabIndex={0}
+          aria-label="Enter Quant Interview Prep Lab"
+          onClick={startLab}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              startLab();
+            }
+          }}
+        >
+          <div className="intro-content">
+            <h1>Quant Interview Prep Lab</h1>
+            <div className="badge-scene" aria-hidden="true">
+              <div className="flower-of-life-3d">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                  <circle className="fol-bound" cx={50} cy={50} r={49} />
+                  {flowerOfLifePoints.map(([x, y], index) => (
+                    <circle key={index} cx={50 + x * 16} cy={50 + y * 16} r={16} />
+                  ))}
+                  <circle className="fol-core" cx={50} cy={50} r={2} />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <p className="hint-bubble">Click anywhere to start</p>
+        </div>
+      )}
+
+      <main className={hasStarted ? "study-site is-visible" : "study-site"} aria-hidden={!hasStarted}>
       <header className="hero">
         <p className="label">Built from the attached book's topic structure</p>
-        <h1>Quantitative Finance Interview Study Site</h1>
+        <h1>Quant Interview Prep Lab</h1>
         <p>
           A content-first guide based on <em>A Practical Guide to Quantitative Finance Interviews</em>.
           It summarizes the book's organization, turns each chapter into a study checklist,
@@ -333,6 +515,85 @@ export default function Home() {
               <p>{week}</p>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="section teaser-arena">
+        <h2>Brain Teasers Arena</h2>
+        <p className="section-intro">
+          Original teasers written in the spirit of Chapter 2, sorted by the reasoning tool that cracks them.
+          Flip a card to check your approach.
+        </p>
+
+        <a href="/brain-teasers" className="chip-btn teaser-bubble brain-teasers-link">
+          Open the Brain Teasers Lab →
+        </a>
+
+        <div className="teaser-spotlight">
+          <div className="teaser-spotlight-head">
+            <p className="label">Spotlight // {spotlightTeaser.category}</p>
+            <button type="button" className="shuffle-btn" onClick={shuffleSpotlight}>
+              Shuffle
+            </button>
+          </div>
+          <p className="teaser-spotlight-prompt">{spotlightTeaser.prompt}</p>
+          {spotlightRevealed ? (
+            <div className="teaser-spotlight-answer">
+              <p>
+                <strong>Approach:</strong> {spotlightTeaser.approach}
+              </p>
+              <p>
+                <strong>Resolution:</strong> {spotlightTeaser.resolution}
+              </p>
+            </div>
+          ) : (
+            <button type="button" className="reveal-btn" onClick={() => setSpotlightRevealed(true)}>
+              Reveal approach
+            </button>
+          )}
+        </div>
+
+        <div className="teaser-filters">
+          {["All", ...teaserCategories].map((category) => (
+            <button
+              key={category}
+              type="button"
+              className={activeCategory === category ? "chip-btn active" : "chip-btn"}
+              onClick={() => setActiveCategory(category)}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+
+        <div className="teaser-grid">
+          {filteredTeasers.map(({ teaser, index }) => {
+            const isFlipped = flippedTeasers.has(index);
+            return (
+              <div className="teaser-card-scene" key={teaser.prompt}>
+                <button
+                  type="button"
+                  className={isFlipped ? "teaser-card is-flipped" : "teaser-card"}
+                  onClick={() => toggleTeaser(index)}
+                  aria-label={isFlipped ? "Flip back to the teaser" : "Flip to reveal the approach"}
+                >
+                  <div className="teaser-face teaser-front">
+                    <p className="label">{teaser.category}</p>
+                    <p>{teaser.prompt}</p>
+                    <span className="teaser-hint-tag">Tap to flip</span>
+                  </div>
+                  <div className="teaser-face teaser-back">
+                    <p>
+                      <strong>Approach:</strong> {teaser.approach}
+                    </p>
+                    <p>
+                      <strong>Resolution:</strong> {teaser.resolution}
+                    </p>
+                  </div>
+                </button>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -413,6 +674,7 @@ export default function Home() {
           </article>
         </div>
       </section>
-    </main>
+      </main>
+    </>
   );
 }

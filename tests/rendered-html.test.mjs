@@ -23,13 +23,15 @@ async function render() {
   );
 }
 
-test("server-renders the quant interview study content", async () => {
+test("server-renders the intro and quant interview study content", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /Quantitative Finance Interview Study Site/);
+  assert.match(html, /Quant Interview Prep Lab/);
+  assert.match(html, /Click anywhere to start/);
+  assert.match(html, /fibonacci-flower/);
   assert.match(html, /Chapter 4 - Probability Theory/);
   assert.match(html, /Chapter 6 - Finance/);
   assert.match(html, /8-Week Prep Schedule/);
@@ -45,7 +47,9 @@ test("source no longer depends on the starter preview", async () => {
   ]);
 
   assert.match(page, /Chapter 7 - Algorithms and Numerical Methods/);
-  assert.match(layout, /Quantitative Finance Interview Study Site/);
+  assert.match(page, /onClick={startLab}/);
+  assert.match(page, /event\.key === "Enter" \|\| event\.key === " "/);
+  assert.match(layout, /Quant Interview Prep Lab/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.doesNotMatch(page, /_sites-preview|codex-preview/);
 });
