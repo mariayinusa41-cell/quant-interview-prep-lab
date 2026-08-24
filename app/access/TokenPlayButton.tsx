@@ -8,7 +8,13 @@ import { useProfile } from "../profile/ProfileContext";
 export function AccessPlayLabel({ gameId, defaultLabel = "Play" }: { gameId: string; defaultLabel?: string }) {
   const { mode, getRoundsRemaining, isFreeGame, isPremiumOnly, getSessionCost } = useAccess();
   const { profile } = useProfile();
-  if (mode === "developer") return <span className="access-play-meta">{defaultLabel}</span>;
+  // Developer mode has no access state worth reporting — and every caller
+  // already passes its own label as `children`, so echoing `defaultLabel`
+  // here just rendered it twice ("STARTSTART", "SET SAILSET SAIL",
+  // "Review Retail Banking...Open the review"). `defaultLabel` stays in the
+  // signature because the paid/free branches below still need a sensible
+  // fallback name for the game.
+  if (mode === "developer") return null;
   if (mode === "infinity") return <span className="access-play-meta">Play unlimited</span>;
   if (isFreeGame(gameId)) return <span className="access-play-meta">Play free</span>;
   // Guests never hold tokens, so anything with a price is sign-up-gated.

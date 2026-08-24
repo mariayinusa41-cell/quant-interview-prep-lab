@@ -1,45 +1,63 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-// Story-then-rules intro, same self-chaining relative-timer pattern used in
-// PirateStory.tsx: each phase schedules only its own next step, so a Skip
-// click (an out-of-band setPhase call) cancels the pending timer via effect
-// cleanup and starts fresh from wherever it lands — nothing gets out of sync.
+// Arcade-style stepped intro, same pattern as Russian Roulette's tutorial:
+// short slides, a Next button, no typing animation. The old version streamed
+// seventeen lines onto one screen on auto-timers, which read as a wall of
+// text you couldn't pace yourself through.
+//
+// Steps that talk about card values show the Hi-Lo groups as actual card
+// chips under the words, so the rule arrives with its picture.
 
-const LINES: string[] = [
-  "Blackjack: beat the dealer's hand without going over 21.",
-  "Dealer stands on all 17s. A natural 21 (\"blackjack\") pays 3:2.",
-  "Hit, Stand, or Double Down — your call, every hand.",
-  "Now the part most players never learn: card counting.",
-  "High cards — 10s, face cards, Aces — are good for you. They're what make a blackjack (paid 3:2), and they make the dealer bust more often too.",
-  "So: the more high cards still in the shoe, the better your odds. The fewer, the worse.",
-  "The Hi-Lo system tracks that balance with one running number, updated as each card is dealt.",
-  "A high card (10, J, Q, K, A) just got dealt — one fewer is left in the shoe, which is bad for you. Count it −1.",
-  "A low card (2–6) just got dealt — the shoe is now relatively richer in high cards, which is good for you. Count it +1.",
-  "Cards 7–9 barely shift that balance either way — count them 0.",
-  "Add up every card you see. A positive running count means the shoe is currently rich in high cards — the odds have tilted your way.",
-  "One honest note: this is legal. Card counting is just mental math, not cheating — a casino can ask a suspected counter to leave, but no law is being broken.",
+type Step = { lines: string[]; showGroups?: boolean };
+
+const STEPS: Step[] = [
+  {
+    lines: [
+      "Beat the dealer without going over 21.",
+      "Dealer stands on all 17s. A natural 21 pays 3:2.",
+    ],
+  },
+  {
+    lines: [
+      "Hit, Stand, or Double Down. Your call, every hand.",
+      "Now the part most players never learn: counting.",
+    ],
+  },
+  {
+    lines: [
+      "High cards left in the shoe are GOOD for you.",
+      "They make blackjacks, and they bust the dealer.",
+    ],
+  },
+  {
+    lines: [
+      "Hi-Lo tracks that with one running number.",
+      "Low card dealt: +1. Middle: 0. High: -1.",
+    ],
+    showGroups: true,
+  },
+  {
+    lines: [
+      "Add up every card you see, hand after hand.",
+      "A positive count means the shoe has tilted your way.",
+    ],
+    showGroups: true,
+  },
+  {
+    lines: [
+      "Each hand, the pit boss may ask for your count.",
+      "Answer before he reaches you. Three misses and you're barred.",
+    ],
+  },
+  {
+    lines: [
+      "Counting is legal. It's just mental math.",
+      "But the casino can still show you the door.",
+    ],
+  },
 ];
-
-const LAST_PHASE = LINES.length; // one extra phase for the "let's play" state
-
-const HOLD_AFTER: number[] = [
-  2200, // intro line
-  2600,
-  2400,
-  2200,
-  2900,
-  2700,
-  2400,
-  2900, // -1 for high cards — picture appears here
-  2900,
-  2400,
-  3100,
-  3400, // legality note — holds a beat longer before "let's play"
-];
-
-const GROUP_PICTURE_FROM = 7; // once we assign the first point value (-1), show the visual groups and keep it up
 
 function GroupCard({ label, tone }: { label: string; tone: "low" | "mid" | "high" }) {
   return (
@@ -49,79 +67,67 @@ function GroupCard({ label, tone }: { label: string; tone: "low" | "mid" | "high
   );
 }
 
+function HiLoGroups() {
+  return (
+    <div className="bj-intro-groups">
+      <div className="bj-intro-group">
+        <p className="bj-intro-group-title" style={{ color: "var(--pixel-good)" }}>LOW · +1</p>
+        <div className="bj-intro-group-row">
+          {["2", "3", "4", "5", "6"].map((r) => <GroupCard key={r} label={r} tone="low" />)}
+        </div>
+      </div>
+      <div className="bj-intro-group">
+        <p className="bj-intro-group-title" style={{ color: "var(--ink-3)" }}>MID · 0</p>
+        <div className="bj-intro-group-row">
+          {["7", "8", "9"].map((r) => <GroupCard key={r} label={r} tone="mid" />)}
+        </div>
+      </div>
+      <div className="bj-intro-group">
+        <p className="bj-intro-group-title" style={{ color: "var(--pixel-bad)" }}>HIGH · −1</p>
+        <div className="bj-intro-group-row">
+          {["10", "J", "Q", "K", "A"].map((r) => <GroupCard key={r} label={r} tone="high" />)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function BlackjackIntro({ onDone }: { onDone: () => void }) {
-  const [phase, setPhase] = useState(0);
-
-  useEffect(() => {
-    if (phase >= LAST_PHASE) return;
-    const t = window.setTimeout(() => setPhase((p) => Math.min(p + 1, LAST_PHASE)), HOLD_AFTER[phase]);
-    return () => window.clearTimeout(t);
-  }, [phase]);
-
-  const canSkip = phase < LAST_PHASE;
-  const handleSkip = () => setPhase(LAST_PHASE);
+  const [step, setStep] = useState(0);
+  const current = STEPS[step];
+  const isLast = step === STEPS.length - 1;
 
   return (
-    <div className="pirate-stage-content">
-      {canSkip && (
-        <button type="button" className="skip-btn" onClick={handleSkip}>
-          Skip
-        </button>
-      )}
-
+    <div className="answer-content">
       <p className="pirate-kicker">Quitters Never Lose</p>
-      <h1 className="pirate-story-line pirate-enter answer-title">Blackjack</h1>
+      <h1 className="pirate-story-line answer-title">Blackjack</h1>
 
-      <div style={{ minHeight: 110 }}>
-        {LINES.slice(0, phase + 1).map((line, i) => (
-          <p key={i} className="pirate-story-line pirate-enter" style={{ fontSize: "1rem" }}>
-            {line}
-          </p>
-        ))}
-      </div>
+      <div className="pixel-stage">
+        <p className="mm-teach-progress">{step + 1} / {STEPS.length}</p>
 
-      {phase >= GROUP_PICTURE_FROM && (
-        <div className="bj-intro-groups pirate-enter">
-          <div className="bj-intro-group">
-            <p className="bj-intro-group-title" style={{ color: "var(--pixel-good)" }}>
-              LOW · +1
-            </p>
-            <div className="bj-intro-group-row">
-              <GroupCard label="2" tone="low" />
-              <GroupCard label="3" tone="low" />
-              <GroupCard label="4" tone="low" />
-              <GroupCard label="5" tone="low" />
-              <GroupCard label="6" tone="low" />
-            </div>
-          </div>
-          <div className="bj-intro-group">
-            <p className="bj-intro-group-title">MID · 0</p>
-            <div className="bj-intro-group-row">
-              <GroupCard label="7" tone="mid" />
-              <GroupCard label="8" tone="mid" />
-              <GroupCard label="9" tone="mid" />
-            </div>
-          </div>
-          <div className="bj-intro-group">
-            <p className="bj-intro-group-title" style={{ color: "var(--pixel-bad)" }}>
-              HIGH · −1
-            </p>
-            <div className="bj-intro-group-row">
-              <GroupCard label="10" tone="high" />
-              <GroupCard label="J" tone="high" />
-              <GroupCard label="Q" tone="high" />
-              <GroupCard label="K" tone="high" />
-              <GroupCard label="A" tone="high" />
-            </div>
-          </div>
+        <div className="hs-tutorial-step">
+          {current.lines.map((line) => <p key={line}>{line}</p>)}
         </div>
-      )}
 
-      {phase >= LAST_PHASE && (
-        <button type="button" className="continue-btn pirate-enter" onClick={onDone}>
-          Let's play
-        </button>
-      )}
+        {current.showGroups && <HiLoGroups />}
+
+        <div className="mm-teach-nav">
+          {step > 0 && (
+            <button type="button" className="hs-chunky-btn is-secondary" onClick={() => setStep((s) => s - 1)}>
+              Back
+            </button>
+          )}
+          {isLast ? (
+            <button type="button" className="hs-chunky-btn" onClick={onDone}>
+              Let&rsquo;s play
+            </button>
+          ) : (
+            <button type="button" className="hs-chunky-btn" onClick={() => setStep((s) => s + 1)}>
+              Next
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

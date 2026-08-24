@@ -7,7 +7,7 @@ import { PALETTES } from "./story/palettes";
 import TokenPlayButton from "../access/TokenPlayButton";
 
 export const metadata: Metadata = {
-  title: "Brain Teasers - Quant Interview Prep Lab",
+  title: "Brain Teasers - Outcry",
   description: "Playable brain teasers, worked out step by step.",
 };
 
@@ -48,7 +48,7 @@ export default function BrainTeasersPage() {
         </a>
 
         <div className="teasers-index">
-          <p className="pirate-kicker">Quant Interview Prep Lab</p>
+          <p className="pirate-kicker">Outcry</p>
           <h1 className="pirate-story-line teasers-title">Brain Teasers Lab</h1>
           <p className="pirate-story-line teasers-subtitle">
             Choose a game. The mechanics, story, and answer breakdowns live inside each playable lab.

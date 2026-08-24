@@ -3,7 +3,7 @@ import DarkMode from "../DarkMode";
 import TigerStory from "./TigerStory";
 
 export const metadata: Metadata = {
-  title: "Tiger and Sheep - Quant Interview Prep Lab",
+  title: "Tiger and Sheep - Outcry",
   description: "A hundred tigers, one sheep, and a question of parity.",
 };
 

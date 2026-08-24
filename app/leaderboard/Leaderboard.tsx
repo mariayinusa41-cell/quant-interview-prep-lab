@@ -1,25 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useProgress } from "../progress/ProgressContext";
 import { useProfile } from "../profile/ProfileContext";
-import { AvatarSprite, type AvatarId } from "../profile/avatars";
+import { AvatarSprite } from "../profile/avatars";
+import PixelDiamond from "./PixelDiamond";
 
-// There is no server, so there are no other real players to rank against.
-// These are clearly-labelled sample rows that exist to show the shape of the
-// board; only the "you" row is real data.
-type Row = { name: string; avatar: AvatarId; tickets: number; accuracy: number; sample: boolean };
-
-const SAMPLE_ROWS: Row[] = [
-  { name: "vega_hunter", avatar: "robot", tickets: 1840, accuracy: 91, sample: true },
-  { name: "brownianbee", avatar: "bird", tickets: 1622, accuracy: 88, sample: true },
-  { name: "delta_duck", avatar: "duck", tickets: 1470, accuracy: 84, sample: true },
-  { name: "ruinwalker", avatar: "frog", tickets: 1210, accuracy: 79, sample: true },
-  { name: "kellycrit", avatar: "cat", tickets: 980, accuracy: 77, sample: true },
-  { name: "pnl_pig", avatar: "pig", tickets: 742, accuracy: 71, sample: true },
-  { name: "greenbook", avatar: "monster", tickets: 511, accuracy: 66, sample: true },
-  { name: "queen_of_ev", avatar: "princess", tickets: 305, accuracy: 63, sample: true },
-];
+// Real accounts only — no sample/placeholder rows. A row exists here iff a
+// real signed-in user has synced at least one ticket (app/progress/
+// ProgressContext.tsx pushes to app/api/leaderboard/sync on every change).
+// Guests and players who haven't made an account yet just don't appear;
+// their local "you" row still renders below the real board so they can see
+// their own numbers without pretending they're ranked against anyone.
+//
+// `isYou` is computed server-side (app/api/leaderboard/route.ts) against
+// the real session's account id — not by comparing display strings, which
+// broke the moment an account's username and displayName differed.
+type LeaderboardRow = { name: string; tickets: number; accuracy: number | null; isPassHolder: boolean; isYou: boolean };
 
 type SortKey = "tickets" | "accuracy";
 
@@ -27,17 +24,25 @@ export default function Leaderboard() {
   const { tickets, accuracy } = useProgress();
   const { profile } = useProfile();
   const [sort, setSort] = useState<SortKey>("tickets");
+  const [rows, setRows] = useState<LeaderboardRow[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
-  const you: Row = {
-    name: profile.displayName.trim() || (profile.account === "guest" ? "you (guest)" : "you"),
-    avatar: profile.avatar,
-    tickets,
-    accuracy: accuracy ?? 0,
-    sample: false,
-  };
+  useEffect(() => {
+    fetch("/api/leaderboard", { credentials: "same-origin" })
+      .then((res) => (res.ok ? res.json() : { leaderboard: [] }))
+      .then((data: { leaderboard: LeaderboardRow[] }) => setRows(data.leaderboard ?? []))
+      .catch(() => setRows([]))
+      .finally(() => setLoaded(true));
+  }, []);
 
-  const rows = [...SAMPLE_ROWS, you].sort((a, b) =>
-    sort === "tickets" ? b.tickets - a.tickets : b.accuracy - a.accuracy,
+  const youName = profile.displayName.trim() || (profile.account === "guest" ? "you (guest)" : "you");
+  const hasRealYouRow = rows.some((r) => r.isYou);
+  const combined = hasRealYouRow
+    ? rows
+    : [...rows, { name: youName, tickets, accuracy: accuracy ?? null, isPassHolder: false, isYou: true }];
+
+  const sorted = [...combined].sort((a, b) =>
+    sort === "tickets" ? b.tickets - a.tickets : (b.accuracy ?? -1) - (a.accuracy ?? -1),
   );
 
   return (
@@ -64,23 +69,33 @@ export default function Leaderboard() {
         </button>
       </div>
 
+      {loaded && rows.length === 0 && (
+        <p className="assess-footnote" style={{ marginBottom: 12 }}>
+          No other synced accounts yet — be the first real row.
+        </p>
+      )}
+
       <ol className="lb-list">
-        {rows.map((row, i) => (
-          <li key={`${row.name}-${i}`} className={row.sample ? "lb-row" : "lb-row is-you"}>
+        {sorted.map((row, i) => (
+          <li key={`${row.name}-${i}`} className={row.isYou ? "lb-row is-you" : "lb-row"}>
             <span className="lb-rank">{i + 1}</span>
-            <span className="lb-avatar"><AvatarSprite id={row.avatar} /></span>
-            <span className="lb-name">
+            <span className="lb-avatar">
+              <AvatarSprite id={row.isYou ? profile.avatar : "duck"} />
+            </span>
+            <span className={row.isPassHolder ? "lb-name is-pass-holder" : "lb-name"}>
+              {row.isPassHolder && <PixelDiamond size={14} />}
               {row.name}
-              {!row.sample && <span className="lb-you-tag">YOU</span>}
+              {row.isYou && <span className="lb-you-tag">YOU</span>}
             </span>
             <span className="lb-tickets">{row.tickets}</span>
-            <span className="lb-acc">{row.accuracy}%</span>
+            <span className="lb-acc">{row.accuracy === null ? "—" : `${row.accuracy}%`}</span>
           </li>
         ))}
       </ol>
 
       <p className="assess-footnote">
-        Sample opponents — there is no server yet, so every row except yours is placeholder data.
+        Real accounts only — a row appears once someone signs in and earns at least one ticket. Gold names are paid
+        pass holders.
       </p>
     </section>
   );

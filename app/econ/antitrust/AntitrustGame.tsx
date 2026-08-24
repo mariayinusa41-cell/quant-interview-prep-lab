@@ -143,14 +143,24 @@ export default function AntitrustGame() {
   return (
     <div className="answer-content" style={{ padding: 0 }}>
       {phase === "brief" && (
+        // Deliberately says nothing about which case you're about to get.
+        // The brief used to print the case title, premise, its specific
+        // substitute threshold and its interview note — so you'd already
+        // read the whole setup before deciding to spend a round on it, and
+        // the "random case" was random in name only. Everything here is now
+        // the method, which is identical for every case; the file itself
+        // opens on click.
         <div className="pixel-stage lab-briefing">
-          <p className="quiz-panel-title">{currentCase.title}</p>
-          <p>{currentCase.premise}</p>
+          <p className="quiz-panel-title">Merger review</p>
+          <p>
+            A merger lands on your desk. Decide what counts as the market, run the concentration
+            math on it, and say whether the agency should clear it or challenge it.
+          </p>
           <div className="lab-topic-grid">
             {[
               ["HHI", "sum of squared shares"],
               ["ΔHHI", "2 × s₁ × s₂"],
-              ["CROSS-ELASTICITY", `Substitutes > ${currentCase.substituteThreshold.toFixed(1)}`],
+              ["CROSS-ELASTICITY", "substitutes join the market"],
               ["THRESHOLDS", "1500, 2500 & Δ200"],
             ].map(([t, s]) => (
               <div key={t}>
@@ -160,16 +170,18 @@ export default function AntitrustGame() {
             ))}
           </div>
           <p className="mm-step-hint">
-            <strong>Interview lens:</strong> {currentCase.interviewNote}
+            <strong>Interview lens:</strong> Market definition dictates the math. Establish
+            cross-elasticity before running HHI — the same merger clears or fails depending on
+            where you draw the boundary.
           </p>
           <AccessStartButton
             gameId="econ-antitrust"
             title="The Antitrust Simulator"
-            defaultLabel="Open the review"
+            defaultLabel="Open a case file"
             className="continue-btn"
             onStart={start}
           >
-            Review {currentCase.tag}
+            Open a case file
           </AccessStartButton>
         </div>
       )}

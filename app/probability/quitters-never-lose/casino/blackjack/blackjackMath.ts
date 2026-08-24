@@ -182,17 +182,82 @@ function reduceFraction(numerator: number, denominator: number): { fraction: str
 }
 
 // The exact probability that the NEXT card drawn busts the player's current
-// hand, computed directly from what's left in the shoe. An Ace can never
-// bust a hand by itself (it can always drop to counting as 1), so it's
-// excluded from the bust count regardless of the bust threshold — e.g. at
-// total 14 (threshold 7), drawing an Ace makes the hand 14+11=25, which
-// immediately demotes to 14+1=15, not a bust.
+// hand, computed directly from what's left in the shoe.
+//
+// This deals each remaining card and asks handValue() whether the resulting
+// hand is actually bust, rather than reasoning about a "bust threshold".
+// The threshold version this replaces got two cases wrong:
+//
+//   * SOFT hands. A soft hand can never bust on a single card, because the
+//     Ace demotes from 11 to 1 to absorb it — soft 17 (A,6) drawing a 5 is
+//     11+6+5=22 -> 1+6+5=12, not a bust. The old code compared 5 against a
+//     threshold of 21-17=4 and counted it as a bust, reporting ~69% for a
+//     hand whose true bust probability is exactly 0%.
+//   * Hard 21 drawing an Ace. Aces were excluded unconditionally on the
+//     grounds that they always demote, but at 21 even the demoted value
+//     busts (21+1=22), so those four cards belong in the count.
+//
+// Enumerating is also just cheaper to trust: there is no separate rule to
+// keep in sync with handValue(), which is already the authority on what a
+// hand is worth.
 export function bustProbability(round: BlackjackRound): { decimal: number; fraction: string; count: number; shoeSize: number } {
-  const { total } = handValue(round.playerHand);
-  const bustThreshold = 21 - total; // any non-Ace card worth MORE than this busts the hand
-  const bustCount = round.shoe.filter((c) => c.rank !== "A" && rankValue(c.rank) > bustThreshold).length;
+  const bustCount = round.shoe.filter((c) => handValue([...round.playerHand, c]).isBust).length;
   const reduced = reduceFraction(bustCount, round.shoe.length);
   return { ...reduced, count: bustCount, shoeSize: round.shoe.length };
+}
+
+
+// The exact probability the DEALER eventually busts, given the upcard you can
+// actually see and the exact composition of what's left in the shoe.
+//
+// Unlike the player's one-card bust question, this is a recursion: the dealer
+// keeps drawing under a fixed rule (S17 — stand on all 17s), so every draw
+// branches into another decision. Cards are drawn WITHOUT replacement, so the
+// shoe is tracked as remaining counts per rank and decremented down each
+// branch — using fixed 1/13 weights would quietly ignore the very card
+// removal that counting is about.
+//
+// Memoised on (total, soft, cards-left) rather than the full shoe: within a
+// single call the shoe composition at a given depth is effectively fixed by
+// the path, and the depth of dealer draws is small (a dealer can draw at most
+// a handful of times before reaching 17+ or busting), so this stays cheap
+// enough to run on every render.
+export function dealerBustProbability(round: BlackjackRound): { decimal: number; percent: string } {
+  // Only the dealer's first card is face-up during the player's turn; the
+  // hole card is unknown to the player and must not be peeked at here.
+  const upcard = round.dealerHand[0];
+  if (!upcard) return { decimal: 0, percent: "0%" };
+
+  const counts = new Map<Rank, number>();
+  for (const c of round.shoe) counts.set(c.rank, (counts.get(c.rank) ?? 0) + 1);
+
+  function recurse(total: number, soft: boolean, remaining: Map<Rank, number>, size: number): number {
+    if (total > 21) {
+      if (soft) return recurse(total - 10, false, remaining, size);
+      return 1;
+    }
+    if (total >= 17) return 0; // S17: dealer stands, no bust
+    if (size <= 0) return 0;
+
+    let p = 0;
+    for (const [rank, n] of remaining) {
+      if (n <= 0) continue;
+      const weight = n / size;
+      const next = new Map(remaining);
+      next.set(rank, n - 1);
+
+      let t = total + rankValue(rank);
+      let s = soft || rank === "A";
+      if (t > 21 && s) { t -= 10; s = false; }
+
+      p += weight * recurse(t, s, next, size - 1);
+    }
+    return p;
+  }
+
+  const startSoft = upcard.rank === "A";
+  const decimal = recurse(rankValue(upcard.rank), startSoft, counts, round.shoe.length);
+  return { decimal, percent: `${(decimal * 100).toFixed(1)}%` };
 }
 
 export { rankValue };

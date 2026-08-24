@@ -1,6 +1,7 @@
 "use client";
 
 import TokenIcon from "./access/TokenIcon";
+import { OutcryMegaphoneLogo } from "./OutcryMegaphoneLogo";
 
 export default function AttractScreen({ onStart }: { onStart: () => void }) {
   return (
@@ -8,7 +9,7 @@ export default function AttractScreen({ onStart }: { onStart: () => void }) {
       className="intro-screen"
       role="button"
       tabIndex={0}
-      aria-label="Enter Quant Interview Prep Lab"
+      aria-label="Enter Outcry"
       onClick={onStart}
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") {
@@ -19,10 +20,11 @@ export default function AttractScreen({ onStart }: { onStart: () => void }) {
     >
       <div className="intro-content">
         <p className="intro-eyebrow">Insert coin</p>
+        <div className="intro-logo" aria-hidden="true">
+          <OutcryMegaphoneLogo size={64} />
+        </div>
         <h1 className="intro-title">
-          <span>Quant</span>
-          <span>Interview</span>
-          <span className="intro-title-accent">Prep Lab</span>
+          <span className="intro-title-accent">Outcry</span>
         </h1>
         <div className="intro-coin" aria-hidden="true">
           <TokenIcon className="intro-coin-icon" />

@@ -177,7 +177,7 @@ export default function DistributionsGame() {
 
   return (
     <div className="answer-content">
-      <p className="pirate-kicker">Quant Interview Prep Lab</p>
+      <p className="pirate-kicker">Outcry</p>
       <h1 className="pirate-story-line answer-title">Read the Shape</h1>
 
       {(phase === "identifying" || phase === "moments") && spec && (

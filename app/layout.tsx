@@ -3,7 +3,7 @@ import "./globals.css";
 import AccessShell from "./access/AccessShell";
 
 export const metadata: Metadata = {
-  title: "Quant Interview Prep Lab",
+  title: "Outcry",
   description:
     "A content-first study website based on the topic structure of A Practical Guide to Quantitative Finance Interviews.",
   icons: {
@@ -11,14 +11,14 @@ export const metadata: Metadata = {
     shortcut: "/favicon.svg",
   },
   openGraph: {
-    title: "Quant Interview Prep Lab",
+    title: "Outcry",
     description:
       "Chapter map, study plan, practice prompts, and answer frameworks for quant finance interviews.",
     images: ["/og.png"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Quant Interview Prep Lab",
+    title: "Outcry",
     description:
       "Chapter map, study plan, practice prompts, and answer frameworks for quant finance interviews.",
     images: ["/og.png"],

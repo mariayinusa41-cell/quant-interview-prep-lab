@@ -3,7 +3,7 @@ import PirateMode from "./PirateMode";
 import PirateStory from "./PirateStory";
 
 export const metadata: Metadata = {
-  title: "Screwy Pirates - Quant Interview Prep Lab",
+  title: "Screwy Pirates - Outcry",
   description: "The screwy pirates puzzle, playable.",
 };
 

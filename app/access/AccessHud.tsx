@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useAccess } from "./AccessContext";
 import { useProgress } from "../progress/ProgressContext";
 import TokenIcon from "./TokenIcon";
@@ -10,9 +9,8 @@ import ThemePicker from "../theme/ThemePicker";
 
 export default function AccessHud() {
   const { mode, tokens } = useAccess();
-  const { tickets, accuracy, graded } = useProgress();
+  const { tickets, accuracy } = useProgress();
   const { muted, toggleMute } = useSound();
-  const [topUpOpen, setTopUpOpen] = useState(false);
 
   return (
     <>
@@ -34,14 +32,9 @@ export default function AccessHud() {
           </span>
         )}
         {mode === "free" && (
-          <button
-            type="button"
-            className="access-plus"
-            onClick={() => setTopUpOpen((open) => !open)}
-            aria-label="Open token top-up information"
-          >
+          <a href="/pricing" className="access-plus" aria-label="Get more tokens on the pricing page">
             +
-          </button>
+          </a>
         )}
 
         <span className="access-hud-divider" aria-hidden="true" />
@@ -78,19 +71,6 @@ export default function AccessHud() {
 
         <ThemePicker />
       </div>
-
-      {topUpOpen && (
-        <div className="access-topup-popover" role="status">
-          <strong>Token top-up</strong>
-          <span>Checkout is intentionally not connected in this local preview.</span>
-          <span className="access-topup-note">
-            {graded === 0
-              ? "Tickets and accuracy start counting on your first graded question."
-              : `${graded} questions graded so far.`}
-          </span>
-          <button type="button" onClick={() => setTopUpOpen(false)}>Close</button>
-        </div>
-      )}
     </>
   );
 }

@@ -3,7 +3,7 @@ import DarkMode from "../finance/DarkMode";
 import "./audit.css";
 
 export const metadata: Metadata = {
-  title: "Readiness Audit - Quant Interview Prep Lab",
+  title: "Readiness Audit - Outcry",
   description: "An honest coverage audit for quant trading, research, and developer interviews.",
 };
 
@@ -34,18 +34,18 @@ const coverage = [
   },
   {
     area: "Statistics",
-    score: "60%",
+    score: "65%",
     level: "Developing",
     levelClass: "developing",
-    current: "Regression and significance, distributions and CLT, backtests, and selection bias.",
+    current: "Crack the Bot now goes past single-predictor t-stats into a real confounder check — closed-form multiple regression, an auxiliary regression, and the omitted-variable-bias identity (naive slope − partial slope ≈ β_control × aux slope), verified against the actual overlapping predictors live. Plus distributions and CLT, backtests, and selection bias.",
     next: "Bayesian updating, MLE, confidence intervals, E/Var algebra, covariance, and time series.",
   },
   {
     area: "Market making",
-    score: "54%",
+    score: "62%",
     level: "Developing",
     levelClass: "developing",
-    current: "Spread, skew, inventory, adverse selection, signals, EV, and delta-hedge decisions, plus Basket Arbitrage — a 20-puzzle/8-minute campaign hedging multi-leg commodity baskets to zero inventory, rising from 2 cards/1 commodity to 9+ cards/5 commodities, every tier verified solvable.",
+    current: "Market Maker now runs the actual Avellaneda-Stoikov model — every round you compute the live reservation price r(s,q,t) = s − qγσ²(T−t) and optimal spread from real inventory and time-to-horizon, not a discrete half-spread/skew picker, then a bonus round still covers adverse selection, EV, and delta-hedge decisions. Basket Arbitrage adds a 20-puzzle/8-minute campaign hedging multi-leg commodity baskets to zero inventory.",
     next: "Order-book depth, execution, queue position, volatility trading, and a fuller market simulation.",
   },
   {
@@ -58,11 +58,11 @@ const coverage = [
   },
   {
     area: "Stochastic processes",
-    score: "55%",
+    score: "62%",
     level: "Developing",
     levelClass: "developing",
-    current: "Ruin Walker (absorbing Markov chain, Gambler's Ruin i/N formula) and Martingale Mutiny (Poisson-shock process, one-step E[Xₙ] recursion, optional-stopping decisions with in-game math guidance) — two playable games under Stochastic Processes.",
-    next: "General transition-matrix Markov chains, Brownian motion / Ito's lemma intuition, and first-passage-time problems beyond the two absorbing-boundary games already built.",
+    current: "Ruin Walker is now the actual Cramér–Lundberg ruin model — a compound-Poisson claims process against premium income, with the closed-form adjustment coefficient R and exact ruin probability ψ(u) = (1/(1+θ))e^(−Ru) computed live against your changing surplus, not a symmetric ±1 walk. Martingale Mutiny still covers the Poisson-shock, one-step E[Xₙ] recursion and optional-stopping side.",
+    next: "General transition-matrix Markov chains, Brownian motion / Ito's lemma intuition, and first-passage-time problems beyond the two games already built.",
   },
   {
     area: "Algorithms / coding",
@@ -110,9 +110,9 @@ export default function AuditPage() {
     <>
       <DarkMode />
       <main className="pirate-stage-main answer-page">
-        <a href="/" className="pirate-back-link">&larr; Quant Interview Prep Lab</a>
+        <a href="/" className="pirate-back-link">&larr; Outcry</a>
         <div className="answer-content audit-content">
-          <p className="pirate-kicker">Quant Interview Prep Lab // Latest audit</p>
+          <p className="pirate-kicker">Outcry // Latest audit</p>
           <h1 className="pirate-story-line answer-title">Readiness Audit</h1>
           <p className="audit-lede">
             This measures playable topic coverage, not your probability of receiving an offer. A real assessment also tests
@@ -120,7 +120,7 @@ export default function AuditPage() {
           </p>
 
           <div className="audit-count-line">
-            <strong>45 playable modes plus 32 coding challenges</strong> across the current labs, counting Pick 3/4/5, timed/not-timed Scratch-Off, Gradient Lab's five sub-games, and Mini Task's four levels as separate modes. Delta Defender and Martingale Mutiny now require writing or predicting the actual math live, not just picking multiple choice, and the Quant Developer assessment now grades actual submitted code against hidden tests and a performance budget. New this round: Technical Estimation, Likelihood Ranking, Dice EV Lab, and Basket Arbitrage — all procedurally generated (200+ verified questions each) rather than a fixed bank — plus Crossroad Multitasker, a task-switching/cognitive-flexibility drill that doesn't map to a single topic row but mirrors the rapid rule-switching some psychometric-style trading screens use. Recent icon and naming changes do not inflate this readiness score.
+            <strong>45 playable modes plus 32 coding challenges</strong> across the current labs, counting Pick 3/4/5, timed/not-timed Scratch-Off, Gradient Lab's five sub-games, and Mini Task's four levels as separate modes. Delta Defender and Martingale Mutiny now require writing or predicting the actual math live, not just picking multiple choice, and the Quant Developer assessment now grades actual submitted code against hidden tests and a performance budget. New this round: Market Maker and Ruin Walker were rebuilt on real closed-form models (Avellaneda–Stoikov quoting and Cramér–Lundberg ruin theory) instead of discrete pickers, Crack the Bot adds a genuine multiple-regression confounder check, and a new Interview Questions hub surfaces real, scraper-sourced OA/interview reports by firm and topic. Recent icon and naming changes do not inflate this readiness score.
           </div>
 
           <h2 className="audit-heading">Current coverage</h2>
@@ -149,8 +149,8 @@ export default function AuditPage() {
 
           <h2 className="audit-heading">Role readiness</h2>
           <div className="audit-role-list">
-            <p><strong>Quant trading: about 80-85% coverage.</strong> Up from the previous 76-81% estimate. Dice EV Lab and Likelihood Ranking specifically target the dice-heavy EV and "which is most likely" question formats real screens lean on, and Basket Arbitrage adds genuine multi-leg inventory hedging on top of Market Maker's single-asset spread quoting. Implied vol, VaR, richer order-book depth, and mixed timed practice are the main remaining gaps.</p>
-            <p><strong>Quant research: about 66-71% coverage.</strong> Up from 64-69%. Technical Estimation's random-walk and combinatorics content adds a little here, but research interviews still lean hardest on statistical inference (MLE, Bayesian updating, confidence intervals) — the biggest remaining gap, unchanged by this round's additions.</p>
+            <p><strong>Quant trading: about 82-87% coverage.</strong> Up from the previous 80-85% estimate. Market Maker now tests the real Avellaneda–Stoikov reservation-price formula live each round instead of a discrete picker — closer to how a trading screen actually asks "what's your quote and why." Implied vol, VaR, richer order-book depth, and mixed timed practice are the main remaining gaps.</p>
+            <p><strong>Quant research: about 68-73% coverage.</strong> Up from 66-71%. Crack the Bot's confounder check (multiple regression, omitted-variable bias) is a real research-interview staple now covered live with real data, and Ruin Walker's Cramér–Lundberg model adds a genuine actuarial/stochastic modeling case. Statistical inference proper (MLE, Bayesian updating, confidence intervals) is still the biggest remaining gap.</p>
             <p><strong>Quant developer: about 70-75% coverage.</strong> Up from 66-72%. The Quant Developer assessment now grades 4 real submitted-code problems against hidden tests and a performance gate instead of multiple choice — closer to what HackerRank/CodeSignal screens actually look like. The remaining gap is production-style depth: actual SQL and pandas, debugging, timed mixed problems, and systems-oriented coding.</p>
           </div>
 

@@ -112,6 +112,23 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     }
   }, [state, hydrated]);
 
+  // Push the same numbers to the real leaderboard row, for accounts that
+  // have one. Fire-and-forget: a guest or logged-out player gets a quiet
+  // 401 from the route, which is expected, not an error to surface —
+  // ProgressContext has no idea whether anyone's signed in, and doesn't
+  // need to; the route is the one place that actually checks.
+  useEffect(() => {
+    if (!hydrated) return;
+    const { correct, graded } = statTotals(state.skills);
+    fetch("/api/leaderboard/sync", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tickets: state.tickets, gradedCorrect: correct, gradedTotal: graded }),
+    }).catch(() => {
+      /* offline, or logged out — nothing to do client-side about either */
+    });
+  }, [state, hydrated]);
+
   const recordAttempts = (attempts: Attempt[]) => {
     if (attempts.length === 0) return;
     setState((prev) => {

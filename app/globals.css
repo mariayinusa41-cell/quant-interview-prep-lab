@@ -393,6 +393,11 @@ body::after {
   width: min(100% - 40px, 900px);
 }
 
+.intro-logo {
+  display: grid;
+  place-items: center;
+}
+
 .intro-eyebrow {
   margin: 0;
   font-family: var(--font-pixel);
@@ -1950,6 +1955,64 @@ body.pirate-mode::after {
   margin-bottom: 12px;
 }
 
+.lab-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lab-filter-title {
+  margin: 0;
+}
+
+.lab-filter-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lab-filter-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.lab-filter-select {
+  border: 2px solid var(--pixel-border);
+  border-radius: 5px;
+  padding: 8px 10px;
+  background: rgba(var(--void-rgb), 0.35);
+  color: var(--ink-1);
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+}
+
+.lab-filter-select:focus {
+  outline: none;
+  border-color: var(--pixel-accent);
+}
+
+.lab-filter-note {
+  margin: 10px 0 0;
+  font-size: 0.82rem;
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+
+.lab-filter-empty {
+  border: 2px dashed var(--pixel-border);
+  border-radius: 6px;
+  padding: 18px;
+  text-align: center;
+  color: var(--ink-3);
+  font-size: 0.86rem;
+}
+
 .lab-link-list {
   display: grid;
   gap: 14px;
@@ -3502,6 +3565,7 @@ button.lab-link-row {
   font-size: 1rem;
   line-height: 1;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .access-plus:hover {
@@ -5849,6 +5913,12 @@ body.casino-mode .pixel-stage .continue-btn:hover:not(:disabled) {
   color: var(--ink-1);
 }
 
+.onboarding-notice.is-error {
+  border-left-color: var(--pixel-bad);
+  background: rgba(224, 79, 79, 0.1);
+  color: var(--pixel-bad);
+}
+
 .onboarding-hint {
   margin: 10px 0 0;
   font-family: var(--font-mono);
@@ -6333,6 +6403,32 @@ body.casino-mode .pixel-stage .continue-btn:hover:not(:disabled) {
   overflow-wrap: anywhere;
 }
 
+.lb-name.is-pass-holder {
+  color: #f4c542;
+  text-shadow: 0 0 8px rgba(244, 197, 66, 0.45);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pixel-diamond-spin {
+  transform-style: preserve-3d;
+  perspective: 200px;
+  animation: pixel-diamond-spin 2.2s linear infinite;
+}
+
+@keyframes pixel-diamond-spin {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel-diamond-spin {
+    animation: none;
+  }
+}
+
 .lb-you-tag {
   margin-left: 8px;
   font-family: var(--font-pixel);
@@ -6433,7 +6529,7 @@ body.casino-mode .pixel-stage .continue-btn:hover:not(:disabled) {
 }
 
 .hub-wordmark {
-  margin: 0 0 16px;
+  margin: 0;
   font-family: var(--font-pixel);
   font-size: clamp(0.78rem, 2.4vw, 1.25rem);
   line-height: 1.4;
@@ -6441,6 +6537,55 @@ body.casino-mode .pixel-stage .continue-btn:hover:not(:disabled) {
   text-transform: uppercase;
   color: var(--pixel-white);
   text-shadow: 3px 3px 0 var(--pixel-border), 6px 6px 0 rgba(79, 179, 224, 0.32);
+}
+
+.hub-header-top {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.hub-header-spacer {
+  justify-self: start;
+}
+
+.hub-wordmark {
+  justify-self: center;
+  text-align: center;
+}
+
+.hub-wordmark-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hub-account-badge {
+  justify-self: end;
+}
+
+.hub-account-badge {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  padding: 7px 12px;
+  border: 2px solid var(--pixel-border);
+  border-radius: 5px;
+  background: rgba(var(--void-rgb), 0.3);
+  color: var(--ink-1);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.hub-account-badge:hover {
+  border-color: var(--pixel-accent);
+  color: var(--pixel-accent);
+}
+
+.hub-account-badge.is-guest {
+  color: var(--pixel-primary);
+  border-color: var(--pixel-primary);
 }
 
 .hub-nav {
@@ -6500,11 +6645,65 @@ body.casino-mode .pixel-stage .continue-btn:hover:not(:disabled) {
 
 .profile-name {
   margin: 0 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: var(--font-pixel);
   font-size: 0.82rem;
   line-height: 1.4;
   color: var(--pixel-white);
   text-shadow: 2px 2px 0 var(--pixel-border);
+}
+
+.gift-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 2px solid #f4c542;
+  border-radius: 5px;
+  padding: 4px 9px;
+  background: rgba(244, 197, 66, 0.12);
+  color: #f4c542;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: none;
+  letter-spacing: normal;
+  cursor: pointer;
+  animation: gift-box-pulse 1.6s ease-in-out infinite;
+}
+
+.gift-box:hover {
+  background: rgba(244, 197, 66, 0.22);
+}
+
+.gift-box:disabled {
+  cursor: default;
+  animation: none;
+  opacity: 0.7;
+}
+
+.gift-box.is-opened {
+  cursor: default;
+  animation: none;
+  color: var(--pixel-good);
+  border-color: var(--pixel-good);
+  background: rgba(90, 200, 130, 0.12);
+}
+
+.gift-box-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.gift-box-error {
+  display: block;
+  color: var(--pixel-bad);
+  font-size: 0.62rem;
+}
+
+@keyframes gift-box-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 197, 66, 0.35); }
+  50% { box-shadow: 0 0 0 4px rgba(244, 197, 66, 0); }
 }
 
 .profile-sub,
@@ -6673,6 +6872,40 @@ body.casino-mode .pixel-stage .continue-btn:hover:not(:disabled) {
 
 /* ---------- Jobs ---------- */
 
+.jobs-add-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.jobs-add-input {
+  flex: 1 1 160px;
+  min-width: 120px;
+  border: 2px solid var(--pixel-border);
+  border-radius: 5px;
+  padding: 9px 11px;
+  background: rgba(var(--void-rgb), 0.28);
+  color: var(--ink-1);
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+}
+
+.jobs-add-input:focus {
+  outline: none;
+  border-color: var(--pixel-accent);
+}
+
+.jobs-empty {
+  border: 2px dashed var(--pixel-border);
+  border-radius: 6px;
+  padding: 18px;
+  text-align: center;
+  color: var(--ink-3);
+  font-size: 0.86rem;
+  margin-bottom: 12px;
+}
+
 .jobs-summary {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
@@ -6710,7 +6943,7 @@ body.casino-mode .pixel-stage .continue-btn:hover:not(:disabled) {
 
 .jobs-row {
   display: grid;
-  grid-template-columns: 1.2fr 1.4fr auto auto;
+  grid-template-columns: 1.2fr 1.4fr auto auto auto;
   gap: 12px;
   align-items: center;
   border: 2px solid var(--pixel-border);
@@ -6754,6 +6987,40 @@ body.casino-mode .pixel-stage .continue-btn:hover:not(:disabled) {
 .jobs-stage.is-onsite { color: var(--pixel-accent); }
 .jobs-stage.is-offer { color: var(--pixel-good); border-color: var(--pixel-good); }
 .jobs-stage.is-rejected { color: var(--pixel-bad); }
+
+.jobs-stage-select {
+  font-family: var(--font-pixel);
+  font-size: 0.44rem;
+  letter-spacing: 0.06em;
+  padding: 6px 8px;
+  border: 2px solid var(--pixel-border);
+  border-radius: 4px;
+  background: rgba(var(--void-rgb), 0.4);
+  white-space: nowrap;
+}
+
+.jobs-stage-select.is-applied { color: var(--pixel-primary); }
+.jobs-stage-select.is-oa,
+.jobs-stage-select.is-phone,
+.jobs-stage-select.is-onsite { color: var(--pixel-accent); }
+.jobs-stage-select.is-offer { color: var(--pixel-good); border-color: var(--pixel-good); }
+.jobs-stage-select.is-rejected { color: var(--pixel-bad); }
+
+.jobs-remove-btn {
+  border: 2px solid var(--pixel-border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink-3);
+  width: 26px;
+  height: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.jobs-remove-btn:hover {
+  color: var(--pixel-bad);
+  border-color: var(--pixel-bad);
+}
 
 /* ---------- News ---------- */
 
@@ -8481,4 +8748,380 @@ body.exam-mode::after { display: none !important; }
   font-size: 0.88rem;
   padding: 20px 0;
   text-align: center;
+}
+
+/* ---------- Pricing ---------- */
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.pricing-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 3px solid var(--pixel-border);
+  border-radius: 8px;
+  padding: 20px;
+  background: rgba(var(--void-rgb), 0.3);
+}
+
+.pricing-card.is-highlighted {
+  border-color: #f4c542;
+  box-shadow: 0 0 0 2px rgba(244, 197, 66, 0.25);
+}
+
+.pricing-badge {
+  position: absolute;
+  top: -12px;
+  right: 16px;
+  background: #f4c542;
+  color: #1a1410;
+  font-family: var(--font-pixel);
+  font-size: 0.5rem;
+  padding: 5px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.pricing-plan-name {
+  font-family: var(--font-pixel);
+  font-size: 0.78rem;
+  margin: 0 0 10px;
+  color: var(--pixel-white);
+}
+
+.pricing-plan-price {
+  font-family: var(--font-pixel);
+  font-size: 1.4rem;
+  color: var(--pixel-accent);
+  margin: 0 0 6px;
+}
+
+.pricing-plan-cadence {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--ink-3);
+  text-transform: none;
+}
+
+.pricing-plan-blurb {
+  color: var(--ink-2);
+  font-size: 0.86rem;
+  line-height: 1.5;
+  margin: 0 0 14px;
+  min-height: 3.2em;
+}
+
+.pricing-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 18px;
+  display: grid;
+  gap: 8px;
+  flex: 1;
+}
+
+.pricing-bullets li {
+  font-size: 0.82rem;
+  color: var(--ink-1);
+  padding-left: 18px;
+  position: relative;
+  line-height: 1.4;
+}
+
+.pricing-bullets li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--pixel-accent);
+}
+
+.pricing-cta {
+  text-align: center;
+  text-decoration: none;
+}
+
+.pricing-not-connected {
+  margin: 10px 0 0;
+  font-size: 0.76rem;
+  color: var(--pixel-bad);
+  line-height: 1.4;
+}
+
+/* ---------- Coming soon ---------- */
+
+.hub-tab-soon {
+  margin-left: 7px;
+  font-family: var(--font-pixel);
+  font-size: 0.36rem;
+  letter-spacing: 0.08em;
+  padding: 3px 5px;
+  border-radius: 3px;
+  background: var(--pixel-accent);
+  color: #1a1410;
+  vertical-align: middle;
+}
+
+.hub-tab.is-coming-soon {
+  opacity: 0.75;
+}
+
+.coming-soon-card {
+  border: 2px dashed var(--pixel-accent);
+  border-radius: 6px;
+  padding: 18px;
+  margin-bottom: 20px;
+  background: rgba(244, 197, 66, 0.06);
+}
+
+.coming-soon-title {
+  margin: 0 0 6px;
+  font-family: var(--font-pixel);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pixel-accent);
+}
+
+.coming-soon-body {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+/* The preview underneath is deliberately dimmed and non-interactive, so it
+   reads as "here's what's planned" rather than something that's broken. */
+.coming-soon-preview {
+  opacity: 0.4;
+  pointer-events: none;
+  filter: grayscale(0.5);
+}
+
+/* ---------- Don't Get Caught (continuous counting drill) ---------- */
+
+.dgc-tape {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  min-height: 62px;
+  padding: 12px;
+  margin: 14px 0;
+  border: 2px solid var(--pixel-border);
+  border-radius: 6px;
+  background: rgba(var(--void-rgb), 0.3);
+}
+
+.dgc-tape-empty {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--ink-3);
+}
+
+.dgc-card {
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  padding: 5px 6px;
+  border: 2px solid var(--pixel-border);
+  border-radius: 4px;
+  background: var(--pixel-white, #f4f0e8);
+  color: #1a1410;
+  font-family: var(--font-mono);
+  line-height: 1.1;
+}
+
+.dgc-card.is-red { color: #c0392b; }
+
+/* Older cards fade back so the newest card reads as "the one that just
+   landed" without removing the history you're counting from. */
+.dgc-card.is-dimmed { opacity: 0.45; }
+
+.dgc-card-rank { font-size: 0.82rem; font-weight: 600; }
+.dgc-card-suit { font-size: 0.68rem; }
+
+.dgc-status {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--ink-3);
+}
+
+.dgc-challenge {
+  border: 2px solid var(--pixel-bad);
+  border-radius: 6px;
+  padding: 16px;
+  background: rgba(224, 79, 79, 0.08);
+}
+
+.dgc-boss {
+  margin: 0 0 10px;
+  font-family: var(--font-pixel);
+  font-size: 0.6rem;
+  line-height: 1.6;
+  color: var(--pixel-bad);
+}
+
+.dgc-timer-track {
+  height: 8px;
+  border: 2px solid var(--pixel-border);
+  border-radius: 3px;
+  overflow: hidden;
+  background: rgba(var(--void-rgb), 0.4);
+}
+
+.dgc-timer-fill {
+  height: 100%;
+  background: var(--pixel-bad);
+  transition: width 0.1s linear;
+}
+
+.dgc-timer-label {
+  margin: 4px 0 10px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--pixel-bad);
+  text-align: right;
+}
+
+.dgc-caught {
+  text-align: center;
+  padding: 8px 0;
+}
+
+.dgc-caught-title {
+  font-family: var(--font-pixel);
+  font-size: 0.7rem;
+  line-height: 1.6;
+  color: var(--pixel-bad);
+  margin: 0 0 10px;
+}
+
+.dgc-caught-body {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0 0 16px;
+}
+
+/* Don't Get Caught — pit / walking boss / hand results */
+.dgc-pit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.dgc-pit-track {
+  position: relative;
+  flex: 1;
+  height: 30px;
+  border: 2px solid var(--pixel-border);
+  border-radius: 4px;
+  background: rgba(var(--void-rgb), 0.35);
+  overflow: hidden;
+}
+
+.dgc-pit-walker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: left 0.1s linear;
+}
+
+.dgc-boss-sprite { width: 20px; height: 22px; display: block; }
+
+.dgc-pit-you {
+  font-family: var(--font-pixel);
+  font-size: 0.44rem;
+  letter-spacing: 0.08em;
+  color: var(--pixel-accent);
+  white-space: nowrap;
+}
+
+.dgc-edge-good { color: var(--pixel-good); }
+.dgc-edge-bad { color: var(--pixel-bad); }
+.dgc-hand-win { color: var(--pixel-good); font-style: normal; font-size: 0.8em; }
+.dgc-hand-loss { color: var(--pixel-bad); font-style: normal; font-size: 0.8em; }
+
+/* Count-check warning pips on the blackjack table */
+.bj-warning-pips { display: inline-flex; gap: 4px; margin-left: 10px; vertical-align: middle; }
+.bj-warning-pip {
+  width: 9px; height: 9px; border-radius: 2px;
+  border: 2px solid var(--pixel-border);
+  background: transparent;
+}
+.bj-warning-pip.is-lit { background: var(--pixel-bad); border-color: var(--pixel-bad); }
+
+/* Blackjack: edge/heat readout + compact question sub-labels */
+.bj-edge-hud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 14px;
+  margin: 8px 0 10px;
+  padding: 7px 10px;
+  border: 2px solid var(--pixel-border);
+  border-radius: 5px;
+  background: rgba(var(--void-rgb), 0.3);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.bj-edge-hud strong { color: var(--pixel-white); }
+.bj-q-sub {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ink-3);
+  margin-left: 6px;
+}
+
+/* Blackjack: inline re-bet row on the felt after a settled hand */
+.bj-rebet-row {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 2px solid rgba(244, 240, 232, 0.12);
+}
+.bj-choice-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.bj-check-grid { display: grid; gap: 10px; }
+
+/* Blackjack: persistent cash-out row */
+.bj-cashout-row {
+  margin-top: 12px;
+  display: grid;
+  justify-items: center;
+}
+.bj-cashout-btn {
+  background: transparent;
+  border: none;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.bj-cashout-btn:hover { color: var(--pixel-white); }
+.bj-cashout-confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--ink-2);
 }

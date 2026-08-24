@@ -37,7 +37,7 @@ export default function BacktestIntro({ onDone }: { onDone: () => void }) {
 
   return (
     <div className="answer-content">
-      <p className="pirate-kicker">Quant Interview Prep Lab</p>
+      <p className="pirate-kicker">Outcry</p>
       <h1 className="pirate-story-line answer-title">Twenty Backtests</h1>
       <div className="pixel-stage">
         <p className="mm-teach-progress">

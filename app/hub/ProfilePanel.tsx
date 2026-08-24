@@ -9,6 +9,7 @@ import { TRACK_BY_ID } from "../profile/tracks";
 import { STREAK_TARGET } from "../daily/challengeBank";
 import TokenIcon from "../access/TokenIcon";
 import TicketIcon from "../progress/TicketIcon";
+import GiftBox from "../access/GiftBox";
 
 const PASS_LABEL: Record<string, string> = {
   developer: "Developer",
@@ -32,7 +33,10 @@ export default function ProfilePanel() {
             <AvatarSprite id={profile.avatar} />
           </div>
           <div className="profile-id">
-            <h2 className="profile-name">{profile.displayName.trim() || "Unnamed player"}</h2>
+            <h2 className="profile-name">
+              {profile.displayName.trim() || "Unnamed player"}
+              <GiftBox />
+            </h2>
             <p className="profile-sub">
               {profile.account === "guest" ? "Guest session" : "Signed in"}
               {profile.experience ? ` · ${profile.experience}` : ""}

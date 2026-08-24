@@ -254,7 +254,7 @@ export default function MarketMakerGame() {
     <div className="answer-content">
       <GlossaryHud />
 
-      <p className="pirate-kicker">Quant Interview Prep Lab</p>
+      <p className="pirate-kicker">Outcry</p>
       <h1 className="pirate-story-line answer-title">Market Maker</h1>
       <p className="quiz-q-prompt" style={{ marginTop: 6, marginBottom: 16 }}>
         {ROUNDS} rounds. Each round you post two prices, someone trades against one of them, and the price moves. Stuck on

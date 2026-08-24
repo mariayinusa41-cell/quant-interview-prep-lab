@@ -1,8 +1,25 @@
-type PixelTileKind = "chart" | "candles" | "calculator" | "target" | "search" | "bars" | "sequence" | "walk";
+type PixelTileKind = "chart" | "candles" | "calculator" | "target" | "search" | "bars" | "sequence" | "walk" | "dino" | "crossroad";
+
+// There are only eight icon shapes but more than a dozen labs, so shape
+// alone can't keep them apart — Read the Shape and Twenty Backtests both
+// want "bars", Algorithm Arena and Quant Dev Lab both want "sequence".
+// `tone` recolours the accent so a repeated shape still reads as a
+// different tile at a glance.
+export type PixelTileTone = "blue" | "green" | "violet" | "amber" | "cyan" | "rose";
+
+const TONE_ACCENT: Record<PixelTileTone, string> = {
+  blue: "#5eb8ff",
+  green: "#47f0c2",
+  violet: "#b98cff",
+  amber: "#ffa94d",
+  cyan: "#4fe0e0",
+  rose: "#ff85a1",
+};
 
 type PixelTileIconProps = {
   kind: PixelTileKind;
   className?: string;
+  tone?: PixelTileTone;
 };
 
 type Pixel = { x: number; y: number; fill: string };
@@ -127,6 +144,33 @@ function detailedPixels(kind: Exclude<PixelTileKind, "target">): Pixel[] {
     return pixels;
   }
 
+  // Dino: a survival mascot for the actuarial run — a silhouette rather
+  // than another chart, since every neighbouring tile is already a chart.
+  if (kind === "dino") {
+    rect(pixels, 8, 1, 6, 5, BLUE);      // head
+    rect(pixels, 13, 3, 1, 1, WHITE);    // eye
+    rect(pixels, 7, 4, 2, 2, BLUE);      // jaw
+    rect(pixels, 4, 5, 7, 6, BLUE);      // body
+    rect(pixels, 2, 7, 3, 2, BLUE);      // tail
+    rect(pixels, 1, 8, 2, 1, BLUE);
+    rect(pixels, 5, 11, 2, 4, BLUE);     // back leg
+    rect(pixels, 9, 11, 2, 3, BLUE);     // front leg
+    rect(pixels, 4, 14, 3, 1, GOLD);     // feet
+    rect(pixels, 8, 14, 3, 1, GOLD);
+    rect(pixels, 6, 6, 2, 2, GOLD);      // spot
+    return pixels;
+  }
+
+  // Crossroad: a four-way intersection for the task-switching drill.
+  if (kind === "crossroad") {
+    rect(pixels, 6, 0, 4, 16, BLUE);     // vertical road
+    rect(pixels, 0, 6, 16, 4, BLUE);     // horizontal road
+    [1, 4, 11, 14].forEach((y) => rect(pixels, 7, y, 2, 2, GOLD));   // lane dashes
+    [1, 4, 11, 14].forEach((x) => rect(pixels, x, 7, 2, 2, GOLD));
+    rect(pixels, 6, 6, 4, 4, WHITE);     // the junction itself
+    return pixels;
+  }
+
   // Walk: a stepped path with bright nodes, used for the Markov-chain game.
   [[2, 12], [5, 9], [8, 11], [11, 6], [14, 3]].forEach(([x, y]) => rect(pixels, x, y, 2, 2, GOLD));
   rect(pixels, 3, 11, 2, 1, BLUE);
@@ -147,6 +191,12 @@ function PixelSvg({ pixels, className }: { pixels: Pixel[]; className?: string }
   );
 }
 
-export default function PixelTileIcon({ kind, className }: PixelTileIconProps) {
-  return <PixelSvg pixels={kind === "target" ? targetPixels() : detailedPixels(kind)} className={className} />;
+export default function PixelTileIcon({ kind, className, tone = "blue" }: PixelTileIconProps) {
+  const pixels = kind === "target" ? targetPixels() : detailedPixels(kind);
+  // Recolour as a post-pass over the finished pixel list rather than
+  // threading a colour argument through every drawing function — the gold
+  // frame and white highlights stay put, only the accent moves.
+  const accent = TONE_ACCENT[tone];
+  const toned = accent === BLUE ? pixels : pixels.map((px) => (px.fill === BLUE ? { ...px, fill: accent } : px));
+  return <PixelSvg pixels={toned} className={className} />;
 }

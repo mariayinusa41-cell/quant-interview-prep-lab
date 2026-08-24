@@ -98,14 +98,101 @@ const QUESTION_BANK: HotSlotQuestionInstance[] = [
     },
   },
   {
-    id: "ev-market",
+    // Replaces an older "what's the EV of a fair contract?" question whose
+    // answer was 0 straight from the definition of "fair", and which never
+    // said whether the multiplier was a total return or a profit. This one
+    // uses the multiplier the wheel ACTUALLY offers (which carries the house
+    // edge), and states the settlement convention explicitly, so there is a
+    // real number to compute and only one way to read the question.
+    id: "ev-house-edge",
     topic: "ev",
-    topicLabel: "Market Maker EV",
-    prompt: (o) => 
-      `A risk-neutral market maker offers you a perfectly fair contract. If you pay $100 to play, and they pay you exactly the Fair Multiplier (${fmtX(o.fairMultiplier)}) if you survive, what is the Expected Value of your NET PROFIT?`,
-    answer: (o) => ({ decimal: 0, tolerance: 0.1, display: "0" }),
-    explanation: (o) => 
-      `By definition, a 'Fair Multiplier' implies a zero-sum game with no house edge. [P(Win) * Payout] - Initial Bet = 0. Your expected net profit is exactly $0.`
+    topicLabel: "House Edge",
+    prompt: (o) =>
+      `You stake $100 on this spin at the wheel's offered multiplier of ${fmtX(o.offeredMultiplier)}. ` +
+      `Settlement: land safe and your $100 is RETURNED TO YOU MULTIPLIED by ${fmtX(o.offeredMultiplier)}; ` +
+      `land on a marked number and you lose the entire $100. ` +
+      `What is the expected NET PROFIT of this bet, in dollars?`,
+    answer: (o) => {
+      const ev = 100 * (o.safeProb.decimal * o.offeredMultiplier - 1);
+      return { decimal: ev, tolerance: 0.75, display: `$${ev.toFixed(2)}` };
+    },
+    explanation: (o) => {
+      const ev = 100 * (o.safeProb.decimal * o.offeredMultiplier - 1);
+      return (
+        `E[return] = P(safe) x 100 x multiplier = ${(o.safeProb.decimal * 100).toFixed(1)}% x $100 x ${o.offeredMultiplier} ` +
+        `= $${(o.safeProb.decimal * 100 * o.offeredMultiplier).toFixed(2)}. Net profit subtracts the $100 stake: $${ev.toFixed(2)}. ` +
+        `It is negative because the wheel pays ${fmtX(o.offeredMultiplier)} where a fair price would be ${fmtX(o.fairMultiplier)} — that gap is the house edge.`
+      );
+    },
+  },
+  {
+    // Expected TOTAL spins, including the one that ends the run. Sits next to
+    // the existing "safe spins before dying" question (S/(K+1)) and catches
+    // the classic off-by-one: the two differ by exactly the fatal spin.
+    id: "ev-total-spins",
+    topic: "ev",
+    topicLabel: "Expected Stopping Time",
+    prompt: (o) =>
+      `You keep spinning until a marked number ends the run. Counting the final, fatal spin itself, ` +
+      `what is the expected TOTAL number of spins the run lasts?`,
+    answer: (o) => {
+      const expected = (o.activeCount + 1) / (o.markedCount + 1);
+      return { decimal: expected, tolerance: 0.05, display: expected.toFixed(2) };
+    },
+    explanation: (o) => {
+      const s = o.activeCount - o.markedCount;
+      const expected = (o.activeCount + 1) / (o.markedCount + 1);
+      return (
+        `The ${o.markedCount} marked numbers cut the ${s} safe numbers into ${o.markedCount + 1} gaps, so the expected number of ` +
+        `SAFE spins first is ${s}/${o.markedCount + 1}. Add the fatal spin: ${s}/${o.markedCount + 1} + 1 = ` +
+        `(${o.activeCount}+1)/(${o.markedCount}+1) = ${expected.toFixed(2)}.`
+      );
+    },
+  },
+  {
+    // Pure symmetry: no arithmetic, but you have to see that every marked
+    // number is equally likely to be the one that gets you. Answer is 1/K and
+    // notably does NOT depend on N — the usual wrong instinct is to involve it.
+    id: "symmetry-first-marked",
+    topic: "gotcha",
+    topicLabel: "Symmetry",
+    prompt: (o) =>
+      `Of your ${o.markedCount} marked numbers, single out one specific number in advance. ` +
+      `What is the probability that THAT number is the first marked number the wheel lands on?`,
+    answer: (o) => {
+      const prob = o.markedCount === 0 ? 0 : 1 / o.markedCount;
+      return { decimal: prob, tolerance: 0.005, display: `${(prob * 100).toFixed(1)}%` };
+    },
+    explanation: (o) =>
+      `By symmetry every marked number is equally likely to be reached first, so it is simply 1/${o.markedCount} = ` +
+      `${o.markedCount === 0 ? "n/a" : ((1 / o.markedCount) * 100).toFixed(1)}%. ` +
+      `Note it does not depend on the ${o.activeCount} active numbers at all — the safe numbers are removed as you go, ` +
+      `but they never break the tie between your marked numbers.`,
+  },
+  {
+    // Extends the existing two-spin survival question by one more spin, which
+    // is where people start reusing the same denominator instead of shrinking
+    // it each time.
+    id: "safe-seq-3",
+    topic: "safe",
+    topicLabel: "Sequential Probability",
+    prompt: (o) =>
+      `What is the exact probability of surviving the next THREE spins in a row? ` +
+      `(Each safe number you land on is removed from the wheel before the next spin.)`,
+    answer: (o) => {
+      const s = o.activeCount - o.markedCount;
+      const n = o.activeCount;
+      const prob = s <= 2 || n <= 2 ? 0 : (s / n) * ((s - 1) / (n - 1)) * ((s - 2) / (n - 2));
+      return { decimal: prob, tolerance: 0.001, display: `${(prob * 100).toFixed(1)}%` };
+    },
+    explanation: (o) => {
+      const s = o.activeCount - o.markedCount;
+      const n = o.activeCount;
+      return (
+        `Both the safe count and the total shrink by one after each survival, while your ${o.markedCount} marked numbers stay put: ` +
+        `(${s}/${n}) x (${s - 1}/${n - 1}) x (${s - 2}/${n - 2}). The denominator has to shrink too — that is the step most people miss.`
+      );
+    },
   },
 ];
 

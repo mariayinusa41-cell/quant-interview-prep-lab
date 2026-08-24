@@ -181,6 +181,13 @@ export function taylorError(fn: TaylorFn, x: number, order: number): number {
   return Math.abs(fn.f(x) - taylorApprox(fn, x, order));
 }
 
+// The exact value of one specific term — this is what the player has to
+// compute and add on each round of the redesigned Taylor game, term by
+// term, rather than watching a live approximation converge on a slider.
+export function taylorTerm(fn: TaylorFn, x: number, order: number): number {
+  return fn.term(order, x);
+}
+
 // Smallest order (0..maxOrder) whose approximation error is at or below the
 // target threshold; returns null if even the max order can't reach it.
 export function minOrderForError(fn: TaylorFn, x: number, threshold: number, maxOrder = 10): number | null {
@@ -190,20 +197,33 @@ export function minOrderForError(fn: TaylorFn, x: number, threshold: number, max
   return null;
 }
 
-// ---------- Lagrange slider optimizer ----------
-export type LagrangeProblem = { k: number };
+// ---------- Lagrange multipliers ----------
+// Maximize f(x,y) = xy subject to the constraint ax + by = k (a, b, k > 0).
+// The old version hardcoded a = b = 1 and let you just drag toward the peak
+// of a live-updating xy readout — no Lagrange condition required at all.
+// This version is solved with the actual method: ∇f = λ∇g gives
+// (y, x) = λ(a, b), so y = λa and x = λb; substituting into the constraint,
+// a(λb) + b(λa) = k ⇒ λ = k / (2ab), giving the closed form below. The
+// player has to produce x* (or y*) from that reasoning — there's nothing to
+// visually converge on before locking in an answer.
+export type LagrangeProblem = { a: number; b: number; k: number };
 
 export function randomLagrangeProblem(): LagrangeProblem {
-  return { k: Math.floor(Math.random() * 16) + 5 }; // k in [5, 20]
+  const a = Math.floor(Math.random() * 4) + 1; // 1..4
+  const b = Math.floor(Math.random() * 4) + 1; // 1..4
+  const k = Math.floor(Math.random() * 16) + 6; // 6..21
+  return { a, b, k };
 }
 
-export function lagrangeObjective(x: number, k: number): number {
-  return x * (k - x);
+export function lagrangeObjective(x: number, y: number): number {
+  return x * y;
 }
 
-export function lagrangeOptimum(k: number): { xStar: number; value: number } {
-  const xStar = k / 2;
-  return { xStar, value: lagrangeObjective(xStar, k) };
+export function lagrangeSolution({ a, b, k }: LagrangeProblem): { xStar: number; yStar: number; lambda: number; value: number } {
+  const lambda = k / (2 * a * b);
+  const xStar = lambda * b;
+  const yStar = lambda * a;
+  return { xStar, yStar, lambda, value: lagrangeObjective(xStar, yStar) };
 }
 
 // ---------- Newton's method stepper ----------

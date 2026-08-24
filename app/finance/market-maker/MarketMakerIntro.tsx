@@ -130,7 +130,7 @@ export default function MarketMakerIntro({ onDone }: { onDone: () => void }) {
 
   return (
     <div className="answer-content">
-      <p className="pirate-kicker">Quant Interview Prep Lab</p>
+      <p className="pirate-kicker">Outcry</p>
       <h1 className="pirate-story-line answer-title">Market Maker</h1>
 
       <div className="pixel-stage">

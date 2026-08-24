@@ -260,7 +260,7 @@ export default function ArithmeticDrillGame() {
 
   return (
     <div className="answer-content">
-      <p className="pirate-kicker">Quant Interview Prep Lab</p>
+      <p className="pirate-kicker">Outcry</p>
       <h1 className="pirate-story-line answer-title">Arithmetic Drill</h1>
       <p className="quiz-q-prompt" style={{ marginTop: 6, marginBottom: 16 }}>
         {DECK_SIZE} cards, one at a time. Take a card first and it's <strong>+1</strong> — answer wrong and it's{" "}

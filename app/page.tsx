@@ -25,12 +25,20 @@ export default function Home() {
     if (new URLSearchParams(window.location.search).has("login")) setHasStarted(true);
   }, []);
 
+  // Once someone is onboarded, the attract screen should never come back —
+  // not on a fresh load, and not after clicking browser-back out of a game.
+  // Gating showHub behind `hasStarted` meant every single back-navigation
+  // dumped a returning, fully set-up player back at "Press Start" with no
+  // way past it except clicking through the splash again. `hasStarted` still
+  // gates the *first-time* flow (it's also the required user gesture for
+  // audio autoplay), but it's irrelevant once `profile.onboarded` is true.
   const needsOnboarding = hasStarted && ready && !profile.onboarded;
-  const showHub = hasStarted && ready && profile.onboarded;
+  const showHub = ready && profile.onboarded;
+  const showAttract = !showHub && !needsOnboarding;
 
   return (
     <>
-      {!hasStarted && <AttractScreen onStart={startLab} />}
+      {showAttract && <AttractScreen onStart={startLab} />}
       {needsOnboarding && <Onboarding />}
 
       <main className={showHub ? "study-site is-visible" : "study-site"} aria-hidden={!showHub}>

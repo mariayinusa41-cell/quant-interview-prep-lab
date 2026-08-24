@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useProfile } from "./ProfileContext";
 import { AGE_BANDS, EXPERIENCE_LEVELS, MAJORS, TRACKS, type TrackId } from "./tracks";
 import { AVATARS, AvatarSprite, type AvatarId } from "./avatars";
@@ -25,9 +25,39 @@ export default function Onboarding() {
   const [displayName, setDisplayName] = useState("");
   const [avatar, setAvatar] = useState<AvatarId>("duck");
 
-  // The auth screen is a visual mockup, so it sits outside the numbered
-  // steps rather than pretending to be one.
+  // Real fields for the auth step — separate from the local-only
+  // displayName/avatar/tracks above, which stay client-side for now.
+  const [authEmail, setAuthEmail] = useState("");
+  const [authPassword, setAuthPassword] = useState("");
+  const [authUsername, setAuthUsername] = useState("");
+  const [authSubmitting, setAuthSubmitting] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+
+  // The auth screen sits outside the numbered steps rather than pretending
+  // to be one of them, since "signup" and "login" aren't really progress —
+  // they're a fork before progress starts.
   const index = Math.max(0, STEPS.indexOf(step));
+
+  // If a real session already exists — e.g. someone just signed up or
+  // logged in on the standalone /login page and got redirected here — don't
+  // make them click through "Sign up" again. Skip straight to picking a
+  // character, same as finishing the auth step normally would.
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/auth/me", { credentials: "same-origin" })
+      .then((res) => (res.ok ? res.json() : { user: null }))
+      .then((data: { user: { displayName: string | null } | null }) => {
+        if (cancelled || !data.user) return;
+        setAccount("account");
+        if (data.user.displayName) setDisplayName(data.user.displayName);
+        setStep((current) => (current === "account" ? "avatar" : current));
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toggleTrack = (id: TrackId) =>
     setTracks((prev) => (prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id]));
@@ -37,7 +67,41 @@ export default function Onboarding() {
 
   const openAuth = (which: "signup" | "login") => {
     setAuthMode(which);
+    setAuthError(null);
     setStep("auth");
+  };
+
+  // Real signup/login against app/api/auth/{signup,login}/route.ts — sets an
+  // actual httpOnly session cookie backed by the `users` table. Only on
+  // success does the flow continue to the avatar/track picker.
+  const submitAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError(null);
+    setAuthSubmitting(true);
+    try {
+      const body: Record<string, string> =
+        authMode === "signup"
+          ? { email: authEmail, password: authPassword, username: authUsername, displayName }
+          : { email: authEmail, password: authPassword };
+      const res = await fetch(`/api/auth/${authMode}`, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const data = (await res.json()) as { user?: { email: string; username: string | null; displayName: string | null }; error?: string };
+      if (!res.ok) {
+        setAuthError(data.error ?? "Something went wrong.");
+        return;
+      }
+      if (data.user?.displayName && !displayName) setDisplayName(data.user.displayName);
+      setAccount("account");
+      setStep("avatar");
+    } catch {
+      setAuthError("Network error — the request never reached the server.");
+    } finally {
+      setAuthSubmitting(false);
+    }
   };
 
   return (
@@ -84,48 +148,71 @@ export default function Onboarding() {
             <p className="onboarding-kicker">{authMode === "signup" ? "Create account" : "Welcome back"}</p>
             <h2 className="onboarding-title">{authMode === "signup" ? "Sign up" : "Log in"}</h2>
 
-            <p className="onboarding-notice" role="status">
-              Design preview — this form is not connected to anything. Nothing you type is sent or
-              stored, so do not enter a real password.
-            </p>
+            <form onSubmit={submitAuth}>
+              {authMode === "signup" && (
+                <>
+                  <label className="onboarding-field">
+                    <span>Display name (optional)</span>
+                    <input
+                      type="text"
+                      value={displayName}
+                      onChange={(e) => setDisplayName(e.target.value)}
+                      placeholder="How you appear on the leaderboard"
+                      autoComplete="off"
+                    />
+                  </label>
 
-            <label className="onboarding-field">
-              <span>Display name</span>
-              <input
-                type="text"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-                placeholder="How you appear on the leaderboard"
-                autoComplete="off"
-              />
-            </label>
+                  <label className="onboarding-field">
+                    <span>Username (optional)</span>
+                    <input
+                      type="text"
+                      value={authUsername}
+                      onChange={(e) => setAuthUsername(e.target.value)}
+                      placeholder="Unique handle, no spaces"
+                      autoComplete="off"
+                    />
+                  </label>
+                </>
+              )}
 
-            <label className="onboarding-field">
-              <span>Email</span>
-              <input type="text" placeholder="you@example.com" autoComplete="off" disabled />
-            </label>
+              <label className="onboarding-field">
+                <span>Email</span>
+                <input
+                  type="email"
+                  value={authEmail}
+                  onChange={(e) => setAuthEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  autoComplete="email"
+                  required
+                />
+              </label>
 
-            <label className="onboarding-field">
-              <span>Password</span>
-              <input type="text" placeholder="Disabled in this preview" autoComplete="off" disabled />
-            </label>
+              <label className="onboarding-field">
+                <span>Password</span>
+                <input
+                  type="password"
+                  value={authPassword}
+                  onChange={(e) => setAuthPassword(e.target.value)}
+                  placeholder={authMode === "signup" ? "At least 8 characters" : "Your password"}
+                  autoComplete={authMode === "signup" ? "new-password" : "current-password"}
+                  minLength={authMode === "signup" ? 8 : undefined}
+                  required
+                />
+              </label>
 
-            <div className="onboarding-actions">
-              <button type="button" className="onboarding-btn" onClick={() => setStep("account")}>Back</button>
-              <button
-                type="button"
-                className="onboarding-btn is-primary"
-                onClick={() => {
-                  setAccount("account");
-                  setStep("avatar");
-                }}
-              >
-                {authMode === "signup" ? "Create account" : "Log in"}
-              </button>
-            </div>
-            <p className="onboarding-hint">
-              Continues as a simulated signed-in player so you can see the full experience.
-            </p>
+              {authError && (
+                <p className="onboarding-notice is-error" role="alert">
+                  {authError}
+                </p>
+              )}
+
+              <div className="onboarding-actions">
+                <button type="button" className="onboarding-btn" onClick={() => setStep("account")}>Back</button>
+                <button type="submit" className="onboarding-btn is-primary" disabled={authSubmitting}>
+                  {authSubmitting ? "Working..." : authMode === "signup" ? "Create account" : "Log in"}
+                </button>
+              </div>
+            </form>
           </>
         )}
 

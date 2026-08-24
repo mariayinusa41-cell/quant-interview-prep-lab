@@ -3,7 +3,7 @@ import DarkMode from "../DarkMode";
 import { TicketIcon, CherrySlotIcon } from "./PixelIcons";
 
 export const metadata: Metadata = {
-  title: "Quitters Never Lose - Quant Interview Prep Lab",
+  title: "Quitters Never Lose - Outcry",
   description: "A gambler simulation: pick a game and watch a real bankroll play out.",
 };
 

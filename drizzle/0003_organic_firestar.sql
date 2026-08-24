@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD `welcome_bonus_claimed_at` text;

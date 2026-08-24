@@ -763,3 +763,39 @@
   color: #f4c542;
   font-weight: 600;
 }
+
+/* ---------- Fermi range input (low / high bounds) ---------- */
+
+.fermi-bounds {
+  display: grid;
+  gap: 10px;
+}
+
+.fermi-bounds-hint {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--ink-3, #9aa4b2);
+  text-align: center;
+}
+
+.fermi-bound-field {
+  display: grid;
+  gap: 4px;
+  flex: 1 1 130px;
+  min-width: 110px;
+}
+
+.fermi-bound-label {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: var(--pixel-accent, #f4c542);
+}
+
+.fermi-bounds .fermi-input-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+}

@@ -193,7 +193,7 @@ export default function CrackTheBotGame() {
 
   return (
     <div className="answer-content">
-      <p className="pirate-kicker">Quant Interview Prep Lab</p>
+      <p className="pirate-kicker">Outcry</p>
       <h1 className="pirate-story-line answer-title">Crack the Bot</h1>
 
       {phase === "briefing" && (

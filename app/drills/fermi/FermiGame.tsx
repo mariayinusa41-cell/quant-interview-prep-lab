@@ -10,15 +10,47 @@ import { AccessStartButton } from "../../access/TokenPlayButton";
 import "./fermi.css";
 
 // ---------- Scoring logic ----------
-// An estimate within 1 order of magnitude of the true answer scores well.
-// Scoring: exact OOM match = 3 pts, ±0.5 OOM = 2 pts, ±1 OOM = 1 pt, else 0.
-function scoreGuess(guess: number, truth: number): { points: number; label: string; oomDiff: number } {
-  if (guess <= 0 || truth <= 0) return { points: 0, label: "Invalid", oomDiff: Infinity };
-  const oomDiff = Math.abs(Math.log10(guess) - Math.log10(truth));
-  if (oomDiff <= 0.25) return { points: 3, label: "Bullseye!", oomDiff };
-  if (oomDiff <= 0.5) return { points: 2, label: "Very close", oomDiff };
-  if (oomDiff <= 1) return { points: 1, label: "Right ballpark", oomDiff };
-  return { points: 0, label: "Off by too much", oomDiff };
+// Fermi estimation is really a question about a RANGE, not a single number —
+// an interviewer wants a bound you'd actually defend, and "somewhere between
+// 10k and 100k" is a real answer where a bare "40,000" hides whether you had
+// any idea. So the player gives a low and a high bound, and scoring rewards
+// two things that pull against each other:
+//
+//   1. the interval has to actually contain the truth, and
+//   2. the tighter it is, the more it's worth.
+//
+// Without (2) you'd just answer 1 to 10^12 every time and always "win";
+// without (1) you'd guess narrow and never be held to it. Width is measured
+// in orders of magnitude (log10 high − log10 low), which is the natural
+// scale for a quantity that could be thousands or billions.
+function scoreInterval(low: number, high: number, truth: number): {
+  points: number;
+  label: string;
+  contains: boolean;
+  widthOom: number;
+} {
+  if (!(low > 0) || !(high > 0) || !(truth > 0) || high < low) {
+    return { points: 0, label: "Invalid range", contains: false, widthOom: Infinity };
+  }
+  const widthOom = Math.log10(high) - Math.log10(low);
+  const contains = truth >= low && truth <= high;
+
+  if (!contains) {
+    // A miss still distinguishes "just outside" from "wildly off", but
+    // neither earns points — the bound was wrong either way.
+    const missOom = truth < low ? Math.log10(low) - Math.log10(truth) : Math.log10(truth) - Math.log10(high);
+    return {
+      points: 0,
+      label: missOom <= 0.5 ? "Just missed the range" : "Truth was outside your range",
+      contains: false,
+      widthOom,
+    };
+  }
+
+  if (widthOom <= 0.5) return { points: 4, label: "Tight and correct!", contains, widthOom };
+  if (widthOom <= 1) return { points: 3, label: "Good range", contains, widthOom };
+  if (widthOom <= 2) return { points: 2, label: "Contained, but wide", contains, widthOom };
+  return { points: 1, label: "Correct, but too wide to be useful", contains, widthOom };
 }
 
 function formatNumber(n: number): string {
@@ -83,7 +115,7 @@ const TECH_ROUND_COUNT = 8;
 
 type Phase = "menu" | "playing" | "result";
 type Mode = "classic" | "technical";
-type Answered = { q: FermiQuestion; guess: number; points: number; label: string; oomDiff: number };
+type Answered = { q: FermiQuestion; low: number; high: number; points: number; label: string; contains: boolean; widthOom: number };
 type TechAnswered = { q: TechnicalQuestion; guess: number; points: 0 | 1 | 2 | 3; label: string };
 
 const PIP_LAYOUT: Record<number, boolean[]> = {
@@ -168,6 +200,8 @@ export default function FermiGame() {
   const [techDeck, setTechDeck] = useState<TechnicalQuestion[]>([]);
   const [idx, setIdx] = useState(0);
   const [input, setInput] = useState("");
+  const [lowInput, setLowInput] = useState("");
+  const [highInput, setHighInput] = useState("");
   const [answered, setAnswered] = useState<Answered[]>([]);
   const [techAnswered, setTechAnswered] = useState<TechAnswered[]>([]);
   const [showResult, setShowResult] = useState(false); // per-question reveal
@@ -252,6 +286,8 @@ export default function FermiGame() {
     }
     setIdx(0);
     setInput("");
+    setLowInput("");
+    setHighInput("");
     setAnswered([]);
     setTechAnswered([]);
     setShowResult(false);
@@ -272,9 +308,15 @@ export default function FermiGame() {
       setTechAnswered((prev) => [...prev, a]);
     } else {
       if (!currentQ) return;
-      if (isNaN(guess) || guess <= 0) guess = 0.001; // treat empty/bad as ~0
-      const result = scoreGuess(guess, currentQ.answer);
-      const a: Answered = { q: currentQ, guess, ...result };
+      let low = parseGuessInput(lowInput.trim().replace(/,/g, ""));
+      let high = parseGuessInput(highInput.trim().replace(/,/g, ""));
+      // An unparseable or missing bound is scored as a miss rather than
+      // silently coerced into something that might accidentally contain the
+      // answer.
+      if (isNaN(low) || low <= 0) low = NaN;
+      if (isNaN(high) || high <= 0) high = NaN;
+      const result = scoreInterval(low, high, currentQ.answer);
+      const a: Answered = { q: currentQ, low, high, ...result };
       setLastResult(a);
       setAnswered((prev) => [...prev, a]);
     }
@@ -304,6 +346,8 @@ export default function FermiGame() {
     }
     setIdx((i) => i + 1);
     setInput("");
+    setLowInput("");
+    setHighInput("");
     setShowResult(false);
     setLastResult(null);
     setLastTechResult(null);
@@ -489,12 +533,24 @@ export default function FermiGame() {
   // ---------- RESULT ----------
   if (phase === "result") {
     const isTech = mode === "technical";
-    const list: { id: string | number; question: string; guess: number; answer: number; unit: string; explanation: string; points: number }[] =
+    // `given` is a pre-formatted string rather than a number: technical mode
+    // still answers with a single estimate, everyday mode now answers with a
+    // low–high range, and the review row just needs to print whichever it was.
+    const list: { id: string | number; question: string; given: string; answer: number; unit: string; explanation: string; points: number }[] =
       isTech
-        ? techAnswered.map((a) => ({ ...a.q, guess: a.guess, points: a.points }))
-        : answered.map((a) => ({ ...a.q, guess: a.guess, points: a.points }));
+        ? techAnswered.map((a) => ({ ...a.q, given: formatNumber(a.guess), points: a.points }))
+        : answered.map((a) => ({
+            ...a.q,
+            given:
+              Number.isNaN(a.low) || Number.isNaN(a.high)
+                ? "—"
+                : `${formatNumber(a.low)} to ${formatNumber(a.high)}`,
+            points: a.points,
+          }));
     const score = list.reduce((s, a) => s + a.points, 0);
-    const maxPts = list.length * 3;
+    // Interval scoring tops out at 4; the technical mode's scoreTechnical
+    // still tops out at 3, so the denominator has to follow the mode.
+    const maxPts = list.length * (isTech ? 3 : 4);
     const pct = maxPts > 0 ? Math.round((score / maxPts) * 100) : 0;
     return (
       <div className="fermi-container">
@@ -513,12 +569,12 @@ export default function FermiGame() {
 
           <div className="fermi-review">
             {list.map((a, i) => (
-              <div key={a.id} className={`fermi-review-row ${a.points === 3 ? "bull" : a.points >= 1 ? "ok" : "miss"}`}>
+              <div key={a.id} className={`fermi-review-row ${a.points >= (isTech ? 3 : 4) ? "bull" : a.points >= 1 ? "ok" : "miss"}`}>
                 <div className="fermi-review-num">Q{i + 1}</div>
                 <div className="fermi-review-body">
                   <p className="fermi-review-q">{a.question}</p>
                   <p className="fermi-review-vals">
-                    You: <strong>{formatNumber(a.guess)}</strong> &nbsp;|&nbsp; Answer:{" "}
+                    You: <strong>{a.given}</strong> &nbsp;|&nbsp; Answer:{" "}
                     <strong>{formatNumber(a.answer)}</strong> {a.unit}
                   </p>
                   <p className="fermi-review-explain">{a.explanation}</p>
@@ -675,22 +731,45 @@ export default function FermiGame() {
         <p className="fermi-question">{currentQ?.question}</p>
 
         {!showResult ? (
-          <div className="fermi-input-row">
-            <input
-              ref={inputRef}
-              type="text"
-              className="fermi-input"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Your estimate (e.g. 500, 1.2e6, 3M, 4.5 million)"
-              autoComplete="off"
-              autoCorrect="off"
-              spellCheck={false}
-            />
-            <button type="button" className="fermi-submit-btn" onClick={handleSubmit}>
-              Lock in
-            </button>
+          <div className="fermi-bounds">
+            <p className="fermi-bounds-hint">
+              Give a range you&rsquo;d defend. Containing the answer earns points; the tighter the range, the more
+              it&rsquo;s worth.
+            </p>
+            <div className="fermi-input-row">
+              <label className="fermi-bound-field">
+                <span className="fermi-bound-label">LOW</span>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  className="fermi-input"
+                  value={lowInput}
+                  onChange={(e) => setLowInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="e.g. 10K"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  spellCheck={false}
+                />
+              </label>
+              <label className="fermi-bound-field">
+                <span className="fermi-bound-label">HIGH</span>
+                <input
+                  type="text"
+                  className="fermi-input"
+                  value={highInput}
+                  onChange={(e) => setHighInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="e.g. 100K"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  spellCheck={false}
+                />
+              </label>
+              <button type="button" className="fermi-submit-btn" onClick={handleSubmit}>
+                Lock in
+              </button>
+            </div>
           </div>
         ) : lastResult ? (
           <div className="fermi-reveal">
@@ -700,8 +779,11 @@ export default function FermiGame() {
             </div>
             <div className="fermi-comparison">
               <div className="fermi-comp-col">
-                <span className="fermi-comp-label">Your guess</span>
-                <span className="fermi-comp-val">{formatNumber(lastResult.guess)}</span>
+                <span className="fermi-comp-label">Your range</span>
+                <span className="fermi-comp-val">
+                  {Number.isNaN(lastResult.low) ? "—" : formatNumber(lastResult.low)} to{" "}
+                  {Number.isNaN(lastResult.high) ? "—" : formatNumber(lastResult.high)}
+                </span>
               </div>
               <div className="fermi-comp-arrow">→</div>
               <div className="fermi-comp-col">
@@ -710,7 +792,7 @@ export default function FermiGame() {
               </div>
             </div>
             <div className="fermi-oom-bar">
-              <OOMBar guess={lastResult.guess} truth={lastResult.q.answer} />
+              <OOMBar guess={Math.sqrt(lastResult.low * lastResult.high)} truth={lastResult.q.answer} />
             </div>
             <p className="fermi-explain">{lastResult.q.explanation}</p>
             <button type="button" className="fermi-next-btn" onClick={nextQuestion}>

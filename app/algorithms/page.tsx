@@ -43,7 +43,7 @@ export default function AlgorithmsPage() {
     <>
       <DarkMode />
       <main className="pirate-stage-main answer-page">
-        <a href="/" className="pirate-back-link">&larr; Quant Interview Prep Lab</a>
+        <a href="/" className="pirate-back-link">&larr; Outcry</a>
         <div className="answer-content">
           <p className="pirate-kicker">Algorithms / Coding // Game Select</p>
           <h1 className="pirate-story-line answer-title">Algorithm Arena</h1>

@@ -50,7 +50,7 @@ export default function CalculusLinearAlgebraPage() {
     <>
       <DarkMode />
       <main className="pirate-stage-main answer-page">
-        <a href="/" className="pirate-back-link">&larr; Quant Interview Prep Lab</a>
+        <a href="/" className="pirate-back-link">&larr; Outcry</a>
         <div className="answer-content">
           <p className="pirate-kicker">Calculus / Linear Algebra // Game Select</p>
           <h1 className="pirate-story-line answer-title">Gradient Lab</h1>
