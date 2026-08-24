@@ -1,0 +1,321 @@
+/* ========== Duck Crossroad Multitasker ========== */
+
+.duck-container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+  font-family: var(--font-display);
+}
+
+.duck-rules-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 16px 0;
+  text-align: left;
+}
+
+@media (max-width: 540px) {
+  .duck-rules-box {
+    grid-template-columns: 1fr;
+  }
+}
+
+.duck-rule-item {
+  border: 3px solid var(--pixel-border);
+  background: rgba(var(--void-rgb), 0.3);
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.duck-rule-item p {
+  margin: 6px 0 0;
+  font-size: 0.82rem;
+  color: var(--ink-2);
+}
+
+.duck-rule-heading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.duck-rule-icon {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+
+/* Prompt Banner */
+.duck-prompt-banner {
+  border: 3px solid var(--pixel-border);
+  border-radius: 6px;
+  padding: 12px;
+  text-align: center;
+  font-family: var(--font-pixel);
+  font-size: 0.76rem;
+  margin-bottom: 12px;
+  background: rgba(var(--void-rgb), 0.4);
+}
+
+.duck-prompt-banner.motion-congruence {
+  border-color: var(--pixel-accent);
+  color: var(--pixel-accent-light);
+  background: rgba(244, 197, 66, 0.1);
+}
+
+.duck-prompt-banner.quadrant-math {
+  border-color: var(--pixel-primary);
+  color: var(--pixel-white);
+  background: rgba(79, 179, 224, 0.12);
+}
+
+/* Crossroad Stage */
+.duck-stage-viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-height: 420px;
+  background: #111722;
+  border: 4px solid var(--pixel-border);
+  border-radius: 12px;
+  margin: 0 auto 1rem;
+  overflow: hidden;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+  transition: background 0.15s ease;
+}
+
+.duck-stage-viewport.flash-good {
+  background: rgba(89, 201, 143, 0.25) !important;
+}
+
+.duck-stage-viewport.flash-bad {
+  background: rgba(231, 76, 76, 0.25) !important;
+}
+
+/* Asphalt Roads — each is a clipped channel with a continuously-scrolling
+   arrow strip inside it, not a couple of static glyphs. The dashed lane
+   markers also crawl, same trick as the dino game's scrolling horizon: a
+   background pattern translated on a loop reads as motion for free. */
+.duck-road {
+  position: absolute;
+  background: #1b2330;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.duck-road.vertical {
+  width: 90px;
+  height: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 2px dashed rgba(255, 255, 255, 0.15);
+  border-right: 2px dashed rgba(255, 255, 255, 0.15);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 18px,
+    rgba(255, 255, 255, 0.06) 18px,
+    rgba(255, 255, 255, 0.06) 22px
+  );
+  animation: lane-crawl-y 0.9s linear infinite;
+}
+
+.duck-road.horizontal {
+  height: 90px;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 2px dashed rgba(255, 255, 255, 0.15);
+  border-bottom: 2px dashed rgba(255, 255, 255, 0.15);
+  background-image: repeating-linear-gradient(
+    to right,
+    transparent 0,
+    transparent 18px,
+    rgba(255, 255, 255, 0.06) 18px,
+    rgba(255, 255, 255, 0.06) 22px
+  );
+  animation: lane-crawl-x 0.9s linear infinite;
+}
+
+@keyframes lane-crawl-y {
+  from { background-position-y: 0; }
+  to { background-position-y: 44px; }
+}
+@keyframes lane-crawl-x {
+  from { background-position-x: 0; }
+  to { background-position-x: 44px; }
+}
+
+.duck-arrow-strip {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.duck-arrow-strip.vertical {
+  flex-direction: column;
+  height: 200%;
+  width: 100%;
+  gap: 14px;
+}
+
+.duck-arrow-strip.horizontal {
+  flex-direction: row;
+  width: 200%;
+  height: 100%;
+  gap: 14px;
+}
+
+.duck-arrow-strip.flow-up { animation: strip-flow-up 2.6s linear infinite; }
+.duck-arrow-strip.flow-down { animation: strip-flow-down 2.6s linear infinite; }
+.duck-arrow-strip.flow-left { animation: strip-flow-left 2.6s linear infinite; }
+.duck-arrow-strip.flow-right { animation: strip-flow-right 2.6s linear infinite; }
+.duck-arrow-strip.flow-idle { opacity: 0.35; }
+
+@keyframes strip-flow-up { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+@keyframes strip-flow-down { from { transform: translateY(-50%); } to { transform: translateY(0); } }
+@keyframes strip-flow-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes strip-flow-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+.duck-road-arrow {
+  font-family: monospace;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.4);
+  animation: arrow-flow 1s ease-in-out infinite alternate;
+  flex-shrink: 0;
+}
+
+@keyframes arrow-flow {
+  from { opacity: 0.25; }
+  to { opacity: 0.9; color: var(--pixel-accent); }
+}
+
+/* Center Duck Hub — this is the piece that actually moves. It walks all
+   the way across the stage in its facing direction and wraps back around,
+   a continuous loop the same way the dino game's runner never stops. */
+.duck-center-hub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid var(--pixel-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  box-shadow: 0 0 14px rgba(244, 197, 66, 0.3);
+}
+
+.duck-center-hub.walk-north { animation: duck-walk-north 3.2s linear infinite; }
+.duck-center-hub.walk-south { animation: duck-walk-south 3.2s linear infinite; }
+.duck-center-hub.walk-east { animation: duck-walk-east 3.2s linear infinite; }
+.duck-center-hub.walk-west { animation: duck-walk-west 3.2s linear infinite; }
+
+@keyframes duck-walk-north {
+  from { top: 118%; transform: translate(-50%, -50%); }
+  to { top: -18%; transform: translate(-50%, -50%); }
+}
+@keyframes duck-walk-south {
+  from { top: -18%; transform: translate(-50%, -50%); }
+  to { top: 118%; transform: translate(-50%, -50%); }
+}
+@keyframes duck-walk-east {
+  from { left: -18%; transform: translate(-50%, -50%); }
+  to { left: 118%; transform: translate(-50%, -50%); }
+}
+@keyframes duck-walk-west {
+  from { left: 118%; transform: translate(-50%, -50%); }
+  to { left: -18%; transform: translate(-50%, -50%); }
+}
+
+.duck-center-hub.walk-north,
+.duck-center-hub.walk-south {
+  left: 50%;
+}
+.duck-center-hub.walk-east,
+.duck-center-hub.walk-west {
+  top: 50%;
+}
+
+.duck-sprite-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.12s ease-out;
+}
+
+.pixel-duck-svg {
+  image-rendering: pixelated;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+}
+
+/* 4 Corner Math Pods */
+.duck-corner {
+  position: absolute;
+  width: 110px;
+  height: 90px;
+  background: rgba(15, 26, 43, 0.88);
+  border: 3px solid var(--pixel-border);
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 3;
+  transition: all 0.15s ease-in-out;
+}
+
+.duck-corner.nw { top: 12px; left: 12px; }
+.duck-corner.ne { top: 12px; right: 12px; }
+.duck-corner.sw { bottom: 12px; left: 12px; }
+.duck-corner.se { bottom: 12px; right: 12px; }
+
+.duck-corner.active-corner {
+  border-color: var(--pixel-primary);
+  background: rgba(79, 179, 224, 0.25);
+  box-shadow: 0 0 16px rgba(79, 179, 224, 0.4);
+  transform: scale(1.05);
+}
+
+.corner-tag {
+  font-family: var(--font-pixel);
+  font-size: 0.55rem;
+  color: var(--ink-3);
+}
+
+.duck-corner.active-corner .corner-tag {
+  color: var(--pixel-primary);
+}
+
+.corner-math {
+  font-family: var(--font-pixel);
+  font-size: 0.95rem;
+  color: var(--pixel-white);
+  text-align: center;
+  margin: auto 0;
+}
+
+.duck-hud-icon {
+  width: 14px;
+  height: 14px;
+  image-rendering: pixelated;
+  vertical-align: -2px;
+  margin-right: 4px;
+}
+
+.duck-banner-icon {
+  width: 22px;
+  height: 22px;
+  image-rendering: pixelated;
+  vertical-align: -4px;
+  margin-right: 6px;
+}

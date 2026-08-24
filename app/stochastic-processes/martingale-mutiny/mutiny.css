@@ -1,0 +1,192 @@
+/* ========== Martingale Mutiny ==========
+   The shared .stochastic-node badge (from Ruin Walker) was sized for 1-2
+   digit integer states (0-12). Martingale Mutiny's wealth values run into
+   the hundreds, so checkpoint labels get their own lightweight row below
+   the track instead of trying to cram 3 digits into a small round badge —
+   the live wealth position still uses the real .stochastic-node.is-current
+   badge, since that one only ever needs to fit ~3 digits comfortably at
+   its larger size. */
+
+/* Fill-in-the-blank guided step (first few legs) */
+.mutiny-blank-panel p {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.mutiny-formula {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--accent-2);
+  background: rgba(94, 184, 255, 0.08);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  margin: 0.5rem 0;
+}
+
+.mutiny-formula-filled {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--text) !important;
+  padding: 0.5rem 0.75rem;
+}
+
+.mutiny-blank {
+  display: inline-block;
+  min-width: 2.5rem;
+  padding: 0 0.4rem;
+  border-bottom: 2px dashed var(--pixel-accent);
+  color: var(--pixel-accent);
+  font-weight: 700;
+  text-align: center;
+}
+
+.mutiny-track {
+  margin-bottom: 6px;
+}
+
+.calc-input-row {
+  display: flex;
+  gap: 0.75rem;
+  margin: 0.75rem 0;
+}
+
+.calc-input {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border: 2px solid var(--line-strong);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--text);
+  outline: none;
+}
+
+.calc-input:focus {
+  border-color: var(--accent);
+}
+
+.calc-submit-btn {
+  font-family: var(--font-pixel);
+  font-size: 0.65rem;
+  padding: 0.7rem 1.1rem;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  background: rgba(71, 240, 194, 0.15);
+  color: var(--accent);
+  cursor: pointer;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.calc-submit-btn:hover {
+  background: rgba(71, 240, 194, 0.25);
+}
+
+.mutiny-verdict {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-family: var(--font-pixel);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mutiny-verdict.is-good {
+  background: rgba(71, 240, 194, 0.12);
+  border: 1px solid rgba(71, 240, 194, 0.3);
+  color: var(--accent);
+}
+
+.mutiny-verdict.is-ok {
+  background: rgba(244, 197, 66, 0.12);
+  border: 1px solid rgba(244, 197, 66, 0.3);
+  color: var(--pixel-accent);
+}
+
+.mutiny-verdict.is-miss {
+  background: rgba(231, 76, 76, 0.1);
+  border: 1px solid rgba(231, 76, 76, 0.25);
+  color: var(--pixel-bad);
+}
+
+.mutiny-checkpoints {
+  position: relative;
+  height: 20px;
+  margin: 0 14px 18px;
+}
+
+.mutiny-checkpoint {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: rgba(244, 240, 232, 0.55);
+  white-space: nowrap;
+}
+
+/* Briefing banner: boat sailing toward the island */
+.mutiny-brief-stage {
+  position: relative;
+}
+
+.mutiny-brief-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.mutiny-icon-lg {
+  width: 56px;
+  height: 56px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+}
+
+.mutiny-brief-arrow {
+  font-size: 1.5rem;
+  color: var(--muted);
+}
+
+/* Live track icons */
+.mutiny-icon-sm {
+  width: 26px;
+  height: 26px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5));
+}
+
+.mutiny-reef {
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.mutiny-island {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.mutiny-boat-marker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: left 0.3s ease-out;
+  z-index: 2;
+}
+
+.mutiny-storm-flash {
+  background: radial-gradient(circle, rgba(94, 184, 255, 0.55), transparent 68%);
+}

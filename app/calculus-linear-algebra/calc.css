@@ -1,0 +1,315 @@
+/* ========== Gradient Lab (Calculus / Linear Algebra) ========== */
+
+.calc-mode-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.calc-chip {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.calc-chip:hover {
+  border-color: var(--accent-2);
+  color: var(--text);
+}
+
+.calc-chip.active {
+  background: rgba(94, 184, 255, 0.12);
+  border-color: var(--accent-2);
+  color: var(--accent-2);
+}
+
+.calc-mode-tag {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin: 0 0 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.calc-subgame {
+  max-width: 640px;
+}
+
+.calc-loading {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 2rem 0;
+}
+
+.calc-subgame-intro {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 1rem;
+}
+
+/* Matrix display */
+.calc-matrix-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 1rem 0 1.25rem;
+}
+
+.calc-matrix-bracket {
+  font-size: 2.4rem;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1;
+}
+
+.calc-matrix-cells {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(3.2rem, auto));
+  grid-template-rows: repeat(2, 2.2rem);
+  gap: 0.3rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  text-align: center;
+  place-items: center;
+  white-space: nowrap;
+}
+
+/* Choice grid (shared by PSD classifier + eigenvector spotter) */
+.calc-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 520px) {
+  .calc-choice-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.calc-choice {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+
+.calc-choice:hover:not(:disabled) {
+  border-color: var(--accent-2);
+}
+
+.calc-choice:disabled {
+  cursor: default;
+}
+
+.calc-choice.is-answer {
+  border-color: var(--accent);
+  background: rgba(71, 240, 194, 0.1);
+  color: var(--accent);
+}
+
+.calc-choice.is-selected {
+  border-color: var(--pixel-bad);
+  background: rgba(231, 76, 76, 0.08);
+  color: var(--pixel-bad);
+}
+
+.calc-reveal {
+  animation: fermi-fadeIn 0.3s ease-out;
+  margin-top: 0.75rem;
+}
+
+/* Eigenvector plot */
+.calc-eigen-plot {
+  width: 100%;
+  max-width: 260px;
+  display: block;
+  margin: 0.5rem auto 1.25rem;
+  color: var(--text);
+}
+
+/* Slider panels (Taylor + Lagrange) */
+.calc-taylor-panel {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  backdrop-filter: blur(6px);
+  padding: 1.25rem 1.25rem 1.5rem;
+}
+
+.calc-taylor-target {
+  font-size: 0.95rem;
+  color: var(--text);
+  margin: 0 0 1rem;
+}
+
+.calc-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.calc-slider-label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  min-width: 2.5rem;
+}
+
+.calc-slider {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  accent-color: var(--accent-2);
+  cursor: pointer;
+}
+
+.calc-slider-value {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent-2);
+  min-width: 2.5rem;
+  text-align: right;
+}
+
+.calc-taylor-readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.calc-taylor-readout > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.calc-comp-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+
+.calc-comp-val {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.calc-comp-val.is-good {
+  color: var(--accent);
+}
+
+.calc-comp-val.is-bad {
+  color: var(--pixel-bad);
+}
+
+.calc-threshold-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.calc-threshold-badge.is-good {
+  background: rgba(71, 240, 194, 0.12);
+  color: var(--accent);
+  border: 1px solid rgba(71, 240, 194, 0.3);
+}
+
+.calc-threshold-badge.is-bad {
+  background: rgba(231, 76, 76, 0.1);
+  color: var(--pixel-bad);
+  border: 1px solid rgba(231, 76, 76, 0.25);
+}
+
+/* Newton stepper */
+.calc-input-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.calc-input {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border: 2px solid var(--line-strong);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--text);
+  outline: none;
+}
+
+.calc-input:focus {
+  border-color: var(--accent);
+}
+
+.calc-submit-btn {
+  font-family: var(--font-pixel);
+  font-size: 0.65rem;
+  padding: 0.7rem 1.1rem;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  background: rgba(71, 240, 194, 0.15);
+  color: var(--accent);
+  cursor: pointer;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.calc-submit-btn:hover {
+  background: rgba(71, 240, 194, 0.25);
+}
+
+.calc-newton-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin: 0.75rem 0 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.calc-newton-row {
+  display: flex;
+  gap: 1rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+@keyframes fermi-fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}

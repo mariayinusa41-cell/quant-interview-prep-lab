@@ -1,0 +1,207 @@
+/* Basket Arbitrage — reuses fermi-* shell classes (menu/HUD/results) plus
+   its own card grid and inventory pills. */
+
+.basket-arb-container {
+  max-width: 900px;
+}
+
+.basket-arb-desc {
+  text-align: center;
+  color: var(--ink-2, rgba(255, 255, 255, 0.7));
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+}
+
+.commodity-icon {
+  width: 18px;
+  height: 18px;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+
+/* ---- inventory bar ---- */
+.basket-inv-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.basket-inv-title {
+  font-size: 0.8rem;
+  color: var(--ink-3, rgba(255, 255, 255, 0.55));
+}
+
+.basket-inv-pills {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.basket-inv-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.85rem;
+  border: 1px solid;
+}
+
+.basket-inv-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.basket-inv-pill.zero { border-color: #47f0c2; color: #47f0c2; }
+.basket-inv-pill.long { border-color: #5eb8ff; color: #5eb8ff; }
+.basket-inv-pill.short { border-color: #e74c4c; color: #e74c4c; }
+
+/* ---- card grid ---- */
+.basket-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.1rem;
+}
+
+.basket-card {
+  padding: 0.8rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.basket-card.buying { border-color: #5eb8ff; background: rgba(94, 184, 255, 0.08); }
+.basket-card.selling { border-color: #e74c4c; background: rgba(231, 76, 76, 0.08); }
+
+.basket-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.basket-card-name {
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.basket-card-spread {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  color: var(--ink-3, rgba(255, 255, 255, 0.5));
+  white-space: nowrap;
+}
+
+.basket-composition {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.basket-comp-item {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.78rem;
+}
+
+.basket-comp-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.basket-quotes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.basket-quote-box {
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.basket-quote-box.bid { background: rgba(231, 76, 76, 0.12); }
+.basket-quote-box.ask { background: rgba(94, 184, 255, 0.12); }
+
+.basket-quote-lbl {
+  display: block;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: var(--ink-3, rgba(255, 255, 255, 0.55));
+}
+
+.basket-quote-price {
+  font-family: var(--font-mono, monospace);
+  font-weight: 700;
+}
+
+.basket-qty-controls {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.basket-btn-qty {
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.basket-btn-qty.sell:hover:not(:disabled) { border-color: #e74c4c; color: #e74c4c; }
+.basket-btn-qty.buy:hover:not(:disabled) { border-color: #5eb8ff; color: #5eb8ff; }
+.basket-btn-qty:disabled { opacity: 0.3; cursor: default; }
+
+.basket-qty-val {
+  text-align: center;
+  font-family: var(--font-mono, monospace);
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+.basket-qty-val.pos { color: #5eb8ff; }
+.basket-qty-val.neg { color: #e74c4c; }
+
+/* ---- execution dock ---- */
+.basket-exec-dock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  flex-wrap: wrap;
+}
+
+.basket-exec-pnl {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono, monospace);
+  font-weight: 700;
+}
+
+.basket-exec-pnl .pos { color: #47f0c2; }
+.basket-exec-pnl .neg { color: #e74c4c; }

@@ -1,0 +1,369 @@
+/* ========== Delta Defender ========== */
+
+.algo-code-editor {
+  width: 100%;
+  min-height: 220px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.35);
+  border: 2px solid var(--line-strong);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  resize: vertical;
+  tab-size: 2;
+  outline: none;
+}
+
+.algo-code-editor:focus {
+  border-color: var(--accent);
+}
+
+.algo-code-editor:disabled {
+  opacity: 0.6;
+}
+
+.algo-mini-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 0.75rem 0;
+}
+
+.algo-mini-code {
+  margin-top: 0.6rem;
+}
+
+.calc-input-row {
+  display: flex;
+  gap: 0.75rem;
+  margin: 0.75rem 0;
+}
+
+.calc-input {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border: 2px solid var(--line-strong);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--text);
+  outline: none;
+}
+
+.calc-input:focus {
+  border-color: var(--accent);
+}
+
+.calc-submit-btn {
+  font-family: var(--font-pixel);
+  font-size: 0.65rem;
+  padding: 0.7rem 1.1rem;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  background: rgba(71, 240, 194, 0.15);
+  color: var(--accent);
+  cursor: pointer;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.calc-submit-btn:hover {
+  background: rgba(71, 240, 194, 0.25);
+}
+
+.delta-verdict {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-family: var(--font-pixel);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.delta-verdict.is-good {
+  background: rgba(71, 240, 194, 0.12);
+  border: 1px solid rgba(71, 240, 194, 0.3);
+  color: var(--accent);
+}
+
+.delta-verdict.is-ok {
+  background: rgba(244, 197, 66, 0.12);
+  border: 1px solid rgba(244, 197, 66, 0.3);
+  color: var(--pixel-accent);
+}
+
+.delta-verdict.is-miss {
+  background: rgba(231, 76, 76, 0.1);
+  border: 1px solid rgba(231, 76, 76, 0.25);
+  color: var(--pixel-bad);
+}
+
+.delta-review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 1.25rem 0;
+}
+
+.delta-review-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.delta-review-row.is-good {
+  background: rgba(71, 240, 194, 0.06);
+}
+
+.delta-review-row.is-ok {
+  background: rgba(244, 197, 66, 0.05);
+}
+
+.delta-review-row.is-miss {
+  background: rgba(231, 76, 76, 0.05);
+}
+
+.delta-review-num {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.delta-review-pts {
+  font-weight: 700;
+  color: var(--text);
+  text-align: right;
+}
+
+@media (max-width: 620px) {
+  .delta-review-row {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 0.2rem;
+  }
+}
+
+.delta-briefing p {
+  color: var(--muted);
+  line-height: 1.55;
+  margin: 0.5rem 0;
+}
+
+.delta-rule-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.delta-rule-grid > div {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.delta-rule-grid strong {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent-2);
+  margin-bottom: 0.3rem;
+}
+
+.delta-rule-grid span {
+  display: block;
+  font-family: var(--font-mono);
+  color: var(--text);
+  margin-bottom: 0.2rem;
+}
+
+.delta-rule-grid small {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+@media (max-width: 560px) {
+  .delta-rule-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.delta-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 1rem 0 1.25rem;
+}
+
+.delta-result-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.delta-result-grid span {
+  display: block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
+}
+
+.delta-result-grid strong {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  color: var(--text);
+}
+
+/* Seesaw / delta gauge */
+.delta-companion {
+  margin: 1.25rem 0;
+}
+
+.delta-seesaw-track {
+  position: relative;
+  height: 14px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid var(--pixel-border);
+}
+
+.delta-seesaw-zone {
+  position: absolute;
+  left: 38%;
+  width: 24%;
+  height: 100%;
+  background: rgba(71, 240, 194, 0.18);
+}
+
+.delta-seesaw-needle {
+  position: absolute;
+  top: -5px;
+  width: 10px;
+  height: 24px;
+  border-radius: 3px;
+  background: var(--pixel-accent);
+  border: 2px solid var(--pixel-border);
+  transform: translateX(-50%);
+  transition: left 0.25s ease-out, background 0.2s ease;
+}
+
+.delta-companion.is-calm .delta-seesaw-needle {
+  background: var(--accent);
+}
+
+.delta-companion.is-panicking .delta-seesaw-needle {
+  background: var(--pixel-bad);
+  animation: delta-shake 0.25s steps(2, end) infinite;
+}
+
+@keyframes delta-shake {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-3px); }
+}
+
+.delta-seesaw-label {
+  margin: 0.5rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.delta-companion.is-calm .delta-seesaw-label {
+  color: var(--accent);
+}
+
+.delta-companion.is-panicking .delta-seesaw-label {
+  color: var(--pixel-bad);
+}
+
+.delta-greeks-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin: 1.25rem 0;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+}
+
+.delta-greeks-row > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.delta-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.delta-progress-label {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+}
+
+/* shared slider/readout look, duplicated from calc.css per this codebase's
+   per-folder convention */
+.calc-slider-label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  min-width: 11rem;
+}
+
+.calc-slider {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  accent-color: var(--accent-2);
+  cursor: pointer;
+}
+
+.calc-slider-value {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent-2);
+  min-width: 3rem;
+  text-align: right;
+}
+
+.calc-comp-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+
+.calc-comp-val {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}

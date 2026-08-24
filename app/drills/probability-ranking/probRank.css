@@ -1,0 +1,181 @@
+/* Likelihood Ranking — reuses the Fermi drill's shell classes (menu,
+   card, HUD, results, progress dots) and layers on the table/distribution
+   context blocks and the reorderable ranking list. */
+
+.prob-rank-container .fermi-title {
+  font-size: 1.6rem;
+}
+
+.prob-title {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+}
+
+.prob-scenario {
+  margin: 0 0 1rem;
+  color: var(--ink-2, rgba(255, 255, 255, 0.75));
+  line-height: 1.5;
+}
+
+/* ---- table context (student performance) ---- */
+.prob-table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.prob-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  font-family: var(--font-mono, monospace);
+}
+
+.prob-table th,
+.prob-table td {
+  padding: 0.5rem 0.7rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.prob-table th {
+  background: rgba(255, 255, 255, 0.05);
+  font-weight: 600;
+}
+
+.prob-table td.name-col {
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ---- distribution context (car/asset price) ---- */
+.prob-dist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 1.1rem;
+}
+
+.prob-dist-card {
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.prob-dist-name {
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.prob-dist-desc {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+  color: var(--ink-2, rgba(255, 255, 255, 0.65));
+}
+
+/* ---- reorderable ranking list ---- */
+.prob-ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.prob-rank-slot {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.prob-rank-badge {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #47f0c2;
+  color: #0b0e13;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.prob-rank-text {
+  flex: 1;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.prob-rank-prob {
+  font-family: var(--font-mono, monospace);
+  font-weight: 700;
+  color: #47f0c2;
+  flex-shrink: 0;
+}
+
+.prob-move-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.prob-btn-arrow {
+  width: 24px;
+  height: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: inherit;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+.prob-btn-arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.prob-btn-arrow:not(:disabled):hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.prob-submit-btn {
+  width: 100%;
+}
+
+/* ---- ordered explanation lists (reveal + results review) ---- */
+.prob-review-order {
+  margin: 0.4rem 0;
+  padding-left: 1.4rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.prob-review-order li {
+  margin-bottom: 0.3rem;
+}
+
+.prob-review-order li.correct {
+  color: #47f0c2;
+}
+
+.prob-review-order li.wrong {
+  color: var(--ink-2, rgba(255, 255, 255, 0.7));
+}
+
+.prob-rationale {
+  font-size: 0.78rem;
+  color: var(--ink-3, rgba(255, 255, 255, 0.5));
+  margin-top: 0.1rem;
+}

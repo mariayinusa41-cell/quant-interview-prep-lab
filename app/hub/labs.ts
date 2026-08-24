@@ -1,0 +1,88 @@
+// One entry per lab, shared by the arcade panel and anything else that needs
+// the catalogue (search, recommendations) later.
+export const LABS = [
+  {
+    href: "/brain-teasers",
+    tag: "Logic",
+    title: "Brain Teasers",
+    desc: "Invariants, symmetry, and induction — played out step by step.",
+    icon: "target" as const,
+  },
+  {
+    href: "/probability",
+    tag: "Probability",
+    title: "Quitters Never Lose",
+    desc: "Lottery and casino games where the house edge is the lesson.",
+    icon: "walk" as const,
+  },
+  {
+    href: "/statistics",
+    tag: "Statistics",
+    title: "Statistics Lab",
+    desc: "Signal versus noise, and the multiple-comparisons trap.",
+    icon: "bars" as const,
+  },
+  {
+    href: "/finance",
+    tag: "Finance",
+    title: "Finance Lab",
+    desc: "Quote a spread, hedge a delta, find out who picked you off.",
+    icon: "candles" as const,
+  },
+  {
+    href: "/stochastic-processes",
+    tag: "Stochastic",
+    title: "Stochastic Processes",
+    desc: "Absorbing boundaries, one-step recursions, knowing when to stop.",
+    icon: "chart" as const,
+  },
+  {
+    href: "/calculus-linear-algebra",
+    tag: "Calculus",
+    title: "Gradient Lab",
+    desc: "Taylor error, Lagrange constraints, eigenvalues, PSD matrices.",
+    icon: "calculator" as const,
+  },
+  {
+    href: "/algorithms",
+    tag: "Coding",
+    title: "Algorithm Arena",
+    desc: "Complexity, dynamic programming, and code that actually runs.",
+    icon: "sequence" as const,
+  },
+  {
+    href: "/quantdev",
+    tag: "Quant dev",
+    title: "Quant Dev Lab",
+    desc: "Matching engines, data structures, and code that is timed rather than argued about.",
+    icon: "sequence" as const,
+  },
+  {
+    href: "/risk",
+    tag: "Risk",
+    title: "Risk Lab",
+    desc: "Tail risk, expected shortfall, and correlations that converge when it counts.",
+    icon: "bars" as const,
+  },
+  {
+    href: "/econ",
+    tag: "Consulting",
+    title: "Economic Consulting",
+    desc: "Causal inference, damages, and the confounder opposing counsel will find.",
+    icon: "chart" as const,
+  },
+  {
+    href: "/actuarial",
+    tag: "Actuarial",
+    title: "Actuarial Lab",
+    desc: "Run-off triangles, loss development, and reserving that has to hold up.",
+    icon: "calculator" as const,
+  },
+  {
+    href: "/drills",
+    tag: "Speed",
+    title: "Drill Lab",
+    desc: "Mental math reps until the arithmetic is automatic.",
+    icon: "search" as const,
+  },
+];

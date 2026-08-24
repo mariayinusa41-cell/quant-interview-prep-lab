@@ -1,0 +1,38 @@
+[
+  {
+    "id": "reddit-t3-xaa386",
+    "source": "Reddit (r/quant)",
+    "sourceUrl": "https://www.reddit.com/r/quant/comments/xaa386/imc_quant_trading_oa/",
+    "firm": "IMC",
+    "category": "Market Making",
+    "title": "IMC Quant Trading OA",
+    "rawPrompt": "Hello, I have an OA for IMC and wanted to know what sort of questions are asked?",
+    "dateScraped": "2022-09-09",
+    "score": 0,
+    "verified": false
+  },
+  {
+    "id": "reddit-t3-x7t55y",
+    "source": "Reddit (r/quant)",
+    "sourceUrl": "https://www.reddit.com/r/quant/comments/x7t55y/sig_capital_markets_oa/",
+    "firm": "Susquehanna (SIG)",
+    "category": "Probability & EV",
+    "title": "SIG Capital Markets OA",
+    "rawPrompt": "OA is probability and how much is finance?",
+    "dateScraped": "2022-09-07",
+    "score": 0,
+    "verified": false
+  },
+  {
+    "id": "reddit-t3-wk0tt9",
+    "source": "Reddit (r/quant)",
+    "sourceUrl": "https://www.reddit.com/r/quant/comments/wk0tt9/sig_trading_internship_2023_oa/",
+    "firm": "Susquehanna (SIG)",
+    "category": "Brainteaser / Logic",
+    "title": "SIG Trading Internship 2023 OA",
+    "rawPrompt": "For those who applied, have you received an invitation to take the OA already?",
+    "dateScraped": "2022-08-09",
+    "score": 0,
+    "verified": false
+  }
+]

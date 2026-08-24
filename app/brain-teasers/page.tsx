@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import DarkMode from "./DarkMode";
 import { ChestTileIcon, TigerTileIcon } from "./TeaserIcons";
+import { TEASER_BANK } from "./story/teaserBank";
+import { PixelSprite } from "./story/sprites";
+import { PALETTES } from "./story/palettes";
+import TokenPlayButton from "../access/TokenPlayButton";
 
 export const metadata: Metadata = {
   title: "Brain Teasers - Quant Interview Prep Lab",
   description: "Playable brain teasers, worked out step by step.",
 };
 
-const teasers = [
+const featuredGames = [
   {
     href: "/brain-teasers/screwy-pirates",
     title: "Screwy Pirates",
@@ -24,6 +28,16 @@ const teasers = [
   },
 ];
 
+const storyGames = TEASER_BANK.map((game) => ({
+  href: `/brain-teasers/${game.slug}`,
+  title: game.title,
+  tag: game.tag,
+  description: game.description,
+  Icon: null,
+  sprite: game.sprite,
+  palette: game.palette,
+}));
+
 export default function BrainTeasersPage() {
   return (
     <>
@@ -35,23 +49,42 @@ export default function BrainTeasersPage() {
 
         <div className="teasers-index">
           <p className="pirate-kicker">Quant Interview Prep Lab</p>
-          <h1 className="pirate-story-line teasers-title">Brain Teasers</h1>
+          <h1 className="pirate-story-line teasers-title">Brain Teasers Lab</h1>
           <p className="pirate-story-line teasers-subtitle">
-            Pick a teaser to play through — the story, the mechanics, and the actual answer, step by step.
+            Choose a game. The mechanics, story, and answer breakdowns live inside each playable lab.
           </p>
 
-          <div className="teaser-tile-grid">
-            {teasers.map((teaser) => (
-              <a href={teaser.href} className="teaser-tile" key={teaser.href}>
+          <div className="lab-link-list">
+            {[...featuredGames, ...storyGames].map((game) => game.title === "Screwy Pirates" ? <a href={game.href} className="lab-link-row" key={game.href}>
                 <span className="teaser-tile-icon" aria-hidden="true">
-                  <teaser.Icon />
+                  {game.Icon ? (
+                    <game.Icon />
+                  ) : (
+                    <PixelSprite
+                      sprite={(game as { sprite: string }).sprite}
+                      palette={PALETTES[(game as { palette: string }).palette] ?? PALETTES.blue}
+                    />
+                  )}
                 </span>
-                <span className="teaser-tile-tag">{teaser.tag}</span>
-                <span className="teaser-tile-title">{teaser.title}</span>
-                <span className="teaser-tile-desc">{teaser.description}</span>
+                <span className="teaser-tile-tag">{game.tag}</span>
+                <span className="teaser-tile-title">{game.title}</span>
+                <span className="teaser-tile-desc">{game.description}</span>
                 <span className="teaser-tile-cta">Play &rarr;</span>
-              </a>
-            ))}
+              </a> : <TokenPlayButton gameId={`brain-${game.title.toLowerCase().replaceAll(" ", "-")}`} title={game.title} href={game.href} className="lab-link-row" key={game.href}>
+                <span className="teaser-tile-icon" aria-hidden="true">
+                  {game.Icon ? (
+                    <game.Icon />
+                  ) : (
+                    <PixelSprite
+                      sprite={(game as { sprite: string }).sprite}
+                      palette={PALETTES[(game as { palette: string }).palette] ?? PALETTES.blue}
+                    />
+                  )}
+                </span>
+                <span className="teaser-tile-tag">{game.tag}</span>
+                <span className="teaser-tile-title">{game.title}</span>
+                <span className="teaser-tile-desc">{game.description}</span>
+              </TokenPlayButton>)}
           </div>
         </div>
       </main>

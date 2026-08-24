@@ -1,0 +1,497 @@
+/* ========== Algorithm Arena ==========
+   Shares class names with app/calculus-linear-algebra/calc.css by design —
+   same visual language, duplicated per-folder rather than cross-imported
+   (matches this codebase's existing convention, e.g. DarkMode.tsx repeated
+   across drills/probability/finance). */
+
+.calc-mode-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.calc-chip {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.calc-chip:hover {
+  border-color: var(--accent-2);
+  color: var(--text);
+}
+
+.calc-chip.active {
+  background: rgba(94, 184, 255, 0.12);
+  border-color: var(--accent-2);
+  color: var(--accent-2);
+}
+
+.calc-mode-tag {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin: 0 0 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.calc-subgame {
+  max-width: 640px;
+}
+
+.calc-subgame-intro {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 1rem;
+}
+
+.calc-loading {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 2rem 0;
+}
+
+.calc-reveal {
+  animation: algo-fadeIn 0.3s ease-out;
+  margin-top: 0.75rem;
+}
+
+.calc-input-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.calc-input {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border: 2px solid var(--line-strong);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--text);
+  outline: none;
+}
+
+.calc-input:focus {
+  border-color: var(--accent);
+}
+
+.calc-submit-btn {
+  font-family: var(--font-pixel);
+  font-size: 0.65rem;
+  padding: 0.7rem 1.1rem;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  background: rgba(71, 240, 194, 0.15);
+  color: var(--accent);
+  cursor: pointer;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.calc-submit-btn:hover {
+  background: rgba(71, 240, 194, 0.25);
+}
+
+.calc-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.calc-slider-label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  min-width: 4.5rem;
+}
+
+.calc-slider {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  accent-color: var(--accent-2);
+  cursor: pointer;
+}
+
+.calc-slider-value {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent-2);
+  min-width: 4rem;
+  text-align: right;
+}
+
+.calc-taylor-target {
+  font-size: 0.95rem;
+  color: var(--text);
+  margin: 0 0 1rem;
+}
+
+.calc-taylor-readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.calc-taylor-readout > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.calc-comp-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+
+.calc-comp-val {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+@keyframes algo-fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- DP table builder ---------- */
+.algo-dp-header {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  padding: 1rem 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.algo-dp-title {
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 0.35rem;
+}
+
+.algo-dp-prompt {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin: 0 0 0.6rem;
+}
+
+.algo-dp-recurrence {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent);
+  background: rgba(71, 240, 194, 0.08);
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+}
+
+.algo-dp-table {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.algo-dp-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  min-width: 3.4rem;
+  padding: 0.5rem 0.4rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.algo-dp-cell-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--muted);
+}
+
+.algo-dp-cell-value {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  min-height: 1.2rem;
+}
+
+.algo-dp-cell.is-given {
+  border-color: var(--line-strong);
+  background: rgba(185, 139, 255, 0.08);
+}
+
+.algo-dp-cell.is-given .algo-dp-cell-value {
+  color: var(--accent-3);
+}
+
+.algo-dp-cell.is-correct {
+  border-color: var(--accent);
+  background: rgba(71, 240, 194, 0.1);
+}
+
+.algo-dp-cell.is-correct .algo-dp-cell-value {
+  color: var(--accent);
+}
+
+.algo-dp-cell.is-wrong {
+  border-color: var(--pixel-bad);
+  background: rgba(231, 76, 76, 0.08);
+}
+
+.algo-dp-cell.is-wrong .algo-dp-cell-value {
+  color: var(--pixel-bad);
+}
+
+.algo-dp-cell.is-active {
+  border-color: var(--accent-2);
+  box-shadow: 0 0 0 2px rgba(94, 184, 255, 0.15);
+}
+
+/* ---------- Monte Carlo estimator ---------- */
+.algo-mc-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.algo-mc-readout {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  padding: 1.1rem 1.25rem 1.4rem;
+}
+
+.algo-mc-history {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.5rem 0 1.25rem;
+}
+
+.algo-mc-history-chip {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+}
+
+.algo-mc-halve {
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+}
+
+/* ---------- Mini Task ---------- */
+.algo-level-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  max-width: 420px;
+}
+
+@media (max-width: 480px) {
+  .algo-level-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.algo-level-btn {
+  font-family: var(--font-pixel);
+  font-size: 0.7rem;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 2px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.15s;
+}
+
+.algo-level-btn:hover {
+  border-color: var(--accent-2);
+  background: rgba(94, 184, 255, 0.08);
+  color: var(--accent-2);
+}
+
+.algo-challenge-list {
+  display: grid;
+  gap: 0.65rem;
+  margin: 1rem 0;
+}
+
+.algo-challenge-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  border: 2px solid var(--line-strong);
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.algo-challenge-row:hover,
+.algo-challenge-row:focus-visible {
+  border-color: var(--accent-2);
+  background: rgba(94, 184, 255, 0.08);
+}
+
+.algo-challenge-number,
+.algo-challenge-cta {
+  font-family: var(--font-pixel);
+  font-size: 0.58rem;
+  color: var(--accent);
+}
+
+.algo-challenge-copy {
+  display: grid;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.algo-challenge-copy strong {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.algo-challenge-copy span {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .algo-challenge-row {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .algo-challenge-cta {
+    grid-column: 2;
+  }
+}
+
+.algo-mini-code {
+  margin-top: 0.6rem;
+}
+
+.algo-mini-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 0.75rem 0;
+}
+
+.algo-mc-next {
+  margin-top: 0.75rem;
+}
+
+.algo-mini-hint {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.algo-code-editor {
+  width: 100%;
+  min-height: 220px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.35);
+  border: 2px solid var(--line-strong);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  resize: vertical;
+  tab-size: 2;
+  outline: none;
+}
+
+.algo-code-editor:focus {
+  border-color: var(--accent);
+}
+
+.algo-test-results {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0.75rem 0;
+}
+
+.algo-test-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  flex-wrap: wrap;
+}
+
+.algo-test-row.is-pass {
+  color: var(--accent);
+  background: rgba(71, 240, 194, 0.08);
+}
+
+.algo-test-row.is-fail {
+  color: var(--pixel-bad);
+  background: rgba(231, 76, 76, 0.08);
+}
+
+.algo-test-label {
+  color: var(--text);
+}
+
+.algo-test-detail {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+/* ---------- Speed round ---------- */
+.algo-speed-timer {
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.algo-speed-timer.is-danger {
+  color: var(--pixel-bad);
+}

@@ -1,0 +1,39 @@
+/* Dice EV Lab — reuses the drill lab's fermi-* shell classes for layout
+   and layers on the dice visualizer and a couple of dice-specific tweaks. */
+
+.dice-lab-visual {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1rem 0 1.25rem;
+  flex-wrap: wrap;
+}
+
+.dice-lab-die {
+  filter: drop-shadow(0 4px 12px rgba(71, 240, 194, 0.25));
+}
+
+.dice-lab-pip {
+  filter: drop-shadow(0 0 4px #47f0c2);
+}
+
+.dice-lab-shortcut {
+  font-style: italic;
+  color: var(--ink-3, rgba(255, 255, 255, 0.5));
+  font-size: 0.82rem;
+}
+
+.dice-lab-card .prob-title {
+  text-align: center;
+}
+
+.dice-lab-tutorial-step {
+  margin: 1.25rem 0 1.75rem;
+  padding: 1rem 1.2rem;
+  border-radius: 8px;
+  background: rgba(71, 240, 194, 0.06);
+  border: 1px solid rgba(71, 240, 194, 0.25);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  text-align: left;
+}

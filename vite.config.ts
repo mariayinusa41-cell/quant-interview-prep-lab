@@ -52,6 +52,7 @@ export default defineConfig(async () => {
       sites(),
       cloudflare({
         viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
+        ...(isCodexSeatbeltSandbox ? { inspectorPort: false } : {}),
         config: localBindingConfig,
       }),
     ],
