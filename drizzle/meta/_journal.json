@@ -57,6 +57,13 @@
       "when": 1787634559141,
       "tag": "0007_jittery_silver_fox",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1787664320495,
+      "tag": "0008_complete_greymalkin",
+      "breakpoints": true
     }
   ]
 }

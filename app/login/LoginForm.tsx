@@ -203,6 +203,14 @@ export default function LoginForm() {
           <button type="submit" className="continue-btn" disabled={submitting} style={{ marginTop: 10 }}>
             {submitting ? "Working..." : mode === "login" ? "Log in" : "Create account"}
           </button>
+
+          {/* Only on the login tab: offering a password reset to someone
+              part-way through creating an account is confusing. */}
+          {mode === "login" && (
+            <p className="mm-step-hint" style={{ marginTop: 14, textAlign: "center" }}>
+              <a href="/forgot-password">Forgot your password?</a>
+            </p>
+          )}
         </form>
       </div>
     </div>

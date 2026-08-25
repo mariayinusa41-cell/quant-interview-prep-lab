@@ -76,6 +76,19 @@ export function newVerificationExpiry(): string {
   return new Date(Date.now() + VERIFICATION_TTL_MS).toISOString();
 }
 
+// Password resets expire far faster than email verification. A reset link
+// is a live key to the account, so a stale one sitting in an inbox is a
+// standing risk in a way an unused verification link is not.
+const RESET_TTL_MS = 60 * 60 * 1000; // 1 hour
+
+export function generateResetToken(): string {
+  return bytesToHex(crypto.getRandomValues(new Uint8Array(32)));
+}
+
+export function newResetExpiry(): string {
+  return new Date(Date.now() + RESET_TTL_MS).toISOString();
+}
+
 export function isValidUsername(username: string): boolean {
   // Letters, numbers, underscore, dot, hyphen — 3 to 24 chars. Loose enough
   // for most handles, tight enough to keep it URL/leaderboard-safe.

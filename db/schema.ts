@@ -32,6 +32,11 @@ export const users = sqliteTable(
     emailVerifiedAt: text("email_verified_at"),
     verificationToken: text("verification_token"),
     verificationTokenExpiresAt: text("verification_token_expires_at"),
+  // Password reset. Separate columns from the verification pair above: a
+  // reset must not consume or interfere with a pending email verification,
+  // and the two have very different lifetimes (24h vs 1h).
+  resetToken: text("reset_token"),
+  resetTokenExpiresAt: text("reset_token_expires_at"),
     // Set the moment the welcome-gift token grant is claimed — server-side
     // so it can't be re-claimed by clearing localStorage (the tokens
     // themselves still live client-side in AccessContext; this column is
