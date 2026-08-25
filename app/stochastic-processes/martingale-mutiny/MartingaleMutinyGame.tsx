@@ -282,13 +282,37 @@ export default function MartingaleMutinyGame() {
           <span>LEG <strong>{step}/{GAME.MAX_STEPS}</strong></span>
         </div>
 
-        <div className="stochastic-track mutiny-track" aria-label={`Cargo ${x.toFixed(1)} of island target ${GAME.TARGET}`}>
-          <div className="stochastic-track-fill" style={{ width: `${trackPosition(x)}%` }} />
+        {/* A real sea rather than a progress bar: the boat's horizontal
+            position is still trackPosition(x), but it now rides a waterline
+            with scrolling wave layers, the reef to port and the island to
+            starboard. A storm shakes the whole scene. */}
+        <div
+          className={justShocked ? "mutiny-ocean is-storming" : "mutiny-ocean"}
+          aria-label={`Cargo ${x.toFixed(1)} of island target ${GAME.TARGET}`}
+        >
+          <div className="mutiny-sky" />
+
           <ReefIcon className="mutiny-icon-sm mutiny-reef" />
           <IslandIcon className="mutiny-icon-sm mutiny-island" />
+
           <div className="mutiny-boat-marker" style={{ left: `${trackPosition(x)}%` }}>
             <BoatIcon className="mutiny-icon-sm" />
           </div>
+
+          {/* Two layers at different speeds/opacities so the surface reads
+              as moving water instead of a single sliding shape. Each SVG
+              holds the wave twice end-to-end and scrolls exactly one copy,
+              which makes the loop seamless. */}
+          <div className="mutiny-water">
+            <svg className="mutiny-wave mutiny-wave-back" viewBox="0 0 240 24" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0 12 Q 15 4 30 12 T 60 12 T 90 12 T 120 12 T 150 12 T 180 12 T 210 12 T 240 12 V24 H0 Z" />
+            </svg>
+            <svg className="mutiny-wave mutiny-wave-front" viewBox="0 0 240 24" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0 14 Q 15 6 30 14 T 60 14 T 90 14 T 120 14 T 150 14 T 180 14 T 210 14 T 240 14 V24 H0 Z" />
+            </svg>
+            <div className="mutiny-deep" />
+          </div>
+
           {justShocked && <div className="blood-flash mutiny-storm-flash" key={step} />}
         </div>
         <div className="mutiny-checkpoints">

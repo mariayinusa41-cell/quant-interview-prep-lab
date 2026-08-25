@@ -161,7 +161,7 @@ function genAsymmetricLock(): Blueprint {
   const className = pick(["Account", "Wallet", "Ledger"] as const);
   return {
     title: `The ${className.toLowerCase()} that goes negative`,
-    premise: `A ${className} class's deposit() protects the balance with a mutex, but the balance goes negative under concurrent withdraw() calls, even though every individual withdraw() checks for sufficient funds first.`,
+    premise: `${className}'s deposit() protects the balance with a mutex, but the balance goes negative under concurrent withdraw() calls, even though every individual withdraw() checks for sufficient funds first.`,
     code: [
       `class ${className} {`,
       "    double balance = 0;",

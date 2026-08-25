@@ -9125,3 +9125,96 @@ body.exam-mode::after { display: none !important; }
   font-size: 0.74rem;
   color: var(--ink-2);
 }
+
+/* ---------- Martingale Mutiny: the ocean ----------
+   Replaces the old 34px progress bar. The boat's left% is still the same
+   trackPosition(x) as before; everything here is the sea it rides on. */
+.mutiny-ocean {
+  position: relative;
+  height: 132px;
+  margin: 18px 14px 30px;
+  border: 3px solid var(--pixel-border);
+  overflow: hidden;
+  background: linear-gradient(180deg, #14243a 0%, #1b3350 46%, #14243a 100%);
+}
+
+.mutiny-sky {
+  position: absolute;
+  inset: 0 0 46% 0;
+  background: linear-gradient(180deg, rgba(28, 52, 82, 0.9), rgba(38, 74, 110, 0.35));
+}
+
+/* Waterline sits at 54% from the top; the boat is anchored to it. */
+.mutiny-water {
+  position: absolute;
+  inset: 54% 0 0 0;
+}
+
+.mutiny-deep {
+  position: absolute;
+  inset: 10px 0 0 0;
+  background: linear-gradient(180deg, rgba(31, 92, 122, 0.95), rgba(12, 32, 52, 0.98));
+}
+
+.mutiny-wave {
+  position: absolute;
+  top: -10px;
+  left: 0;
+  width: 200%;
+  height: 26px;
+  display: block;
+}
+.mutiny-wave path { stroke: none; }
+
+.mutiny-wave-back path { fill: rgba(89, 201, 183, 0.35); }
+.mutiny-wave-front path { fill: rgba(71, 160, 200, 0.75); }
+
+.mutiny-wave-back { animation: mutiny-swell 7s linear infinite; }
+.mutiny-wave-front { animation: mutiny-swell 4.5s linear infinite; }
+
+/* Scrolls exactly one of the two end-to-end copies, so it loops seamlessly. */
+@keyframes mutiny-swell {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* The boat rides the waterline and bobs. translate(-50%) keeps it centred
+   on its position the same way the old marker did. */
+.mutiny-ocean .mutiny-boat-marker {
+  position: absolute;
+  top: 54%;
+  z-index: 3;
+  transform: translate(-50%, -86%);
+  transition: left 0.35s ease;
+  animation: mutiny-bob 2.6s ease-in-out infinite;
+}
+
+@keyframes mutiny-bob {
+  0%, 100% { transform: translate(-50%, -86%) rotate(-3deg); }
+  50%      { transform: translate(-50%, -94%) rotate(3deg); }
+}
+
+.mutiny-ocean .mutiny-reef,
+.mutiny-ocean .mutiny-island {
+  position: absolute;
+  top: 54%;
+  z-index: 2;
+  transform: translateY(-88%);
+}
+.mutiny-ocean .mutiny-reef { left: 10px; }
+.mutiny-ocean .mutiny-island { right: 10px; }
+
+/* A storm shakes the whole sea, not just a flash overlay. */
+.mutiny-ocean.is-storming { animation: mutiny-shake 0.42s ease-in-out; }
+@keyframes mutiny-shake {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-4px); }
+  75%      { transform: translateX(4px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mutiny-wave-back,
+  .mutiny-wave-front,
+  .mutiny-ocean .mutiny-boat-marker,
+  .mutiny-ocean.is-storming { animation: none; }
+}
