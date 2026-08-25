@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useProfile } from "./ProfileContext";
 import { AGE_BANDS, EXPERIENCE_LEVELS, MAJORS, TRACKS, type TrackId } from "./tracks";
-import { AVATARS, AvatarSprite, type AvatarId } from "./avatars";
+import { GUEST_AVATAR_ID, SELECTABLE_AVATARS, AvatarSprite, type AvatarId } from "./avatars";
 import { ASSESSMENT_TICKETS, ASSESSMENT_ACCURACY } from "../assessments/requirements";
 import TokenIcon from "../access/TokenIcon";
 import TicketIcon from "../progress/TicketIcon";
@@ -106,11 +106,13 @@ export default function Onboarding() {
   // defaults. `personalized` stays false, which is the hook LoginForm uses
   // to route them through avatar/tracks/about when they later sign up.
   const startAsGuest = () => {
-    const randomAvatar = AVATARS[Math.floor(Math.random() * AVATARS.length)].id;
     completeOnboarding({
       account: "guest",
       displayName: "Guest",
-      avatar: randomAvatar,
+      // A question mark, not a character. Picking a character is part of
+      // making an account; a random frog implied an identity the guest
+      // never chose.
+      avatar: GUEST_AVATAR_ID,
       tracks: [],
       major: "",
       experience: "",
@@ -274,7 +276,7 @@ export default function Onboarding() {
             <p className="onboarding-copy">This is you on the leaderboard.</p>
 
             <div className="avatar-grid">
-              {AVATARS.map((a) => (
+              {SELECTABLE_AVATARS.map((a) => (
                 <button
                   type="button"
                   key={a.id}

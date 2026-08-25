@@ -34,7 +34,9 @@ export type AvatarId =
   | "wolf"
   | "shark"
   | "astronaut"
-  | "ninja";
+  | "ninja"
+  // Anonymous placeholder — see GUEST_AVATAR_ID below.
+  | "guest";
 
 type AvatarDef = {
   id: AvatarId;
@@ -68,7 +70,43 @@ const BODY = [
 ];
 const EYES = ".kawwkaaaakwwak.";
 
+/**
+ * The avatar a guest gets: a question mark, not a character.
+ *
+ * Choosing a character is part of making an account, so handing guests a
+ * random frog or astronaut implied an identity they had not created and
+ * removed a small reason to sign up. An anonymous placeholder says what is
+ * actually true — nobody has picked yet.
+ *
+ * Excluded from SELECTABLE_AVATARS so it can never be chosen deliberately.
+ */
+export const GUEST_AVATAR_ID = "guest" as const;
+
 export const AVATARS: AvatarDef[] = [
+  {
+    id: "guest", name: "Guest", tag: "Anonymous",
+    // Deliberately flat and grey: it should read as "not set", not as a
+    // character someone might mistake for a choice.
+    palette: { a: "#5a6675", b: "#3d4652", c: "#7c8899", d: "#2b323c", w: W, k: K, p: P },
+    grid: [
+      "................",
+      "..kkkkkkkkkkkk..",
+      ".kaaaaaaaaaaaak.",
+      ".kaaaddddddaaak.",
+      ".kaaddaaaaddaak.",
+      ".kaaddaaaaddaak.",
+      ".kaaaaaaaddaaak.",
+      ".kaaaaaaddaaaak.",
+      ".kaaaaaddaaaaak.",
+      ".kaaaaaddaaaaak.",
+      ".kaaaaaddaaaaak.",
+      ".kaaaaaaaaaaaak.",
+      ".kaaaaaaaaaaaak.",
+      ".kaaaaaddaaaaak.",
+      "..kkkkkkkkkkkk..",
+      "................",
+    ],
+  },
   {
     id: "duck", name: "Duck", tag: "Starter",
     palette: { a: "#f4c542", b: "#d9a52c", c: "#ffe28a", d: "#e8873c", w: W, k: K, p: P },
@@ -531,6 +569,12 @@ export const AVATARS: AvatarDef[] = [
     ],
   },
 ];
+
+/**
+ * What the avatar pickers offer. The guest placeholder is not a choice, so
+ * it is filtered out rather than left in for someone to select on purpose.
+ */
+export const SELECTABLE_AVATARS: AvatarDef[] = AVATARS.filter((a) => a.id !== GUEST_AVATAR_ID);
 
 export const AVATAR_BY_ID = AVATARS.reduce(
   (acc, a) => {

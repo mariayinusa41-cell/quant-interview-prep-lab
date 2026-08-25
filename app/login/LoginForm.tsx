@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useProfile } from "../profile/ProfileContext";
-import { AVATARS, AvatarSprite, type AvatarId } from "../profile/avatars";
+import { SELECTABLE_AVATARS, AvatarSprite, type AvatarId } from "../profile/avatars";
 import { AGE_BANDS, EXPERIENCE_LEVELS, MAJORS, TRACKS, type TrackId } from "../profile/tracks";
 
 // A real account form — POSTs to app/api/auth/{signup,login}/route.ts,
@@ -186,7 +186,7 @@ export default function LoginForm() {
 
   useEffect(() => {
     if (!me || editorSeeded) return;
-    const isAvatar = (v: string | null): v is AvatarId => AVATARS.some((a) => a.id === v);
+    const isAvatar = (v: string | null): v is AvatarId => SELECTABLE_AVATARS.some((a) => a.id === v);
     const validTracks = (v: string[] | null): TrackId[] =>
       (v ?? []).filter((t): t is TrackId => TRACKS.some((k) => k.id === t));
     setEditName(me.displayName ?? (profile.displayName !== "Guest" ? profile.displayName : ""));
@@ -299,7 +299,7 @@ export default function LoginForm() {
 
           <p className="pick-ticket-col-label" style={{ margin: "14px 0 6px" }}>CHARACTER</p>
           <div className="avatar-grid">
-            {AVATARS.map((a) => (
+            {SELECTABLE_AVATARS.map((a) => (
               <button
                 type="button"
                 key={a.id}
