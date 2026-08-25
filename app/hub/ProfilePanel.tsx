@@ -5,11 +5,15 @@ import { useProfile } from "../profile/ProfileContext";
 import { useProgress } from "../progress/ProgressContext";
 import { AvatarSprite } from "../profile/avatars";
 import { buildAchievements } from "../profile/achievements";
+import { getProgression } from "../progress/progression";
+import SkillMap from "./SkillMap";
+import TrackReadiness from "./TrackReadiness";
 import { TRACK_BY_ID } from "../profile/tracks";
 import { STREAK_TARGET } from "../daily/challengeBank";
 import TokenIcon from "../access/TokenIcon";
 import TicketIcon from "../progress/TicketIcon";
 import GiftBox from "../access/GiftBox";
+import VerifyEmailNotice from "../access/VerifyEmailNotice";
 
 const PASS_LABEL: Record<string, string> = {
   developer: "Developer",
@@ -23,7 +27,17 @@ export default function ProfilePanel() {
   const { tickets, accuracy, graded } = useProgress();
 
   const achievements = buildAchievements({ tickets, accuracy, graded, profile });
+  // Earned first, then closest-to-earned. The near-misses are the ones
+  // worth surfacing; a locked achievement at 5% is just noise.
+  const sorted = [...achievements].sort((a, b) => {
+    if (a.earned !== b.earned) return a.earned ? -1 : 1;
+    return (b.progress ?? 0) - (a.progress ?? 0);
+  });
   const earned = achievements.filter((a) => a.earned).length;
+
+  // Derived from tickets, not stored — see app/progress/progression.ts for
+  // why there is no separate XP number.
+  const prog = getProgression(tickets);
 
   return (
     <div className="hub-panel">
@@ -42,6 +56,7 @@ export default function ProfilePanel() {
               {profile.experience ? ` · ${profile.experience}` : ""}
               {profile.major ? ` · ${profile.major}` : ""}
             </p>
+            <VerifyEmailNotice />
             <p className="profile-tracks">
               {profile.tracks.length > 0
                 ? profile.tracks.map((id) => TRACK_BY_ID[id]?.label).filter(Boolean).join(" · ")
@@ -92,13 +107,45 @@ export default function ProfilePanel() {
             {STREAK_TARGET - (profile.streak % STREAK_TARGET || STREAK_TARGET)} day(s) to your next spin
           </span>
         </div>
+
+        {/* Rank and progress, derived from tickets. */}
+        <div className="rank-strip">
+          <div className="rank-strip-head">
+            <span className="rank-strip-rank">
+              LV.{prog.level} · {prog.rank}
+            </span>
+            <span className="rank-strip-points">
+              {prog.nextAt === null
+                ? `${prog.points} tickets · max rank`
+                : `${prog.points} / ${prog.nextAt} tickets`}
+            </span>
+          </div>
+          <div className="rank-bar" aria-label={`${Math.round(prog.fraction * 100)} percent to the next rank`}>
+            <span className="rank-bar-fill" style={{ width: `${Math.round(prog.fraction * 100)}%` }} />
+          </div>
+          <p className="rank-strip-next">
+            {prog.nextRank === null ? (
+              "Top rank reached."
+            ) : (
+              <>
+                {prog.toNext} more {prog.toNext === 1 ? "ticket" : "tickets"} to{" "}
+                <strong>{prog.nextRank}</strong>
+                {prog.nextUnlocks ? ` — unlocks ${prog.nextUnlocks}.` : "."}
+              </>
+            )}
+          </p>
+        </div>
       </section>
+
+      <TrackReadiness />
+
+      <SkillMap />
 
       <section className="section">
         <h2>Achievements</h2>
         <p className="section-intro">{earned} of {achievements.length} earned.</p>
         <div className="ach-grid">
-          {achievements.map((a) => (
+          {sorted.map((a) => (
             <div className={a.earned ? "ach-card is-earned" : "ach-card"} key={a.id}>
               <span className="ach-icon" aria-hidden="true">{a.icon}</span>
               <span className="ach-body">
@@ -108,7 +155,11 @@ export default function ProfilePanel() {
                   <span className="ach-bar"><span style={{ width: `${Math.round(a.progress * 100)}%` }} /></span>
                 )}
               </span>
-              <span className="ach-state">{a.earned ? "EARNED" : "LOCKED"}</span>
+              {/* ALMOST is the cheapest comeback hook there is: a locked
+                  card at 90% is worth a different word from one at 5%. */}
+              <span className="ach-state">
+                {a.earned ? "EARNED" : (a.progress ?? 0) >= 0.9 ? "ALMOST" : "LOCKED"}
+              </span>
             </div>
           ))}
         </div>
