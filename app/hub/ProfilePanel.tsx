@@ -15,6 +15,7 @@ import TicketIcon from "../progress/TicketIcon";
 import DailyChallenge from "../daily/DailyChallenge";
 import GiftBox from "../access/GiftBox";
 import GuestGate, { GuestSignupBanner } from "../access/GuestGate";
+import AccountActions from "../access/AccountActions";
 import VerifyEmailNotice from "../access/VerifyEmailNotice";
 
 const PASS_LABEL: Record<string, string> = {
@@ -65,9 +66,12 @@ export default function ProfilePanel() {
                 : "No track selected"}
             </p>
           </div>
-          <span className={mode === "infinity" ? "profile-pass is-inf" : "profile-pass"}>
-            {PASS_LABEL[mode] ?? mode}
-          </span>
+          <div className="profile-head-side">
+            <span className={mode === "infinity" ? "profile-pass is-inf" : "profile-pass"}>
+              {PASS_LABEL[mode] ?? mode}
+            </span>
+            <AccountActions />
+          </div>
         </div>
 
         <GuestGate active={profile.account === "guest"}>
