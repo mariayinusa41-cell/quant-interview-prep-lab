@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import GameLeaderboard from "../../scores/GameLeaderboard";
 import {
   flattenCost,
   generateRoundTruth,
@@ -467,6 +468,12 @@ export default function MarketMakerGame() {
             sub={`${fmt(pnlDollars)} over ${Math.min(round + 1, ROUNDS)} rounds (incl. ${fmt(
               flattenCostPaid * (stake ?? 0)
             )} flatten cost) — ended at ${fmt(bankroll)}`}
+          />
+          {/* Profit, not final bankroll — same reasoning as Ruin Walker. */}
+          <GameLeaderboard
+            gameId="finance-market-maker"
+            score={Math.round(pnlDollars)}
+            title="Market Maker leaderboard"
           />
           <button type="button" className="chip-btn" style={{ marginTop: 16 }} onClick={playAgain}>
             Play again

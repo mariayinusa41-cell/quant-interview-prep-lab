@@ -59,12 +59,15 @@ export async function POST(request: Request) {
   // game could not have awarded: every board has a known ceiling, so a
   // score above it is provably fabricated rather than merely suspicious.
   const score = Number(body.score);
-  if (!Number.isFinite(score) || !Number.isInteger(score) || score < 0) {
+  if (!Number.isFinite(score) || !Number.isInteger(score)) {
     return Response.json({ error: "Score must be a whole number." }, { status: 400 });
   }
-  if (score > limit.maxScore) {
+  // Bankroll games rank on profit, which is legitimately negative after a
+  // losing session, so the floor comes from the game rather than being 0.
+  const minScore = limit.minScore ?? 0;
+  if (score < minScore || score > limit.maxScore) {
     return Response.json(
-      { error: `${limit.label} tops out at ${limit.maxScore} points.` },
+      { error: `${limit.label} scores must be between ${minScore} and ${limit.maxScore}.` },
       { status: 400 },
     );
   }

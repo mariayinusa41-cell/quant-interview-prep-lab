@@ -24,9 +24,18 @@
 export type GameLimit = {
   /** Highest score the game can actually award. Inclusive. */
   maxScore: number;
+  /**
+   * Lowest recordable score. Defaults to 0 for points games, but the
+   * bankroll games rank on PROFIT, which is legitimately negative when a
+   * session loses money — refusing negatives there would quietly drop every
+   * losing run instead of ranking it.
+   */
+  minScore?: number;
   /** Shortest plausible run, in ms. Submissions faster than this are junk. */
   minDurationMs?: number;
   label: string;
+  /** Shown on the board so a profit column is not mistaken for points. */
+  unit?: "points" | "dollars";
 };
 
 export const GAME_LIMITS: Record<string, GameLimit> = {
@@ -44,6 +53,28 @@ export const GAME_LIMITS: Record<string, GameLimit> = {
   "statistics-twenty-backtests": { maxScore: 1000, label: "Twenty Backtests" },
   // 5 cases x (100 base + 50 speed + 40 data + PREDICTIONS(3) x 10 hits).
   "statistics-crack-the-bot": { maxScore: 1100, label: "Crack the Bot" },
+
+  // --- Bankroll games: ranked on PROFIT, not final chips ---
+  //
+  // Profit is the fair comparison because every player starts with the same
+  // $100. Ranking final chips would just reward whoever staked biggest,
+  // which measures appetite rather than judgement.
+  //
+  // These ceilings are deliberately looser than the points games above.
+  // A points game has an exact maximum; a bankroll game does not — a hot
+  // run can compound. So the cap's job here is to reject nonsense (1e9),
+  // not to pin the exact best-possible session. The numbers below sit well
+  // clear of simulated extremes so a genuinely lucky run is never refused.
+  //
+  // Ruin Walker: 40k simulated runs per loading gave a net surplus between
+  // -82 and +119; at the $10 max stake that is roughly -820 to +1190.
+  "stochastic-ruin-walker": {
+    minScore: -5000, maxScore: 5000, label: "Ruin Walker", unit: "dollars",
+  },
+  // Market Maker: 10 rounds of tick P&L at up to $50 per tick.
+  "finance-market-maker": {
+    minScore: -30000, maxScore: 30000, label: "Market Maker", unit: "dollars",
+  },
 };
 
 /** How many runs one player may record per game per hour. */

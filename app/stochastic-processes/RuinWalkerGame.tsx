@@ -5,6 +5,7 @@ import { ResultBanner } from "../probability/quitters-never-lose/lottery/pick/Pi
 import { AccessStartButton } from "../access/TokenPlayButton";
 import RuinFormula from "./RuinFormula";
 import TeX from "../math/TeX";
+import GameLeaderboard from "../scores/GameLeaderboard";
 import { makeRuinQuestion, type RuinQuestion } from "./ruinQuestions";
 import {
   LAMBDA,
@@ -235,6 +236,16 @@ export default function RuinWalkerGame() {
               ? `Ruin hit after ${round} period${round === 1 ? "" : "s"} at θ = ${Math.round((theta ?? 0) * 100)}%. Once surplus goes negative, the process is absorbed — there's no continuing.`
               : `${fmt(pnlDollars)} over ${round} periods — ended at ${fmt(bankroll)}, surplus ${fmt2(Math.max(surplus, 0))}.`
           }
+        />
+
+        {/* Ranked on PROFIT, not final bankroll: everyone starts with the
+            same $100, so profit compares judgement rather than stake size.
+            Rounded because the column is an integer; the cents are noise at
+            this scale. */}
+        <GameLeaderboard
+          gameId="stochastic-ruin-walker"
+          score={Math.round(pnlDollars)}
+          title="Ruin Walker leaderboard"
         />
 
         <div className="pixel-stage stochastic-result-grid">
