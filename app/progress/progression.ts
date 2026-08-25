@@ -1,84 +1,20 @@
-// Levels, ranks and skill bars — all DERIVED, nothing stored.
+// Skill levels and track readiness — all DERIVED, nothing stored.
 //
-// The design handoff called for an XP number. There isn't one, and adding
-// one would mean two progression currencies that can disagree: tickets are
-// already earned per correct answer and already shown in the HUD, so a
-// separate XP total would be a second source of truth for the same thing.
-// Tickets ARE the XP here.
+// There is deliberately no XP, level or rank here. An earlier version added
+// one, and it immediately told players things like "25 more tickets to Desk
+// Analyst — unlocks the casino floor". Nothing of the sort happens: access
+// is governed by tokens and the Infinity Pass, so a rank ladder was
+// inventing a second, fictional progression system that contradicted the
+// real one. Tickets are the only progression currency, and the HUD already
+// shows them.
 //
 // Everything below is a pure function of what ProgressContext already
-// stores. That is the swap point: if a real XP system ever arrives, change
-// `progressPoints()` to read it and the rest of this file — and every
-// component using it — keeps working unchanged.
+// stores, so none of it can drift out of step with the HUD.
 
 import { ALL_SKILLS, type SkillTag } from "./skills";
 
 type SkillStat = { correct: number; incorrect: number; revealed: number };
 type Skills = Partial<Record<SkillTag, SkillStat>>;
-
-/**
- * The single number progression is built on. Currently just tickets.
- *
- * Swap this one function to move to a real XP system; nothing else in the
- * app needs to know where the number came from.
- */
-export function progressPoints(tickets: number): number {
-  return tickets;
-}
-
-// Bands are deliberately front-loaded: the first few levels arrive quickly
-// so a new player sees movement in their first session, then stretch out.
-const RANKS: { min: number; name: string; unlocks: string | null }[] = [
-  { min: 0, name: "Rookie", unlocks: "the full drill lab" },
-  { min: 25, name: "Desk Analyst", unlocks: "the casino floor" },
-  { min: 60, name: "Junior Trader", unlocks: "the assessment cabinet" },
-  { min: 120, name: "Trader", unlocks: "advanced stochastic labs" },
-  { min: 220, name: "Senior Trader", unlocks: "every timed mode" },
-  { min: 380, name: "Desk Head", unlocks: null },
-  { min: 600, name: "Partner", unlocks: null },
-];
-
-export type Progression = {
-  level: number;
-  rank: string;
-  points: number;
-  /** Points at which the current level began. */
-  levelFloor: number;
-  /** Points needed for the next level, or null at the top. */
-  nextAt: number | null;
-  nextRank: string | null;
-  /** What the next rank opens up, if anything. */
-  nextUnlocks: string | null;
-  /** 0-1 through the current band; 1 at max rank. */
-  fraction: number;
-  toNext: number;
-};
-
-export function getProgression(tickets: number): Progression {
-  const points = progressPoints(tickets);
-
-  let index = 0;
-  for (let i = RANKS.length - 1; i >= 0; i--) {
-    if (points >= RANKS[i].min) { index = i; break; }
-  }
-
-  const current = RANKS[index];
-  const next = RANKS[index + 1] ?? null;
-  const floor = current.min;
-  const ceiling = next?.min ?? null;
-
-  return {
-    level: index + 1,
-    rank: current.name,
-    points,
-    levelFloor: floor,
-    nextAt: ceiling,
-    nextRank: next?.name ?? null,
-    nextUnlocks: next?.unlocks ?? null,
-    fraction: ceiling === null ? 1 : Math.min(1, (points - floor) / (ceiling - floor)),
-    toNext: ceiling === null ? 0 : Math.max(0, ceiling - points),
-  };
-}
 
 // --- Skill levels -----------------------------------------------------
 

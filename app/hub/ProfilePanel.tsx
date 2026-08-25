@@ -5,7 +5,6 @@ import { useProfile } from "../profile/ProfileContext";
 import { useProgress } from "../progress/ProgressContext";
 import { AvatarSprite } from "../profile/avatars";
 import { buildAchievements } from "../profile/achievements";
-import { getProgression } from "../progress/progression";
 import ContinuePanel from "./ContinuePanel";
 import SkillMap from "./SkillMap";
 import TrackReadiness from "./TrackReadiness";
@@ -36,9 +35,6 @@ export default function ProfilePanel() {
   });
   const earned = achievements.filter((a) => a.earned).length;
 
-  // Derived from tickets, not stored — see app/progress/progression.ts for
-  // why there is no separate XP number.
-  const prog = getProgression(tickets);
 
   return (
     <div className="hub-panel">
@@ -112,33 +108,6 @@ export default function ProfilePanel() {
           </span>
         </div>
 
-        {/* Rank and progress, derived from tickets. */}
-        <div className="rank-strip">
-          <div className="rank-strip-head">
-            <span className="rank-strip-rank">
-              LV.{prog.level} · {prog.rank}
-            </span>
-            <span className="rank-strip-points">
-              {prog.nextAt === null
-                ? `${prog.points} tickets · max rank`
-                : `${prog.points} / ${prog.nextAt} tickets`}
-            </span>
-          </div>
-          <div className="rank-bar" aria-label={`${Math.round(prog.fraction * 100)} percent to the next rank`}>
-            <span className="rank-bar-fill" style={{ width: `${Math.round(prog.fraction * 100)}%` }} />
-          </div>
-          <p className="rank-strip-next">
-            {prog.nextRank === null ? (
-              "Top rank reached."
-            ) : (
-              <>
-                {prog.toNext} more {prog.toNext === 1 ? "ticket" : "tickets"} to{" "}
-                <strong>{prog.nextRank}</strong>
-                {prog.nextUnlocks ? ` — unlocks ${prog.nextUnlocks}.` : "."}
-              </>
-            )}
-          </p>
-        </div>
       </section>
 
       <TrackReadiness />
