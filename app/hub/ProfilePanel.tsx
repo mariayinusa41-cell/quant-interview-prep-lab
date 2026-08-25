@@ -3,7 +3,7 @@
 import { useAccess } from "../access/AccessContext";
 import { useProfile } from "../profile/ProfileContext";
 import { useProgress } from "../progress/ProgressContext";
-import { AvatarSprite } from "../profile/avatars";
+import { AvatarSprite, displayAvatarId } from "../profile/avatars";
 import { buildAchievements } from "../profile/achievements";
 import ContinuePanel from "./ContinuePanel";
 import SkillMap from "./SkillMap";
@@ -48,7 +48,7 @@ export default function ProfilePanel() {
       <section className="section profile-card">
         <div className="profile-head">
           <div className="profile-avatar">
-            <AvatarSprite id={profile.avatar} />
+            <AvatarSprite id={displayAvatarId(profile)} />
           </div>
           <div className="profile-id">
             <h2 className="profile-name">

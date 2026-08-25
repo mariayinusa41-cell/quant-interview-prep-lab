@@ -574,6 +574,20 @@ export const AVATARS: AvatarDef[] = [
  * What the avatar pickers offer. The guest placeholder is not a choice, so
  * it is filtered out rather than left in for someone to select on purpose.
  */
+/**
+ * The avatar to actually draw for a profile.
+ *
+ * Derived from account type rather than read straight off `profile.avatar`,
+ * because the stored value cannot be trusted to match. Guests created
+ * before the placeholder existed still carry a random character, and
+ * signing out does not rewrite the avatar field — so a guest would keep
+ * wearing a frog. Deriving it means the rule holds for every guest,
+ * whenever their profile was made.
+ */
+export function displayAvatarId(profile: { account?: string; avatar: AvatarId }): AvatarId {
+  return profile.account === "guest" ? GUEST_AVATAR_ID : profile.avatar;
+}
+
 export const SELECTABLE_AVATARS: AvatarDef[] = AVATARS.filter((a) => a.id !== GUEST_AVATAR_ID);
 
 export const AVATAR_BY_ID = AVATARS.reduce(

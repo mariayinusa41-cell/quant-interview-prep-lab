@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { GUEST_AVATAR_ID } from "../profile/avatars";
 import { useProfile } from "../profile/ProfileContext";
 
 // Log out and account settings, surfaced in the hub.
@@ -36,6 +37,10 @@ export default function AccountActions() {
     saveProfile({
       account: "guest",
       displayName: "",
+      // The comment above promised the avatar was cleared and it was not,
+      // so a signed-out machine kept showing the previous user's character
+      // under "Guest session".
+      avatar: GUEST_AVATAR_ID,
       tracks: [],
       major: "",
       experience: "",
