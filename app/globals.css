@@ -9218,3 +9218,83 @@ body.exam-mode::after { display: none !important; }
   .mutiny-ocean .mutiny-boat-marker,
   .mutiny-ocean.is-storming { animation: none; }
 }
+
+/* ---------- Ruin Walker: the walk to the end ---------- */
+.ruin-walk {
+  position: relative;
+  height: 58px;
+  margin: 14px 4px 18px;
+  border: 3px solid var(--pixel-border);
+  background: rgba(var(--void-rgb), 0.34);
+  overflow: hidden;
+}
+.ruin-walk-line {
+  position: absolute;
+  left: 0; right: 0; bottom: 5px;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--pixel-border) 0 6px, transparent 6px 12px);
+}
+.ruin-walk-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  background: linear-gradient(90deg, rgba(89, 201, 143, 0.10), rgba(89, 201, 143, 0.26));
+  transition: width 0.4s ease;
+}
+.ruin-walk-edge,
+.ruin-walk-finish {
+  position: absolute;
+  top: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+}
+.ruin-walk-edge { left: 7px; color: var(--pixel-bad); }
+.ruin-walk-finish { right: 7px; color: var(--pixel-good); }
+
+.ruin-walker {
+  position: absolute;
+  width: 10px;
+  transform: translateX(-50%);
+  transition: left 0.4s ease, bottom 0.4s ease;
+}
+.ruin-walker-body {
+  display: block;
+  width: 10px;
+  height: 14px;
+  background: var(--pixel-white);
+  border: 2px solid var(--pixel-border);
+  animation: ruin-step 0.9s steps(2) infinite;
+}
+.ruin-walker.is-gone .ruin-walker-body {
+  background: var(--pixel-bad);
+  animation: none;
+  opacity: 0.5;
+}
+@keyframes ruin-step {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+
+/* Given-values row under a procedural question */
+.ruin-given {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 8px 0 10px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+}
+.ruin-given-label {
+  color: var(--ink-3);
+  margin-right: 5px;
+  text-transform: none;
+}
+.ruin-math {
+  margin: 10px 0 6px;
+  font-size: 1.15rem;
+  color: var(--pixel-white);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ruin-walker-body { animation: none; }
+}

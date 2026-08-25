@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { ResultBanner } from "../probability/quitters-never-lose/lottery/pick/PixelArt";
 import { AccessStartButton } from "../access/TokenPlayButton";
+import RuinFormula from "./RuinFormula";
+import { makeRuinQuestion, type RuinQuestion } from "./ruinQuestions";
 import {
   LAMBDA,
   MU,
@@ -55,6 +57,11 @@ export default function RuinWalkerGame() {
 
   const [psiAnswer, setPsiAnswer] = useState("");
   const [psiChecked, setPsiChecked] = useState(false);
+  // The question is drawn fresh from the procedural bank each period, so the
+  // drill is not "apply ψ(u) twelve times in a row" — it can ask for R, the
+  // premium rate, the Lundberg bound, the surplus needed to hit a target
+  // risk, and so on, all off the live state of the book.
+  const [question, setQuestion] = useState<RuinQuestion | null>(null);
   const [lastOutcome, setLastOutcome] = useState<RoundOutcome | null>(null);
   const [statusMsg, setStatusMsg] = useState("");
 
@@ -67,6 +74,7 @@ export default function RuinWalkerGame() {
     setHistory([]);
     setPsiAnswer("");
     setPsiChecked(false);
+    setQuestion(makeRuinQuestion(START_SURPLUS, theta));
     setPhase("question");
   };
 
@@ -82,7 +90,16 @@ export default function RuinWalkerGame() {
 
   const checkPsi = () => setPsiChecked(true);
   const psiGuess = parseAnswer(psiAnswer);
-  const psiCorrect = psiChecked && psiGuess !== null && Math.abs(psiGuess - truePsi) <= R_TOLERANCE;
+  // Grade against the drawn question, not always ψ(u). parseAnswer accepts a
+  // percent or a decimal, which is right for the probability questions but
+  // would silently divide a plain quantity (a premium rate, a surplus) by
+  // 100 — so non-probability answers are read as a raw number.
+  const rawGuess = Number.parseFloat(psiAnswer.replace(/[^0-9.\-]/g, ""));
+  const activeGuess = question?.isProbability ? psiGuess : (Number.isFinite(rawGuess) ? rawGuess : null);
+  const activeAnswer = question ? question.answer : truePsi;
+  const activeTolerance = question ? question.tolerance : R_TOLERANCE;
+  const psiCorrect =
+    psiChecked && activeGuess !== null && Math.abs(activeGuess - activeAnswer) <= activeTolerance;
 
   const playRound = () => {
     if (theta === null) return;
@@ -116,6 +133,7 @@ export default function RuinWalkerGame() {
         } else {
           setPsiAnswer("");
           setPsiChecked(false);
+          setQuestion(makeRuinQuestion(outcome.nextSurplus, theta));
           setPhase("question");
         }
       }, 1600);
@@ -279,6 +297,34 @@ export default function RuinWalkerGame() {
           </div>
         </div>
 
+        {/* The walk. There IS a finish line — survive all ROUNDS periods and
+            the book closes solvent — but the only sign of it was a row of
+            dots, so there was nothing to walk toward. The walker now
+            advances period by period along a track with the ruin edge
+            behind it and the finish ahead, and its height tracks surplus so
+            you can see the book sinking before it goes under. */}
+        <div className="ruin-walk" aria-label={`Period ${round} of ${ROUNDS}, surplus ${fmt2(Math.max(surplus, 0))}`}>
+          <div className="ruin-walk-line" />
+          <div
+            className="ruin-walk-fill"
+            style={{ width: `${(Math.min(round, ROUNDS) / ROUNDS) * 100}%` }}
+          />
+          <span className="ruin-walk-edge">RUIN</span>
+          <span className="ruin-walk-finish">SOLVENT</span>
+          <div
+            className={surplus <= 0 ? "ruin-walker is-gone" : "ruin-walker"}
+            style={{
+              left: `${(Math.min(round, ROUNDS) / ROUNDS) * 100}%`,
+              // Surplus drives vertical position: at or above the starting
+              // surplus the walker is on the path, and it sinks toward the
+              // ruin line as the book erodes.
+              bottom: `${Math.max(0, Math.min(1, surplus / START_SURPLUS)) * 26 + 6}px`,
+            }}
+          >
+            <span className="ruin-walker-body" />
+          </div>
+        </div>
+
         {history.length > 0 && (
           <div className="mm-round-track">
             {history.map((h, i) => (
@@ -293,18 +339,29 @@ export default function RuinWalkerGame() {
 
         {phase === "question" && (
           <div className="quiz-panel" style={{ marginTop: 10 }}>
-            <p className="quiz-panel-title">Compute the ruin probability</p>
+            <p className="quiz-panel-title">{question?.topic ?? "Compute the ruin probability"}</p>
             <div className={psiChecked ? (psiCorrect ? "quiz-q is-correct" : "quiz-q is-wrong") : "quiz-q"}>
               <p className="quiz-q-topic">Cramér–Lundberg</p>
-              <p className="quiz-q-prompt">
-                ψ(u) = (1/(1+θ))·e^(−R·u). Surplus u = {fmt2(surplus)}, θ = {Math.round((theta ?? 0) * 100)}%, R ={" "}
-                {R.toFixed(4)}. What's ψ(u), the probability this book eventually gets ruined from here?
-              </p>
+              <p className="quiz-q-prompt">{question?.prompt}</p>
+
+              {question && <RuinFormula kind={question.formula} />}
+
+              {question && (
+                <div className="ruin-given">
+                  {question.given.map((g) => (
+                    <span key={g.label} className="ruin-given-item">
+                      <span className="ruin-given-label">{g.label}</span>
+                      <strong>{g.value}</strong>
+                    </span>
+                  ))}
+                </div>
+              )}
+
               <div className="quiz-q-input-row">
                 <input
                   type="text"
                   className="quiz-q-input"
-                  placeholder="e.g. 36% or 0.36"
+                  placeholder={question?.isProbability ? "e.g. 36% or 0.36" : "e.g. 12.5"}
                   value={psiAnswer}
                   onChange={(e) => setPsiAnswer(e.target.value)}
                   disabled={psiChecked}
@@ -317,9 +374,12 @@ export default function RuinWalkerGame() {
               )}
               {psiChecked && (
                 <p className={psiCorrect ? "quiz-q-explain is-correct" : "quiz-q-explain is-wrong"}>
-                  {psiCorrect ? "✓ Correct. " : `✗ Not quite — it's ${pct(truePsi)}. `}
-                  Higher surplus and higher loading both push ψ(u) down exponentially — that's the Lundberg bound at
-                  work, not luck.
+                  {psiCorrect
+                    ? "✓ Correct. "
+                    : `✗ Not quite — it's ${
+                        question?.isProbability ? pct(activeAnswer) : activeAnswer.toFixed(2)
+                      }. `}
+                  {question?.explanation}
                 </p>
               )}
             </div>
