@@ -26,10 +26,11 @@ const subsections = [
     description: "Estimate real-world quantities — piano tuners in Chicago, atoms in a body, golf balls in a bus. A quant interview staple.",
     tone: "green" as const,
     icon: "target" as const,
-    gameId: "drills-fermi-estimation",
-    // Rendered as a plain link, not gated by TokenPlayButton, because Fermi
-    // does its own access check per-mode inside the game (classic Fermi vs
-    // the Infinity-Pass-gated Technical Estimation mode).
+    // Only used as a display key here — the tile is a plain link. The real
+    // gate lives inside FermiGame.tsx, split into "drills-fermi-classic"
+    // (token-priced) and "drills-fermi-technical" (Infinity Pass only)
+    // depending on which mode tab is active.
+    gameId: "drills-fermi-classic",
     free: true,
   },
   {
@@ -46,12 +47,13 @@ const subsections = [
     href: "/drills/survival",
     title: "Survival Run",
     tag: "Mental math",
-    // Kept as "drills-sequence-sprint" — that's what it already was (an
-    // apparent copy/paste leftover from before this list had a real gameId
-    // per entry). Left as-is rather than silently repricing/resplitting an
-    // existing paid game's session pool as a side effect of adding an
-    // unrelated new drill; worth a deliberate look if you want it split out.
-    gameId: "drills-sequence-sprint",
+    description: "An endless mental-math run — answer fast enough to keep jumping, or the run ends.",
+    // Was "drills-sequence-sprint" (a copy/paste leftover) — that made this
+    // tile silently free forever AND share Sequence Sprint's session pool.
+    // Now its own id, gated for real both here and inside SurvivalDrill.tsx
+    // itself (menu button, "Try Again", and the SPACE/canvas-click
+    // shortcuts all route through the same access check).
+    gameId: "drills-survival-run",
     tone: "amber" as const,
     icon: "dino" as const,
     free: false,

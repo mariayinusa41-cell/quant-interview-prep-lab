@@ -1,12 +1,21 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { SESSION_ROUNDS, useAccess } from "./AccessContext";
 import { useProfile } from "../profile/ProfileContext";
 
 export function AccessPlayLabel({ gameId, defaultLabel = "Play" }: { gameId: string; defaultLabel?: string }) {
-  const { mode, getRoundsRemaining, isFreeGame, isPremiumOnly, getSessionCost } = useAccess();
+  const {
+    mode,
+    getRoundsRemaining,
+    isFreeGame,
+    isPremiumOnly,
+    getSessionCost,
+    getLifetimeCap,
+    isLifetimeExhausted,
+    getLifetimeGroupLabel,
+  } = useAccess();
   const { profile } = useProfile();
   // Developer mode has no access state worth reporting — and every caller
   // already passes its own label as `children`, so echoing `defaultLabel`
@@ -25,7 +34,22 @@ export function AccessPlayLabel({ gameId, defaultLabel = "Play" }: { gameId: str
   if (isPremiumOnly(gameId)) return <span className="access-play-meta">Infinity Pass only</span>;
   const roundsRemaining = getRoundsRemaining(gameId);
   if (roundsRemaining > 0) return <span className="access-play-meta">Use round ({roundsRemaining} left)</span>;
-  return <span className="access-play-meta">Play for {getSessionCost(gameId)} tokens</span>;
+  // A lifetime-capped game reads as premium-only once used up, and as a
+  // normal purchase (with a heads-up that it's a one-time unlock) before
+  // that — so the cost is never a surprise.
+  if (isLifetimeExhausted(gameId)) return <span className="access-play-meta">Infinity Pass only</span>;
+  const cost = getSessionCost(gameId);
+  const cap = getLifetimeCap(gameId);
+  if (cap !== null) {
+    const groupLabel = getLifetimeGroupLabel(gameId);
+    const capText = cap === 1 ? "1 lifetime play" : `${cap} lifetime plays`;
+    return (
+      <span className="access-play-meta">
+        Play for {cost} tokens ({groupLabel ? `${capText} across ${groupLabel}` : capText})
+      </span>
+    );
+  }
+  return <span className="access-play-meta">Play for {cost} tokens</span>;
 }
 
 type AccessStartButtonProps = {
@@ -34,23 +58,41 @@ type AccessStartButtonProps = {
   defaultLabel?: string;
   children: ReactNode;
   className?: string;
+  style?: CSSProperties;
   disabled?: boolean;
   onStart: () => void;
 };
 
-export function AccessStartButton({ gameId, title = "this game", defaultLabel = "Play", children, className, disabled = false, onStart }: AccessStartButtonProps) {
-  const { mode, tokens, getRoundsRemaining, isFreeGame, isPremiumOnly, getSessionCost, startGameEntry } = useAccess();
+export function AccessStartButton({ gameId, title = "this game", defaultLabel = "Play", children, className, style, disabled = false, onStart }: AccessStartButtonProps) {
+  const {
+    mode,
+    tokens,
+    getRoundsRemaining,
+    isFreeGame,
+    isPremiumOnly,
+    getSessionCost,
+    getLifetimeCap,
+    isLifetimeExhausted,
+    getLifetimeGroupLabel,
+    startGameEntry,
+  } = useAccess();
   const { profile } = useProfile();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [error, setError] = useState(false);
   const roundsRemaining = getRoundsRemaining(gameId);
   const cost = getSessionCost(gameId);
+  const lifetimeCap = getLifetimeCap(gameId);
+  const lifetimeGroupLabel = getLifetimeGroupLabel(gameId);
   // A guest has no wallet at all: only the always-free games are playable.
   // Scoped to free mode — someone holding a pass (or in developer mode) is by
   // definition not a guest, and must not be blocked by this.
   const guestBlocked =
     mode === "free" && profile.onboarded && profile.account === "guest" && !isFreeGame(gameId);
-  const premiumBlocked = !guestBlocked && mode === "free" && isPremiumOnly(gameId);
+  // A used-up lifetime play reads exactly like premium-only content from
+  // here down: the modal and button state don't need to distinguish them,
+  // only the copy inside the modal does.
+  const lifetimeBlocked = !guestBlocked && mode === "free" && isLifetimeExhausted(gameId);
+  const premiumBlocked = !guestBlocked && mode === "free" && (isPremiumOnly(gameId) || lifetimeBlocked);
   const requiresPurchase =
     !guestBlocked && mode === "free" && !isFreeGame(gameId) && !premiumBlocked && roundsRemaining === 0;
 
@@ -69,6 +111,7 @@ export function AccessStartButton({ gameId, title = "this game", defaultLabel = 
       <button
         type="button"
         className={className}
+        style={style}
         disabled={disabled}
         onClick={() => {
           setError(false);
@@ -96,6 +139,22 @@ export function AccessStartButton({ gameId, title = "this game", defaultLabel = 
                   <button type="button" className="access-modal-confirm" onClick={() => setConfirmOpen(false)}>Close</button>
                 </div>
               </>
+            ) : lifetimeBlocked ? (
+              <>
+                <p className="label">Lifetime play used</p>
+                <h2 id="access-modal-title">
+                  {lifetimeGroupLabel ? `Your ${lifetimeGroupLabel} unlock is used` : "You've already played this one"}
+                </h2>
+                <p>
+                  {lifetimeGroupLabel
+                    ? `You already spent your one free lifetime play in ${lifetimeGroupLabel}. Every game in ${lifetimeGroupLabel} is Infinity Pass only from here.`
+                    : `${title} was a one-time unlock for Free users, and you've used it.`}{" "}
+                  It&rsquo;s still playable any time on the Infinity Pass.
+                </p>
+                <div className="access-modal-actions">
+                  <button type="button" className="access-modal-confirm" onClick={() => setConfirmOpen(false)}>Close</button>
+                </div>
+              </>
             ) : premiumBlocked ? (
               <>
                 <p className="label">Infinity Pass content</p>
@@ -110,6 +169,19 @@ export function AccessStartButton({ gameId, title = "this game", defaultLabel = 
                 <p className="label">Free user session</p>
                 <h2 id="access-modal-title">Purchase {title}?</h2>
                 <p>This uses {cost} tokens and gives you {SESSION_ROUNDS} rounds of {title}. Your current balance is {tokens} tokens.</p>
+                {lifetimeCap !== null && (
+                  <p className="mm-step-hint">
+                    {lifetimeGroupLabel ? (
+                      <>
+                        Heads up: as a Free user you get {lifetimeCap === 1 ? "one lifetime play across all of" : `${lifetimeCap} lifetime plays across`} {lifetimeGroupLabel} — starting {title} uses it, and every other {lifetimeGroupLabel} game becomes Infinity Pass only right after, whether you've tried it or not.
+                      </>
+                    ) : (
+                      <>
+                        Heads up: as a Free user this is a one-time unlock — {lifetimeCap === 1 ? "this is your only lifetime play" : `you get ${lifetimeCap} lifetime plays`} of {title}. After that it's Infinity Pass only.
+                      </>
+                    )}
+                  </p>
+                )}
                 {error && <p className="access-modal-error">You need at least {cost} tokens to start another session.</p>}
                 <div className="access-modal-actions">
                   <button type="button" className="access-modal-cancel" onClick={() => setConfirmOpen(false)}>Cancel</button>

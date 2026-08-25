@@ -455,7 +455,7 @@ export default function FermiGame() {
               )}
 
               <AccessStartButton
-                gameId="drills-fermi-estimation"
+                gameId="drills-fermi-classic"
                 title="Fermi Estimation"
                 defaultLabel={availableCount === 0 ? "No questions match" : `Start (${Math.min(ROUND_COUNT, availableCount)} questions)`}
                 className="fermi-start-btn"
@@ -509,7 +509,7 @@ export default function FermiGame() {
               )}
 
               <AccessStartButton
-                gameId="drills-fermi-estimation"
+                gameId="drills-fermi-technical"
                 title="Technical Estimation"
                 defaultLabel={
                   availableTechCount === 0

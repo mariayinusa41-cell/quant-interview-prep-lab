@@ -3,6 +3,10 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useSound } from "../../audio/SoundProvider";
 import { useProfile } from "../../profile/ProfileContext";
+import { useAccess } from "../../access/AccessContext";
+import { AccessStartButton } from "../../access/TokenPlayButton";
+
+const GAME_ID = "drills-survival-run";
 import {
   SPRITE_TREX,
   SPRITE_CACTUS_LARGE,
@@ -220,6 +224,16 @@ export default function SurvivalDrill() {
     setTimeout(() => inputRef.current?.focus(), 60);
   }, [category]);
 
+  // Keyboard (SPACE) and canvas-click starts are shortcuts for someone who
+  // already has access — they bypass the confirm-purchase modal entirely,
+  // so if access is denied they just silently do nothing rather than
+  // spending tokens without confirmation. The actual buttons below use
+  // AccessStartButton directly, which shows the real modal.
+  const { startGameEntry } = useAccess();
+  const requestStart = useCallback(() => {
+    if (startGameEntry(GAME_ID)) startGame();
+  }, [startGameEntry, startGame]);
+
   // Correct answer -> jump + advance. Wrong -> shake, no penalty beyond the
   // obstacle still bearing down. Called from both the global space-bar
   // handler and (as a fallback) the input's own Enter key.
@@ -249,13 +263,13 @@ export default function SurvivalDrill() {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.code !== "Space" && e.key !== " ") return;
       e.preventDefault();
-      if (statusRef.current === "menu") startGame();
+      if (statusRef.current === "menu") requestStart();
       else if (statusRef.current === "playing") submitAnswer();
-      else if (statusRef.current === "gameover") startGame();
+      else if (statusRef.current === "gameover") requestStart();
     };
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [startGame, submitAnswer]);
+  }, [requestStart, submitAnswer]);
 
   // Canvas game engine loop.
   useEffect(() => {
@@ -484,7 +498,7 @@ export default function SurvivalDrill() {
     const centerX = e.currentTarget.width / 2;
     const restartY = e.currentTarget.height / 2;
     if (cx > centerX - 18 && cx < centerX + 18 && cy > restartY && cy < restartY + 32) {
-      startGame();
+      requestStart();
     }
   };
 
@@ -618,9 +632,11 @@ export default function SurvivalDrill() {
                 </button>
               ))}
             </div>
-            <button
-              type="button"
-              onClick={startGame}
+            <AccessStartButton
+              gameId={GAME_ID}
+              title="Survival Run"
+              defaultLabel="Start Run"
+              onStart={startGame}
               style={{
                 padding: "10px 24px",
                 fontSize: "1rem",
@@ -632,7 +648,7 @@ export default function SurvivalDrill() {
               }}
             >
               Start Run <kbd style={{ marginLeft: 6 }}>SPACE</kbd>
-            </button>
+            </AccessStartButton>
           </div>
         )}
 
@@ -661,9 +677,11 @@ export default function SurvivalDrill() {
             <p style={{ color: "#666", marginBottom: 14 }}>
               The answer was <strong>{question.answer}</strong>. You cleared <strong>{score}</strong> obstacles!
             </p>
-            <button
-              type="button"
-              onClick={startGame}
+            <AccessStartButton
+              gameId={GAME_ID}
+              title="Survival Run"
+              defaultLabel="Try Again"
+              onStart={startGame}
               style={{
                 padding: "10px 24px",
                 fontSize: "1rem",
@@ -675,7 +693,7 @@ export default function SurvivalDrill() {
               }}
             >
               Try Again <kbd style={{ marginLeft: 6 }}>SPACE</kbd>
-            </button>
+            </AccessStartButton>
           </div>
         )}
       </div>
