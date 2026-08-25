@@ -15,6 +15,9 @@ import type { DetailedHTMLProps, HTMLAttributes } from "react";
 type MathMLProps = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> & {
   display?: "block" | "inline";
   xmlns?: string;
+  mathvariant?: string;
+  accent?: boolean | "true" | "false";
+  stretchy?: boolean | "true" | "false";
 };
 
 declare module "react" {
@@ -31,6 +34,9 @@ declare module "react" {
       msqrt: MathMLProps;
       mtext: MathMLProps;
       mspace: MathMLProps;
+      msubsup: MathMLProps;
+      mover: MathMLProps;
+      munder: MathMLProps;
     }
   }
 }

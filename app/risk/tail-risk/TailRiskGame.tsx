@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import TeX from "../../math/TeX";
 import {
   normalES,
   normalVaR,
@@ -216,7 +217,7 @@ export default function TailRiskGame() {
       {phase === "calm" && (
         <div className="stochastic-explain">
           <p className="quiz-panel-title">Step 1 — portfolio volatility, calm regime</p>
-          <div className="mutiny-formula">σ<sub>p</sub> = √( Σᵢ Σⱼ wᵢ wⱼ σᵢ σⱼ ρᵢⱼ )</div>
+          <TeX block>{String.raw`\sigma_{p} = \sqrt{\sum_{i}\sum_{j} w_{i} w_{j} \sigma_{i} \sigma_{j} \rho_{ij}}`}</TeX>
           <div className="calc-input-row">
             <input type="text" className="calc-input" inputMode="decimal" value={calmInput}
               disabled={calmChecked} placeholder="Daily σ, in % (e.g. 1.23)"
@@ -287,7 +288,7 @@ export default function TailRiskGame() {
             worse than that it gets. Expected Shortfall answers exactly that: the average loss{" "}
             <em>given</em> you are already past VaR.
           </p>
-          <div className="mutiny-formula">ES<sub>α</sub> = σ × φ(z<sub>α</sub>) ÷ (1 − α)</div>
+          <TeX block>{String.raw`ES_{\alpha} = \frac{\sigma \cdot \phi(z_{\alpha})}{1 - \alpha}`}</TeX>
           <div className="calc-input-row">
             <input type="text" className="calc-input" inputMode="decimal" value={esInput}
               disabled={esChecked} placeholder="99% Expected Shortfall, $M"

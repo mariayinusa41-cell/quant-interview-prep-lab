@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { lagrangeSolution, randomLagrangeProblem } from "./calcMath";
 import { useClientRound } from "./useClientRound";
+import { useWalkthrough } from "./useWalkthrough";
+import CalcWalkthrough from "./CalcWalkthrough";
+import { LAGRANGE_GUIDE } from "./walkthroughs";
 import { AccessStartButton } from "../access/TokenPlayButton";
 
 function parseAnswer(input: string): number | null {
@@ -14,12 +17,14 @@ function parseAnswer(input: string): number | null {
 
 export default function LagrangeOptimizer() {
   const [problem, nextProblem] = useClientRound(randomLagrangeProblem);
+  const guide = useWalkthrough("lagrange");
   const [answer, setAnswer] = useState("");
   const [checked, setChecked] = useState(false);
   const [score, setScore] = useState(0);
   const [rounds, setRounds] = useState(0);
 
-  if (!problem) return <div className="calc-subgame calc-loading">Loading a fresh constraint…</div>;
+  if (!problem || guide.show === null) return <div className="calc-subgame calc-loading">Loading a fresh constraint…</div>;
+  if (guide.show) return <CalcWalkthrough guide={LAGRANGE_GUIDE} title="Lagrange Optimizer" onDone={guide.dismiss} />;
 
   const solution = lagrangeSolution(problem);
   const guess = parseAnswer(answer);
@@ -54,6 +59,7 @@ export default function LagrangeOptimizer() {
       <div className="lab-hud">
         <span>ROUND <strong>{rounds}</strong></span>
         <span>SCORE <strong>{score}</strong></span>
+        <button type="button" className="calc-guide-replay" onClick={guide.replay}>Walkthrough</button>
       </div>
 
       <div className="calc-taylor-panel">

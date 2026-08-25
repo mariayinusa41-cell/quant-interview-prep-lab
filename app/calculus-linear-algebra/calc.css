@@ -309,6 +309,89 @@
   background: rgba(255, 255, 255, 0.03);
 }
 
+/* Pre-round walkthrough */
+.calc-guide-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.calc-guide-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* The site-wide .skip-btn is position: fixed, which would float this over
+   the page chrome — this one belongs inline, next to the eyebrow. */
+.calc-guide-skip {
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: transparent;
+  padding: 0.3rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.calc-guide-skip:hover {
+  color: var(--text);
+  border-color: var(--accent-2);
+}
+
+.calc-guide-premise {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text);
+  margin: 0 0 1rem;
+}
+
+/* Alignment inside the worked steps is load-bearing — the columns of a
+   term-by-term expansion only read as columns if the whitespace survives,
+   hence pre rather than a wrapped block. */
+.calc-guide-math {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.75;
+  color: var(--accent-2);
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  margin: 0.9rem 0 0;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* Replay affordance, sitting with the round/score HUD. */
+.calc-guide-replay {
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: transparent;
+  padding: 0.25rem 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.calc-guide-replay:hover {
+  color: var(--accent-2);
+  border-color: var(--accent-2);
+}
+
 @keyframes fermi-fadeIn {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ResultBanner } from "../probability/quitters-never-lose/lottery/pick/PixelArt";
 import { AccessStartButton } from "../access/TokenPlayButton";
 import RuinFormula from "./RuinFormula";
+import TeX from "../math/TeX";
 import { makeRuinQuestion, type RuinQuestion } from "./ruinQuestions";
 import {
   LAMBDA,
@@ -245,14 +246,16 @@ export default function RuinWalkerGame() {
         <div className="stochastic-explain">
           <p className="label">What the model says</p>
           <p>
-            Adjustment coefficient R = θ/((1+θ)μ) = <strong>{R.toFixed(4)}</strong>. At θ = {Math.round((theta ?? 0) * 100)}%,
-            starting from u = {START_SURPLUS} the exact ruin probability was ψ(u) = (1/(1+θ))·e^(−Ru) ={" "}
+            Adjustment coefficient <TeX>{String.raw`R = \frac{\theta}{(1+\theta)\mu}`}</TeX> ={" "}
+            <strong>{R.toFixed(4)}</strong>. At θ = {Math.round((theta ?? 0) * 100)}%, starting from u ={" "}
+            {START_SURPLUS} the exact ruin probability was{" "}
             <strong>{pct(ruinProbability(START_SURPLUS, theta ?? 0, MU))}</strong>.
           </p>
-          <code>ψ(u) = (1/(1+θ)) · e^(−R·u)</code>
+          <TeX block>{String.raw`\psi(u) = \frac{1}{1+\theta} \cdot e^{-Ru}`}</TeX>
           <p>
-            At u = 0 that formula gives exactly 1/(1+θ) = <strong>{pct(1 / (1 + (theta ?? 0)))}</strong> — however much
-            you've saved up, there's always some ruin risk unless θ is charged high enough and u grows large.
+            At u = 0 that formula gives exactly <TeX>{String.raw`\frac{1}{1+\theta}`}</TeX> ={" "}
+            <strong>{pct(1 / (1 + (theta ?? 0)))}</strong> — however much you&rsquo;ve saved up, there&rsquo;s always
+            some ruin risk unless θ is charged high enough and u grows large.
           </p>
         </div>
 

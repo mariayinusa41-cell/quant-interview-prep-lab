@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { TAYLOR_FUNCTIONS, minOrderForError, taylorApprox, taylorError, type TaylorFn } from "./calcMath";
 import { useClientRound } from "./useClientRound";
+import { useWalkthrough } from "./useWalkthrough";
+import CalcWalkthrough from "./CalcWalkthrough";
+import { TAYLOR_GUIDE } from "./walkthroughs";
 import { AccessStartButton } from "../access/TokenPlayButton";
 
 const MAX_ORDER = 8;
@@ -42,12 +45,14 @@ function parseAnswer(input: string): number | null {
 
 export default function TaylorSlider() {
   const [round, nextRound] = useClientRound(newRound);
+  const guide = useWalkthrough("taylor");
   const [answer, setAnswer] = useState("");
   const [checked, setChecked] = useState(false);
   const [score, setScore] = useState(0);
   const [rounds, setRounds] = useState(0);
 
-  if (!round) return <div className="calc-subgame calc-loading">Loading a fresh function…</div>;
+  if (!round || guide.show === null) return <div className="calc-subgame calc-loading">Loading a fresh function…</div>;
+  if (guide.show) return <CalcWalkthrough guide={TAYLOR_GUIDE} title="Taylor Slider" onDone={guide.dismiss} />;
 
   const trueApprox = taylorApprox(round.fn, round.x, round.order);
   const trueValue = round.fn.f(round.x);
@@ -84,6 +89,7 @@ export default function TaylorSlider() {
       <div className="lab-hud">
         <span>ROUND <strong>{rounds}</strong></span>
         <span>SCORE <strong>{score}</strong></span>
+        <button type="button" className="calc-guide-replay" onClick={guide.replay}>Walkthrough</button>
       </div>
 
       <div className="calc-taylor-panel">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import TeX from "../../math/TeX";
 import { adjustedDid, did, groupChange, preTrendGap, type Cell, type Confounder } from "../causalMath";
 import { AccessStartButton } from "../../access/TokenPlayButton";
 import { useProgress } from "../../progress/ProgressContext";
@@ -185,7 +186,7 @@ export default function CausalConfounderGame() {
           <p className="mm-step-hint">
             Southvale tells you what Northgate would have done anyway. Subtract it out.
           </p>
-          <div className="mutiny-formula">DiD = (T<sub>post</sub> − T<sub>pre</sub>) − (C<sub>post</sub> − C<sub>pre</sub>)</div>
+          <TeX block>{String.raw`\text{DiD} = (T_{post} - T_{pre}) - (C_{post} - C_{pre})`}</TeX>
 
           <div className="calc-input-row">
             <input
@@ -275,7 +276,7 @@ export default function CausalConfounderGame() {
             <strong>{Math.abs(TRUE_SHOCK)}k units</strong> over the post period. Strip it out of the
             naive estimate of {naiveTruth}.
           </p>
-          <div className="mutiny-formula">Causal effect = DiD − (treated-only shock)</div>
+          <TeX block>{String.raw`\text{Causal effect} = \text{DiD} - \text{treated-only shock}`}</TeX>
 
           <div className="calc-input-row">
             <input

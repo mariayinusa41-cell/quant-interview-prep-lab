@@ -9298,3 +9298,60 @@ body.exam-mode::after { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   .ruin-walker-body { animation: none; }
 }
+
+/* ---------- TeX / MathML rendering ---------- */
+.tex-math { font-size: 1.05em; color: inherit; }
+.tex-block {
+  display: block;
+  margin: 10px 0;
+  text-align: center;
+  font-size: 1.15rem;
+  color: var(--pixel-white);
+}
+.tex-inline { display: inline-block; vertical-align: -0.15em; }
+
+/* ---------- Martingale "where do these numbers come from" sheet ---------- */
+.mutiny-sheet {
+  margin-top: 12px;
+  border: 2px solid var(--pixel-border);
+  border-radius: 5px;
+  background: rgba(var(--void-rgb), 0.28);
+}
+.mutiny-sheet > summary {
+  cursor: pointer;
+  padding: 8px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pixel-accent, #f5c542);
+}
+.mutiny-sheet[open] > summary { border-bottom: 2px solid var(--pixel-border); }
+.mutiny-sheet-list { margin: 0; padding: 10px 12px; }
+.mutiny-sheet-list > div {
+  display: grid;
+  grid-template-columns: 3.2rem 1fr;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.09);
+}
+.mutiny-sheet-list > div:last-child { border-bottom: none; }
+.mutiny-sheet-list dt {
+  font-size: 1.05rem;
+  color: var(--pixel-accent, #f5c542);
+  text-align: center;
+}
+.mutiny-sheet-list dd {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--ink-2, #c7d0dc);
+}
+.mutiny-sheet-note {
+  margin: 0;
+  padding: 9px 12px 11px;
+  border-top: 2px solid var(--pixel-border);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--ink-3, #9aa4b2);
+}

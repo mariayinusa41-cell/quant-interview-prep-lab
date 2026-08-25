@@ -3,6 +3,9 @@
 import { useMemo, useState } from "react";
 import { applyMatrix, buildEigenPuzzle, isEigenvector, type Vec2 } from "./calcMath";
 import { useClientRound } from "./useClientRound";
+import { useWalkthrough } from "./useWalkthrough";
+import CalcWalkthrough from "./CalcWalkthrough";
+import { EIGEN_GUIDE } from "./walkthroughs";
 import { AccessStartButton } from "../access/TokenPlayButton";
 
 // Display-only rounding — the underlying matrix stays full-precision for
@@ -39,6 +42,7 @@ function Arrow({ v, color, label }: { v: Vec2; color: string; label: string }) {
 
 export default function EigenvectorSpotter() {
   const [puzzle, nextPuzzle] = useClientRound(buildEigenPuzzle);
+  const guide = useWalkthrough("eigenvalues");
   const [picked, setPicked] = useState<Vec2 | null>(null);
   const [score, setScore] = useState(0);
   const [rounds, setRounds] = useState(0);
@@ -46,7 +50,8 @@ export default function EigenvectorSpotter() {
   const candidates = useMemo(() => (puzzle ? shuffle([puzzle.eigenvector, ...puzzle.decoys]) : []), [puzzle]);
   const colors = ["#5eb8ff", "#f4c542", "#b98bff", "#e74c4c"];
 
-  if (!puzzle) return <div className="calc-subgame calc-loading">Loading a fresh matrix…</div>;
+  if (!puzzle || guide.show === null) return <div className="calc-subgame calc-loading">Loading a fresh matrix…</div>;
+  if (guide.show) return <CalcWalkthrough guide={EIGEN_GUIDE} title="Eigenvector Spotter" onDone={guide.dismiss} />;
 
   function pick(v: Vec2) {
     if (picked) return;
@@ -72,6 +77,7 @@ export default function EigenvectorSpotter() {
       <div className="lab-hud">
         <span>ROUND <strong>{rounds}</strong></span>
         <span>SCORE <strong>{score}</strong></span>
+        <button type="button" className="calc-guide-replay" onClick={guide.replay}>Walkthrough</button>
       </div>
 
       <div className="calc-matrix-display" aria-label="2 by 2 matrix">

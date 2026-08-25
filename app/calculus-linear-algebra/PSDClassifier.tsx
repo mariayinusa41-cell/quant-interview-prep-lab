@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { classifyPSD, randomPSDMatrix, type PSDLabel } from "./calcMath";
 import { useClientRound } from "./useClientRound";
+import { useWalkthrough } from "./useWalkthrough";
+import CalcWalkthrough from "./CalcWalkthrough";
+import { PSD_GUIDE } from "./walkthroughs";
 import { AccessStartButton } from "../access/TokenPlayButton";
 import { useProgress } from "../progress/ProgressContext";
 import { useSound } from "../audio/SoundProvider";
@@ -13,12 +16,14 @@ export default function PSDClassifier() {
   const { recordAttempt } = useProgress();
   const { playSfx, startMusic } = useSound();
   const [matrix, nextMatrix] = useClientRound(randomPSDMatrix);
+  const guide = useWalkthrough("psd-matrices");
   const [picked, setPicked] = useState<PSDLabel | null>(null);
   const [score, setScore] = useState(0);
   const [rounds, setRounds] = useState(0);
   const [streak, setStreak] = useState(0);
 
-  if (!matrix) return <div className="calc-subgame calc-loading">Loading a fresh matrix…</div>;
+  if (!matrix || guide.show === null) return <div className="calc-subgame calc-loading">Loading a fresh matrix…</div>;
+  if (guide.show) return <CalcWalkthrough guide={PSD_GUIDE} title="PSD Classifier" onDone={guide.dismiss} />;
 
   const truth = classifyPSD(matrix);
   const det = matrix.a * matrix.c - matrix.b * matrix.b;
@@ -56,6 +61,7 @@ export default function PSDClassifier() {
         <span>ROUND <strong>{rounds}</strong></span>
         <span>SCORE <strong>{score}</strong></span>
         <span>STREAK <strong>{streak}</strong></span>
+        <button type="button" className="calc-guide-replay" onClick={guide.replay}>Walkthrough</button>
       </div>
 
       <div className="calc-matrix-display" aria-label="2 by 2 matrix">

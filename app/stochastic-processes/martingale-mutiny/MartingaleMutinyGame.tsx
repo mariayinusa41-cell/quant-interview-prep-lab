@@ -5,6 +5,7 @@ import { ResultBanner } from "../../probability/quitters-never-lose/lottery/pick
 import { BoatIcon, IslandIcon, ReefIcon } from "./MutinyIcons";
 import { AccessStartButton } from "../../access/TokenPlayButton";
 import { useProgress } from "../../progress/ProgressContext";
+import TeX from "../../math/TeX";
 import {
   EQUILIBRIUM_CEILING,
   GAME,
@@ -12,6 +13,7 @@ import {
   blankFormulaAnswer,
   resolveStep,
   scorePrediction,
+  stepSigma,
   theoreticalExpectedValue,
   type StepResult,
 } from "./martingaleMath";
@@ -251,7 +253,8 @@ export default function MartingaleMutinyGame() {
             )}
             You actually banked <strong>{x.toFixed(1)}</strong>, {x >= theoreticalNow ? "above" : "below"} the theoretical value.
           </p>
-          <code>E[Xₙ] = a·E[Xₙ₋₁] + b, a = 1 − p/2, b = (1−p)μ</code>
+          <TeX block>{String.raw`\mathbb{E}[X_{n}] = a \cdot \mathbb{E}[X_{n-1}] + b`}</TeX>
+          <TeX block>{String.raw`a = 1 - \frac{p}{2} \quad b = (1-p)\mu`}</TeX>
           <p>
             That recursion has a fixed point at <strong>{EQUILIBRIUM_CEILING.toFixed(1)}</strong>: because the storm
             cost scales with your current hold but the edge is flat, expected cargo never climbs past that ceiling no
@@ -327,22 +330,85 @@ export default function MartingaleMutinyGame() {
             <p className="label">Fill in the blank — leg {step + 1}</p>
             {pendingStep.shocked ? (
               <>
-                <p>Storm check: a Poisson-arrival event with rate λ = {GAME.LAMBDA} gives ~{pct(P_SHOCK)} chance per leg — it hit this time. Storms take a fixed fraction, regardless of how much cargo you're carrying.</p>
-                <p className="mutiny-formula">nextCargo = currentCargo × {GAME.SHOCK_MULTIPLIER}</p>
+                <p>
+                  Storm check: a Poisson-arrival event with rate <TeX>{String.raw`\lambda`}</TeX> = {GAME.LAMBDA} gives{" "}
+                  <TeX>{String.raw`P(\text{storm}) = 1 - e^{-\lambda}`}</TeX> = {pct(P_SHOCK)} per leg — it hit this
+                  time. A storm takes a fixed FRACTION, so it costs more the more you are carrying.
+                </p>
+                <TeX block>{String.raw`X_{n} = X_{n-1} \times ${GAME.SHOCK_MULTIPLIER}`}</TeX>
                 <p className="mutiny-formula-filled">
-                  nextCargo = {x.toFixed(1)} × {GAME.SHOCK_MULTIPLIER} = <span className="mutiny-blank">?</span>
+                  <TeX>{String.raw`X_{n} = ${x.toFixed(1)} \times ${GAME.SHOCK_MULTIPLIER} =`}</TeX>{" "}
+                  <span className="mutiny-blank">?</span>
                 </p>
               </>
             ) : (
               <>
-                <p>Storm check: ~{pct(P_SHOCK)} chance per leg — didn't hit this time. Calm-water gain is drawn from a Normal distribution with mean +{GAME.MU} and this leg's spread σₙ.</p>
-                <p className="mutiny-formula">nextCargo = currentCargo + μ + σₙ · z</p>
+                <p>
+                  Storm check: <TeX>{String.raw`1 - e^{-\lambda}`}</TeX> = {pct(P_SHOCK)} per leg — didn&rsquo;t hit
+                  this time. So this leg is a calm-water draw:
+                </p>
+                <TeX block>{String.raw`X_{n} = X_{n-1} + \mu + \sigma_{n} \cdot z`}</TeX>
                 <p className="mutiny-formula-filled">
-                  nextCargo = {x.toFixed(1)} + {GAME.MU} + {(Math.round((pendingStep.sigmaUsed ?? 0) * 100) / 100).toFixed(2)} ×{" "}
-                  {(Math.round((pendingStep.zUsed ?? 0) * 100) / 100).toFixed(2)} = <span className="mutiny-blank">?</span>
+                  <TeX>{String.raw`X_{n} = ${x.toFixed(1)} + ${GAME.MU} + ${(Math.round((pendingStep.sigmaUsed ?? 0) * 100) / 100).toFixed(2)} \times ${(Math.round((pendingStep.zUsed ?? 0) * 100) / 100).toFixed(2)} =`}</TeX>{" "}
+                  <span className="mutiny-blank">?</span>
                 </p>
               </>
             )}
+
+            {/* Where each number in the line above actually comes from. Two of
+                the three are computed, not constants, and nothing on screen
+                said so — the drift is fixed, the spread GROWS every leg, and
+                z is a fresh random draw. */}
+            <details className="mutiny-sheet">
+              <summary>Where do these numbers come from?</summary>
+              <dl className="mutiny-sheet-list">
+                <div>
+                  <dt><TeX>{String.raw`X_{n-1}`}</TeX></dt>
+                  <dd>
+                    Your cargo right now: <strong>{x.toFixed(1)}</strong>. Starts at {GAME.X0}.
+                  </dd>
+                </div>
+                <div>
+                  <dt><TeX>{String.raw`\mu`}</TeX></dt>
+                  <dd>
+                    Calm-water drift. A <em>fixed</em> <strong>+{GAME.MU}</strong> every calm leg — this one never
+                    changes.
+                  </dd>
+                </div>
+                <div>
+                  <dt><TeX>{String.raw`\sigma_{n}`}</TeX></dt>
+                  <dd>
+                    This leg&rsquo;s spread, and it <em>grows</em> every leg:{" "}
+                    <TeX>{String.raw`\sigma_{n} = \sigma_{0}(1+g)^{n}`}</TeX> with{" "}
+                    <TeX>{String.raw`\sigma_{0} = ${GAME.SIGMA0}`}</TeX> and{" "}
+                    <TeX>{String.raw`g = ${GAME.VARIANCE_GROWTH}`}</TeX>. At leg {step + 1} that is{" "}
+                    <TeX>{String.raw`${GAME.SIGMA0} \times ${(1 + GAME.VARIANCE_GROWTH).toFixed(2)}^{${step + 1}} =`}</TeX>{" "}
+                    <strong>{stepSigma(step + 1).toFixed(2)}</strong>. Later legs are wilder than early ones.
+                  </dd>
+                </div>
+                <div>
+                  <dt><TeX>{String.raw`z`}</TeX></dt>
+                  <dd>
+                    A fresh draw from the standard Normal{" "}
+                    <TeX>{String.raw`\mathcal{N}(0,1)`}</TeX> — mean 0, spread 1. This leg it came up{" "}
+                    <strong>{(Math.round((pendingStep.zUsed ?? 0) * 100) / 100).toFixed(2)}</strong>. Negative means a
+                    bad draw, positive a good one. This is the only genuinely random part.
+                  </dd>
+                </div>
+                <div>
+                  <dt><TeX>{String.raw`\lambda`}</TeX></dt>
+                  <dd>
+                    Storm rate, <strong>{GAME.LAMBDA}</strong> per leg, giving{" "}
+                    <TeX>{String.raw`1 - e^{-${GAME.LAMBDA}} = ${(P_SHOCK).toFixed(4)}`}</TeX> ({pct(P_SHOCK)}) chance
+                    of a storm instead of a calm draw.
+                  </dd>
+                </div>
+              </dl>
+              <p className="mutiny-sheet-note">
+                So the spread term <TeX>{String.raw`\sigma_{n} \cdot z`}</TeX> is &ldquo;how wild this leg is&rdquo;
+                times &ldquo;how the dice fell&rdquo;. The drift is what you earn; that term is what you risk.
+              </p>
+            </details>
 
             {!blankChecked ? (
               <div className="calc-input-row">

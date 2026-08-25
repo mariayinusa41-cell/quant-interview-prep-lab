@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import TeX from "../../math/TeX";
 import {
   annuityDue,
   discount,
@@ -318,7 +319,7 @@ export default function SurvivalRunGame() {
             book at <strong>${baseEPV.toLocaleString(undefined, { maximumFractionDigits: 0 })}</strong>{" "}
             per policy. What is the shortfall per policy now?
           </p>
-          <div className="mutiny-formula">shortfall = ä(improved) − ä(priced)</div>
+          <TeX block>{String.raw`\text{shortfall} = \ddot{a}_{improved} - \ddot{a}_{priced}`}</TeX>
 
           <div className="calc-input-row">
             <input

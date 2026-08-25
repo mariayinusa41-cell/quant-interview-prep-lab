@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { newtonStep, randomNewtonProblem } from "./calcMath";
 import { useClientRound } from "./useClientRound";
+import { useWalkthrough } from "./useWalkthrough";
+import CalcWalkthrough from "./CalcWalkthrough";
+import { NEWTON_GUIDE } from "./walkthroughs";
 import { AccessStartButton } from "../access/TokenPlayButton";
 
 const TOLERANCE = 1e-4;
@@ -29,12 +32,14 @@ function scoreFromDiff(diff: number): number {
 
 export default function NewtonStepper() {
   const [problem, nextProblem] = useClientRound(randomNewtonProblem);
+  const guide = useWalkthrough("newton");
   const [guess, setGuess] = useState("");
   const [revealed, setRevealed] = useState(false);
   const [score, setScore] = useState(0);
   const [rounds, setRounds] = useState(0);
 
-  if (!problem) return <div className="calc-subgame calc-loading">Loading a fresh root…</div>;
+  if (!problem || guide.show === null) return <div className="calc-subgame calc-loading">Loading a fresh root…</div>;
+  if (guide.show) return <CalcWalkthrough guide={NEWTON_GUIDE} title="Newton Stepper" onDone={guide.dismiss} />;
 
   const steps = revealed ? runSteps(problem.a, problem.root) : [];
   const actualCount = steps.length;
@@ -71,6 +76,7 @@ export default function NewtonStepper() {
       <div className="lab-hud">
         <span>ROUND <strong>{rounds}</strong></span>
         <span>SCORE <strong>{score}</strong></span>
+        <button type="button" className="calc-guide-replay" onClick={guide.replay}>Walkthrough</button>
       </div>
 
       <div className="calc-taylor-panel">

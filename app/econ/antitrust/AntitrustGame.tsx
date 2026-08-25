@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
+import TeX from "../../math/TeX";
 import {
   concentrationBand,
   hhi,
@@ -343,7 +344,7 @@ export default function AntitrustGame() {
                 <strong>{shares(trueRevenues)[0].toFixed(2)}%</strong> and {currentCase.core[1].name} holds{" "}
                 <strong>{shares(trueRevenues)[1].toFixed(2)}%</strong>.
               </p>
-              <div className="mutiny-formula">ΔHHI = 2 × s₁ × s₂</div>
+              <TeX block>{String.raw`\Delta HHI = 2 \times s_{1} \times s_{2}`}</TeX>
 
               <div className="calc-input-row">
                 <input

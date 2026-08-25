@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import TeX from "../../math/TeX";
 import {
   bfReserve,
   cdfFrom,
@@ -180,7 +181,7 @@ export default function LossTriangleGame() {
             For each step, add up every origin year where <em>both</em> columns are known, then
             divide.
           </p>
-          <div className="mutiny-formula">LDF<sub>j</sub> = Σ C[i][j+1] ÷ Σ C[i][j]</div>
+          <TeX block>{String.raw`LDF_{j} = \frac{\sum_{i} C_{i,j+1}}{\sum_{i} C_{i,j}}`}</TeX>
 
           <div className="tri-ldf-grid">
             {ratios.map((r, i) => (
@@ -232,7 +233,7 @@ export default function LossTriangleGame() {
             Push each origin year out to ultimate with the ratios, then subtract what is already
             paid. The reserve is what you have <em>not</em> paid yet.
           </p>
-          <div className="mutiny-formula">Reserve = Σ ( latest<sub>i</sub> × CDF<sub>i</sub> − latest<sub>i</sub> )</div>
+          <TeX block>{String.raw`\text{Reserve} = \sum_{i}\left( L_{i} \times CDF_{i} - L_{i} \right)`}</TeX>
 
           <div className="tri-cdf-row">
             {TRIANGLE.map((row, i) => (
@@ -309,7 +310,7 @@ export default function LossTriangleGame() {
             </button>
           </div>
 
-          <div className="mutiny-formula">BF reserve = ( 1 − 1 ÷ CDF ) × premium × ELR</div>
+          <TeX block>{String.raw`\text{BF reserve} = \left(1 - \frac{1}{CDF}\right) \times P \times ELR`}</TeX>
 
           <div className="calc-input-row">
             <input
