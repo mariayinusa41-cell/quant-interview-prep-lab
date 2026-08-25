@@ -124,8 +124,6 @@ export default function Leaderboard() {
           )}
         </div>
 
-        <p className="arc-intro">Ranked by volume or by reliability — they reward different things.</p>
-
         {loaded && rows.length === 0 && (
           <p className="arc-note" style={{ marginTop: 0, marginBottom: 12 }}>
             No other synced accounts yet — be the first real row.
@@ -157,11 +155,6 @@ export default function Leaderboard() {
             </li>
           ))}
         </ol>
-
-        <p className="arc-note">
-          Real accounts only — a row appears once someone signs in and earns at least one ticket. Gold names
-          are paid pass holders.
-        </p>
       </section>
     </>
   );

@@ -124,14 +124,6 @@ export default function ArcadePanel() {
           ))}
         </div>
 
-        {filter !== "all" && (
-          <p className="lab-filter-note">
-            Showing labs recommended for {activeTrackLabel} — {visibleLabs.length} of {LABS.length}. A game
-            living outside this filter still counts toward every track&rsquo;s readiness a little, it just
-            weights less; nothing here is actually hidden from you elsewhere.
-          </p>
-        )}
-
         <div className="arc-cab-grid">
           {visibleLabs.map((lab) => {
             const cost = costLabel(lab.gameIds);

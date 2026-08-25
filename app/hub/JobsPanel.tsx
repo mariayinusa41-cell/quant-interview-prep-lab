@@ -176,11 +176,6 @@ export default function JobsPanel() {
         ) : (
           <p className="arc-note">No applications yet — add your first one above.</p>
         )}
-
-        <p className="arc-note">
-          Saved in this browser. There&rsquo;s no account system yet, so this list won&rsquo;t follow you to another
-          device — once there is one, syncing this list is a small change, not a rebuild.
-        </p>
       </section>
     </div>
   );
