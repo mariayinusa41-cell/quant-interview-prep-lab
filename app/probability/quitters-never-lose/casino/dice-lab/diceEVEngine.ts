@@ -130,7 +130,13 @@ function fmtUSD(v: number): string {
 let counter = 0;
 const nextId = () => `dice-ev-${counter++}`;
 
-const SIDES = [6, 8, 10, 12, 20];
+// Regular six-sided dice only. The generator is fully parameterised by
+// `sides`, so d8/d10/d12/d20 all produced correct EVs — but nothing above 6
+// has a conventional pip face, so they rendered as a bare numeral in a box
+// instead of a die, which doesn't read as dice at all. Variety comes from
+// the mechanics, the dice COUNT, and the payoffs rather than exotic dice,
+// which also matches what actual interviews ask about.
+const SIDES = [6];
 
 function pick<T>(xs: T[]): T {
   return xs[Math.floor(Math.random() * xs.length)];

@@ -5,7 +5,7 @@ import BlackjackGame from "./BlackjackGame";
 
 export const metadata: Metadata = {
   title: "Blackjack - Quitters Never Lose",
-  description: "Hit, stand, double down — dealer stands on all 17s.",
+  description: "Hit, stand, double down. Dealer stands on all 17s.",
 };
 
 export default function BlackjackPage() {

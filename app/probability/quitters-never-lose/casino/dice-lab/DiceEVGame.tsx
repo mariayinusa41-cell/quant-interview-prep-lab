@@ -27,10 +27,25 @@ const ROUND_COUNT = 10;
 // The mechanic mix itself is no longer a player-facing choice — every round
 // draws from all 7 mechanics, same as Russian Roulette doesn't let you
 // filter which wheel events show up.
-const TUTORIAL_STEPS = [
-  "Every round mixes reroll games, roll-until-target, max/min of N dice, bust accumulators, algebraic combinations, conditional wagers, and backgammon-flavored cube decisions — you won't know which is coming next, same as a real screen.",
-  "Each question shows the dice and a scenario. Work out the exact expected value and type it in before the clock runs out — this isn't a guess, there's a precise answer.",
-  "Scoring: within 3% of the exact EV is a Bullseye (3 pts), within 10% is Tight (2 pts), inside the stated tolerance is 1 pt.",
+// Short lines, not paragraphs: this reads on a pixel arcade screen, so it
+// gets the same 1-3 line slide rhythm as the Blackjack and Russian Roulette
+// tutorials rather than a block of prose in the body font.
+const TUTORIAL_STEPS: string[][] = [
+  [
+    "Every round pulls from all seven dice mechanics.",
+    "Rerolls, roll-until-target, max/min, bust runs, cube calls.",
+    "You won't know which is next. Same as a real screen.",
+  ],
+  [
+    "Each question shows the dice and a scenario.",
+    "Work out the exact expected value and type it in.",
+    "This isn't a guess. There's a precise answer.",
+  ],
+  [
+    "Within 3% of exact: BULLSEYE, 3 pts.",
+    "Within 10%: TIGHT, 2 pts.",
+    "Inside the stated tolerance: 1 pt.",
+  ],
 ];
 
 type Phase = "tutorial" | "menu" | "playing" | "result";
@@ -162,8 +177,13 @@ export default function DiceEVGame() {
       <div className="fermi-container dice-lab-container">
         <div className="fermi-menu">
           <h1 className="fermi-title">Dice EV Lab</h1>
+          <p className="mm-teach-progress">
+            {tutorialStep + 1} / {TUTORIAL_STEPS.length}
+          </p>
           <div className="dice-lab-tutorial-step">
-            <p>{TUTORIAL_STEPS[tutorialStep]}</p>
+            {TUTORIAL_STEPS[tutorialStep].map((line) => (
+              <p key={line}>{line}</p>
+            ))}
           </div>
           {tutorialStep < TUTORIAL_STEPS.length - 1 ? (
             <button type="button" className="fermi-start-btn" onClick={() => setTutorialStep((s) => s + 1)}>

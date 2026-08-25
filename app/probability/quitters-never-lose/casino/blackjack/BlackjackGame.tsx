@@ -56,7 +56,7 @@ function outcomeCopy(outcome: Outcome | undefined, wager: number, won: number) {
     case "dealer-bust":
       return { kind: "win" as const, title: "DEALER BUSTS", sub: `${fmt(won)} returned on a ${fmt(wager)} wager` };
     case "push":
-      return { kind: "loss" as const, title: "PUSH", sub: `Your ${fmt(wager)} wager is returned — no gain, no loss` };
+      return { kind: "loss" as const, title: "PUSH", sub: `Your ${fmt(wager)} wager is returned. No gain, no loss.` };
     case "player-bust":
       return { kind: "loss" as const, title: "BUST", sub: `Lost your ${fmt(wager)} wager` };
     case "dealer-win":
@@ -513,7 +513,7 @@ export default function BlackjackGame() {
             {heatCorrect === 1 ? "" : "s"} correctly before they noticed.
           </p>
           <p className="mm-step-hint" style={{ marginBottom: 16 }}>
-            Counting is legal — but the house is allowed to refuse your business, and hesitating over the count is
+            Counting is legal. But the house is allowed to refuse your business, and hesitating over the count is
             what gives you away.
           </p>
           <button
@@ -571,7 +571,7 @@ export default function BlackjackGame() {
             <span>CLOCK <strong>{heatSeconds(heatCorrect)}s</strong></span>
           </div>
 
-          {justReshuffled && <p className="bj-reshuffle-banner">NEW SHOE — RUNNING COUNT RESET TO 0</p>}
+          {justReshuffled && <p className="bj-reshuffle-banner">NEW SHOE · RUNNING COUNT RESET TO 0</p>}
 
           {round && (
             <>

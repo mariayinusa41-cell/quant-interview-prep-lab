@@ -161,7 +161,7 @@ function genAsymmetricLock(): Blueprint {
   const className = pick(["Account", "Wallet", "Ledger"] as const);
   return {
     title: `The ${className.toLowerCase()} that goes negative`,
-    premise: `A ${className} class protects its balance with a mutex in deposit() but the balance goes negative under concurrent withdraw() calls, even though every individual withdraw() checks for sufficient funds first.`,
+    premise: `A ${className} class's deposit() protects the balance with a mutex, but the balance goes negative under concurrent withdraw() calls, even though every individual withdraw() checks for sufficient funds first.`,
     code: [
       `class ${className} {`,
       "    double balance = 0;",
@@ -217,7 +217,7 @@ function genCondvarNoPredicate(): Blueprint {
   const qName = pick(["q", "queue_", "pending"] as const);
   return {
     title: "The consumer that wakes too early",
-    premise: `A worker pool drains a ${taskType.toLowerCase()} queue. Occasionally a consumer crashes dereferencing the front of an empty queue.`,
+    premise: `A worker pool drains a queue of ${taskType.toLowerCase()}s. Occasionally a consumer crashes dereferencing the front of an empty queue.`,
     code: [
       `std::queue<${taskType}> ${qName};`,
       "std::mutex m;",
