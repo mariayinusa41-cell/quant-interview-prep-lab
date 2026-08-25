@@ -4,7 +4,15 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 export type AccessMode = "developer" | "free" | "infinity";
 
-export const STARTING_TOKENS = 100;
+// Nobody starts with tokens. They are granted once, by claiming the welcome
+// gift after signing up and verifying (app/api/auth/claim-welcome-bonus).
+//
+// This used to be 100, which broke the free tier twice over: a guest who had
+// never signed up already showed a full wallet despite being unable to spend
+// any of it, and anyone who did sign up and claim the gift ended on 200 —
+// so the gift granted nothing they did not already have, and the incentive
+// to make an account was invisible.
+export const STARTING_TOKENS = 0;
 export const SESSION_COST = 10;
 export const SESSION_ROUNDS = 3;
 
