@@ -126,7 +126,12 @@ export default function PrivacyPage() {
           <p>
             We will post any update here and change the date above. Material changes will be notified by email.
           </p>
-          <p>Data controller: [LEGAL ENTITY &mdash; to be completed]. Contact: <a href="mailto:support@outcryarcade.com">support@outcryarcade.com</a>.</p>
+          <p>
+            Outcry is operated as a sole proprietorship and is the data controller for the information described
+            here. If you need the operator identified by name for a formal data-protection request, ask at the
+            address below and we will provide it.
+          </p>
+          <p>Contact: <a href="mailto:support@outcryarcade.com">support@outcryarcade.com</a>.</p>
 
           <LegalNav />
         </div>

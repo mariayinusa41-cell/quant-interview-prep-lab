@@ -135,8 +135,8 @@ export default function TermsPage() {
 
           <h2>11. Governing law and contact</h2>
           <p>
-            These terms are governed by the laws of [STATE/COUNTRY &mdash; to be completed], without regard to
-            conflict-of-laws rules.
+            Outcry is operated as a sole proprietorship based in Ohio, United States. These terms are governed by
+            the laws of the State of Ohio and the United States, without regard to conflict-of-laws rules.
           </p>
           <p>Questions about these terms: <a href="mailto:support@outcryarcade.com">support@outcryarcade.com</a>.</p>
 
