@@ -5,7 +5,7 @@ import { TAYLOR_FUNCTIONS, minOrderForError, taylorApprox, taylorError, type Tay
 import { useClientRound } from "./useClientRound";
 import { useWalkthrough } from "./useWalkthrough";
 import CalcWalkthrough from "./CalcWalkthrough";
-import { TAYLOR_GUIDE } from "./walkthroughs";
+import { TAYLOR_DEMO } from "./demos/TaylorDemo";
 import { AccessStartButton } from "../access/TokenPlayButton";
 
 const MAX_ORDER = 8;
@@ -52,7 +52,7 @@ export default function TaylorSlider() {
   const [rounds, setRounds] = useState(0);
 
   if (!round || guide.show === null) return <div className="calc-subgame calc-loading">Loading a fresh function…</div>;
-  if (guide.show) return <CalcWalkthrough guide={TAYLOR_GUIDE} title="Taylor Slider" onDone={guide.dismiss} />;
+  if (guide.show) return <CalcWalkthrough steps={TAYLOR_DEMO} title="Taylor Slider" onDone={guide.dismiss} />;
 
   const trueApprox = taylorApprox(round.fn, round.x, round.order);
   const trueValue = round.fn.f(round.x);

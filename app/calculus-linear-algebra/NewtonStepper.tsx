@@ -5,7 +5,7 @@ import { newtonStep, randomNewtonProblem } from "./calcMath";
 import { useClientRound } from "./useClientRound";
 import { useWalkthrough } from "./useWalkthrough";
 import CalcWalkthrough from "./CalcWalkthrough";
-import { NEWTON_GUIDE } from "./walkthroughs";
+import { NEWTON_DEMO } from "./demos/NewtonDemo";
 import { AccessStartButton } from "../access/TokenPlayButton";
 
 const TOLERANCE = 1e-4;
@@ -39,7 +39,7 @@ export default function NewtonStepper() {
   const [rounds, setRounds] = useState(0);
 
   if (!problem || guide.show === null) return <div className="calc-subgame calc-loading">Loading a fresh root…</div>;
-  if (guide.show) return <CalcWalkthrough guide={NEWTON_GUIDE} title="Newton Stepper" onDone={guide.dismiss} />;
+  if (guide.show) return <CalcWalkthrough steps={NEWTON_DEMO} title="Newton Stepper" onDone={guide.dismiss} />;
 
   const steps = revealed ? runSteps(problem.a, problem.root) : [];
   const actualCount = steps.length;

@@ -372,6 +372,73 @@
   overflow-x: auto;
 }
 
+/* The demo board — the real game UI, frozen mid-round. It sits in a well so
+   it reads as "the game", visibly distinct from the narration panel below. */
+.calc-demo-board {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.22);
+  padding: 1rem 1rem 0.4rem;
+  margin-bottom: 0.9rem;
+}
+
+/* A demo board's controls are inert, but the disabled styling would grey the
+   whole thing out and hide the very states we're demonstrating. */
+.calc-demo-board .calc-choice:disabled,
+.calc-demo-board .quiz-q-input:disabled,
+.calc-demo-board .calc-input:disabled,
+.calc-demo-board .calc-submit-btn:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+/* Nested panels would double the border/background — the well already frames
+   it, so the inner panel goes flat. */
+.calc-demo-board .calc-taylor-panel {
+  border: none;
+  background: transparent;
+  padding: 0 0 0.6rem;
+  backdrop-filter: none;
+}
+
+/* The candidate currently under test. */
+.calc-choice.is-demo-testing {
+  border-color: var(--accent-2);
+  background: rgba(94, 184, 255, 0.12);
+  box-shadow: 0 0 0 1px var(--accent-2);
+}
+
+/* Already ruled out — dimmed and struck, so the search narrows visibly. */
+.calc-choice.is-demo-out {
+  opacity: 0.34;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+/* Running tally of Taylor terms already computed. */
+.calc-demo-terms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.85rem;
+}
+
+.calc-demo-term {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: rgba(94, 184, 255, 0.08);
+  color: var(--text);
+}
+
+.calc-demo-term em {
+  font-style: normal;
+  color: var(--muted);
+  margin-right: 0.35rem;
+}
+
 /* Replay affordance, sitting with the round/score HUD. */
 .calc-guide-replay {
   border: 1px solid var(--line-strong);
@@ -395,4 +462,10 @@
 @keyframes fermi-fadeIn {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* The demo plot carries twice the content of the live one (each candidate
+   plus its image under A), so it gets more room to breathe. */
+.calc-demo-plot {
+  max-width: 340px;
 }

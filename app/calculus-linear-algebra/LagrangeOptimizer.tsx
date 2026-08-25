@@ -5,7 +5,7 @@ import { lagrangeSolution, randomLagrangeProblem } from "./calcMath";
 import { useClientRound } from "./useClientRound";
 import { useWalkthrough } from "./useWalkthrough";
 import CalcWalkthrough from "./CalcWalkthrough";
-import { LAGRANGE_GUIDE } from "./walkthroughs";
+import { LAGRANGE_DEMO } from "./demos/LagrangeDemo";
 import { AccessStartButton } from "../access/TokenPlayButton";
 
 function parseAnswer(input: string): number | null {
@@ -24,7 +24,7 @@ export default function LagrangeOptimizer() {
   const [rounds, setRounds] = useState(0);
 
   if (!problem || guide.show === null) return <div className="calc-subgame calc-loading">Loading a fresh constraint…</div>;
-  if (guide.show) return <CalcWalkthrough guide={LAGRANGE_GUIDE} title="Lagrange Optimizer" onDone={guide.dismiss} />;
+  if (guide.show) return <CalcWalkthrough steps={LAGRANGE_DEMO} title="Lagrange Optimizer" onDone={guide.dismiss} />;
 
   const solution = lagrangeSolution(problem);
   const guess = parseAnswer(answer);

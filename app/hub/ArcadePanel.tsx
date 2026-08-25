@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PixelTileIcon from "../PixelTileIcon";
 import DailyChallenge from "../daily/DailyChallenge";
 import { LABS } from "./labs";
@@ -10,14 +10,49 @@ import { TRACKS, type TrackId } from "../profile/tracks";
 
 type FilterId = "all" | TrackId;
 
+// Remembers the track filter across navigation. Without this the panel
+// remounts every time you come back from a lab and re-runs its initialiser,
+// which silently threw away whatever you had picked and snapped back to the
+// profile's first track.
+const FILTER_KEY = "outcry_lab_filter";
+
+function isValidFilter(value: string): value is FilterId {
+  return value === "all" || TRACKS.some((t) => t.id === value);
+}
+
 export default function ArcadePanel() {
   const { playSfx } = useSound();
   const { profile } = useProfile();
 
-  // Defaults to whatever the player picked first during onboarding — "your
-  // first choice" — rather than always opening on "All". Falls back to "all"
-  // for guests or anyone who picked nothing.
+  // Opens on whatever the player picked first during onboarding — "your
+  // first choice" — rather than always on "All". Falls back to "all" for
+  // guests or anyone who picked nothing. Once they change the dropdown
+  // themselves, that choice wins from then on (see the effect below).
   const [filter, setFilter] = useState<FilterId>(() => profile.tracks[0] ?? "all");
+
+  // Restore an explicit earlier choice. Deliberately in an effect rather
+  // than the useState initialiser: this component is server-rendered, so
+  // reading localStorage during the first render would make the server and
+  // client disagree and trip a hydration mismatch.
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(FILTER_KEY);
+      if (saved && isValidFilter(saved)) setFilter(saved);
+    } catch {
+      /* storage unavailable (private mode) — keep the profile default */
+    }
+  }, []);
+
+  // Only a deliberate change is persisted, so the stored value always
+  // represents something the player actually chose.
+  const chooseFilter = (next: FilterId) => {
+    setFilter(next);
+    try {
+      window.localStorage.setItem(FILTER_KEY, next);
+    } catch {
+      /* noop */
+    }
+  };
 
   const visibleLabs = filter === "all" ? LABS : LABS.filter((lab) => lab.tracks.includes(filter));
 
@@ -34,7 +69,7 @@ export default function ArcadePanel() {
               className="lab-filter-select"
               value={filter}
               onChange={(e) => {
-                setFilter(e.target.value as FilterId);
+                chooseFilter(e.target.value as FilterId);
                 playSfx("select");
               }}
             >

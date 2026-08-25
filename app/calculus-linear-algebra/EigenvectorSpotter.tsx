@@ -5,7 +5,7 @@ import { applyMatrix, buildEigenPuzzle, isEigenvector, type Vec2 } from "./calcM
 import { useClientRound } from "./useClientRound";
 import { useWalkthrough } from "./useWalkthrough";
 import CalcWalkthrough from "./CalcWalkthrough";
-import { EIGEN_GUIDE } from "./walkthroughs";
+import { EIGEN_DEMO } from "./demos/EigenDemo";
 import { AccessStartButton } from "../access/TokenPlayButton";
 
 // Display-only rounding — the underlying matrix stays full-precision for
@@ -51,7 +51,7 @@ export default function EigenvectorSpotter() {
   const colors = ["#5eb8ff", "#f4c542", "#b98bff", "#e74c4c"];
 
   if (!puzzle || guide.show === null) return <div className="calc-subgame calc-loading">Loading a fresh matrix…</div>;
-  if (guide.show) return <CalcWalkthrough guide={EIGEN_GUIDE} title="Eigenvector Spotter" onDone={guide.dismiss} />;
+  if (guide.show) return <CalcWalkthrough steps={EIGEN_DEMO} title="Eigenvector Spotter" onDone={guide.dismiss} />;
 
   function pick(v: Vec2) {
     if (picked) return;

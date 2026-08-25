@@ -5,7 +5,7 @@ import { classifyPSD, randomPSDMatrix, type PSDLabel } from "./calcMath";
 import { useClientRound } from "./useClientRound";
 import { useWalkthrough } from "./useWalkthrough";
 import CalcWalkthrough from "./CalcWalkthrough";
-import { PSD_GUIDE } from "./walkthroughs";
+import { PSD_DEMO } from "./demos/PSDDemo";
 import { AccessStartButton } from "../access/TokenPlayButton";
 import { useProgress } from "../progress/ProgressContext";
 import { useSound } from "../audio/SoundProvider";
@@ -23,7 +23,7 @@ export default function PSDClassifier() {
   const [streak, setStreak] = useState(0);
 
   if (!matrix || guide.show === null) return <div className="calc-subgame calc-loading">Loading a fresh matrix…</div>;
-  if (guide.show) return <CalcWalkthrough guide={PSD_GUIDE} title="PSD Classifier" onDone={guide.dismiss} />;
+  if (guide.show) return <CalcWalkthrough steps={PSD_DEMO} title="PSD Classifier" onDone={guide.dismiss} />;
 
   const truth = classifyPSD(matrix);
   const det = matrix.a * matrix.c - matrix.b * matrix.b;
