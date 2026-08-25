@@ -1,0 +1,83 @@
+// Every indexable route, derived from the filesystem at build time.
+//
+// Written out rather than globbed at runtime because the Workers runtime has
+// no filesystem to walk. Regenerate with the snippet in the sitemap route's
+// history if pages are added; a route missing here is simply a page search
+// engines find later via links rather than a broken one.
+//
+// Deliberately excluded: /dev (a credential prompt), /reset-password and
+// /forgot-password (one-time links, and indexing a reset page is a bad
+// idea), and /audit (an internal progress note, not a product page).
+
+export type SitemapRoute = { path: string; changefreq: string; priority: string };
+
+export const STATIC_ROUTES: SitemapRoute[] = [
+  { path: "/", changefreq: "daily", priority: "1.0" },
+  { path: "/actuarial", changefreq: "weekly", priority: "0.8" },
+  { path: "/actuarial/loss-triangle", changefreq: "weekly", priority: "0.6" },
+  { path: "/actuarial/survival-run", changefreq: "weekly", priority: "0.6" },
+  { path: "/algorithms", changefreq: "weekly", priority: "0.8" },
+  { path: "/algorithms/dp-table-builder", changefreq: "weekly", priority: "0.6" },
+  { path: "/algorithms/mini-task", changefreq: "weekly", priority: "0.6" },
+  { path: "/algorithms/monte-carlo", changefreq: "weekly", priority: "0.6" },
+  { path: "/algorithms/speed-round", changefreq: "weekly", priority: "0.6" },
+  { path: "/brain-teasers", changefreq: "weekly", priority: "0.8" },
+  { path: "/brain-teasers/screwy-pirates", changefreq: "weekly", priority: "0.6" },
+  { path: "/brain-teasers/screwy-pirates/answer", changefreq: "weekly", priority: "0.6" },
+  { path: "/brain-teasers/screwy-pirates/breakdown", changefreq: "weekly", priority: "0.6" },
+  { path: "/brain-teasers/tiger-and-sheep", changefreq: "weekly", priority: "0.6" },
+  { path: "/brain-teasers/tiger-and-sheep/answer", changefreq: "weekly", priority: "0.6" },
+  { path: "/brain-teasers/tiger-and-sheep/breakdown", changefreq: "weekly", priority: "0.6" },
+  { path: "/calculus-linear-algebra", changefreq: "weekly", priority: "0.8" },
+  { path: "/calculus-linear-algebra/eigenvalues", changefreq: "weekly", priority: "0.6" },
+  { path: "/calculus-linear-algebra/lagrange", changefreq: "weekly", priority: "0.6" },
+  { path: "/calculus-linear-algebra/newton", changefreq: "weekly", priority: "0.6" },
+  { path: "/calculus-linear-algebra/psd-matrices", changefreq: "weekly", priority: "0.6" },
+  { path: "/calculus-linear-algebra/taylor", changefreq: "weekly", priority: "0.6" },
+  { path: "/drills", changefreq: "weekly", priority: "0.8" },
+  { path: "/drills/arithmetic", changefreq: "weekly", priority: "0.6" },
+  { path: "/drills/duck-intersection", changefreq: "weekly", priority: "0.6" },
+  { path: "/drills/fermi", changefreq: "weekly", priority: "0.6" },
+  { path: "/drills/probability-ranking", changefreq: "weekly", priority: "0.6" },
+  { path: "/drills/sequences", changefreq: "weekly", priority: "0.6" },
+  { path: "/drills/survival", changefreq: "weekly", priority: "0.6" },
+  { path: "/econ", changefreq: "weekly", priority: "0.8" },
+  { path: "/econ/antitrust", changefreq: "weekly", priority: "0.6" },
+  { path: "/econ/causal-confounder", changefreq: "weekly", priority: "0.6" },
+  { path: "/finance", changefreq: "weekly", priority: "0.8" },
+  { path: "/finance/basket-arbitrage", changefreq: "weekly", priority: "0.6" },
+  { path: "/finance/delta-defender", changefreq: "weekly", priority: "0.6" },
+  { path: "/finance/market-maker", changefreq: "weekly", priority: "0.6" },
+  { path: "/leaderboard", changefreq: "weekly", priority: "0.8" },
+  { path: "/legal/privacy", changefreq: "weekly", priority: "0.6" },
+  { path: "/legal/refunds", changefreq: "weekly", priority: "0.6" },
+  { path: "/legal/terms", changefreq: "weekly", priority: "0.6" },
+  { path: "/login", changefreq: "weekly", priority: "0.8" },
+  { path: "/news", changefreq: "daily", priority: "0.9" },
+  { path: "/pricing", changefreq: "daily", priority: "0.9" },
+  { path: "/probability", changefreq: "weekly", priority: "0.8" },
+  { path: "/probability/quitters-never-lose", changefreq: "weekly", priority: "0.6" },
+  { path: "/probability/quitters-never-lose/casino", changefreq: "weekly", priority: "0.6" },
+  { path: "/probability/quitters-never-lose/casino/blackjack", changefreq: "weekly", priority: "0.6" },
+  { path: "/probability/quitters-never-lose/casino/dice-lab", changefreq: "weekly", priority: "0.6" },
+  { path: "/probability/quitters-never-lose/casino/hot-slot", changefreq: "weekly", priority: "0.6" },
+  { path: "/probability/quitters-never-lose/lottery", changefreq: "weekly", priority: "0.6" },
+  { path: "/probability/quitters-never-lose/lottery/pick", changefreq: "weekly", priority: "0.6" },
+  { path: "/probability/quitters-never-lose/lottery/pick/play", changefreq: "weekly", priority: "0.6" },
+  { path: "/probability/quitters-never-lose/lottery/scratch-off", changefreq: "weekly", priority: "0.6" },
+  { path: "/probability/quitters-never-lose/lottery/scratch-off/not-timed", changefreq: "weekly", priority: "0.6" },
+  { path: "/probability/quitters-never-lose/lottery/scratch-off/play", changefreq: "weekly", priority: "0.6" },
+  { path: "/probability/quitters-never-lose/lottery/scratch-off/timed", changefreq: "weekly", priority: "0.6" },
+  { path: "/quantdev", changefreq: "weekly", priority: "0.8" },
+  { path: "/quantdev/concurrency", changefreq: "weekly", priority: "0.6" },
+  { path: "/quantdev/order-book", changefreq: "weekly", priority: "0.6" },
+  { path: "/risk", changefreq: "weekly", priority: "0.8" },
+  { path: "/risk/tail-risk", changefreq: "weekly", priority: "0.6" },
+  { path: "/statistics", changefreq: "weekly", priority: "0.8" },
+  { path: "/statistics/backtests", changefreq: "weekly", priority: "0.6" },
+  { path: "/statistics/crack-the-bot", changefreq: "weekly", priority: "0.6" },
+  { path: "/statistics/distributions", changefreq: "weekly", priority: "0.6" },
+  { path: "/stochastic-processes", changefreq: "weekly", priority: "0.8" },
+  { path: "/stochastic-processes/martingale-mutiny", changefreq: "weekly", priority: "0.6" },
+  { path: "/stochastic-processes/ruin-walker", changefreq: "weekly", priority: "0.6" },
+];
