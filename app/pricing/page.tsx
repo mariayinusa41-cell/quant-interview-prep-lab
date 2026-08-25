@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SiteFooter from "../SiteFooter";
 import DarkMode from "../finance/DarkMode";
 import PricingTable from "./PricingTable";
 
@@ -16,6 +17,7 @@ export default function PricingPage() {
           &larr; Outcry
         </a>
         <PricingTable />
+        <SiteFooter />
       </main>
     </>
   );

@@ -5,7 +5,7 @@ import AccessShell from "./access/AccessShell";
 export const metadata: Metadata = {
   title: "Outcry",
   description:
-    "A content-first study website based on the topic structure of A Practical Guide to Quantitative Finance Interviews.",
+    "Timed, scored quant interview practice: market making, probability, statistics and mental-math drills you play rather than read.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
@@ -13,14 +13,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Outcry",
     description:
-      "Chapter map, study plan, practice prompts, and answer frameworks for quant finance interviews.",
+      "Timed, scored quant interview practice: market making, probability, statistics and mental-math drills you play rather than read.",
     images: ["/og.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Outcry",
     description:
-      "Chapter map, study plan, practice prompts, and answer frameworks for quant finance interviews.",
+      "Timed, scored quant interview practice: market making, probability, statistics and mental-math drills you play rather than read.",
     images: ["/og.png"],
   },
 };

@@ -12,6 +12,7 @@ import NewsPanel from "./NewsPanel";
 import AssessmentBoard from "../assessments/AssessmentBoard";
 import MockInterviewBoard from "../assessments/MockInterviewBoard";
 import Leaderboard from "../leaderboard/Leaderboard";
+import SiteFooter from "../SiteFooter";
 
 // Category tabs rather than one long scroll: each area of the product gets
 // its own screen, so the hub stays navigable as more is added.
@@ -123,13 +124,7 @@ export default function Hub() {
         <AccessModePicker />
       </div>
 
-      <footer className="site-footer">
-        <p>
-          Study structure follows the topic organization of <em>A Practical Guide to Quantitative
-          Finance Interviews</em>. Games, prompts, and explanations are original; the book&rsquo;s
-          protected solutions and passages are not reproduced.
-        </p>
-      </footer>
+      <SiteFooter />
     </>
   );
 }

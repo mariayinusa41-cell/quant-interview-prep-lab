@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SiteFooter from "../SiteFooter";
 import DarkMode from "../finance/DarkMode";
 import Leaderboard from "./Leaderboard";
 import GameBoards from "./GameBoards";
@@ -26,6 +27,7 @@ export default function LeaderboardPage() {
           <Leaderboard />
           <GameBoards />
         </div>
+        <SiteFooter />
       </main>
     </>
   );

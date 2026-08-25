@@ -9646,3 +9646,41 @@ body.exam-mode::after { display: none !important; }
 }
 .pricing-legal strong { color: var(--pixel-white); }
 .pricing-legal a { color: var(--pixel-accent, #f5c542); }
+
+/* ---------- Site footer (support + policies) ---------- */
+.site-footer {
+  max-width: 860px;
+  margin: 40px auto 28px;
+  padding: 18px 16px 0;
+  border-top: 2px solid var(--pixel-border);
+  text-align: center;
+}
+.site-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 18px;
+  margin-bottom: 12px;
+}
+.site-footer-links a {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  text-decoration: none;
+}
+.site-footer-links a:hover { color: var(--pixel-accent, #f5c542); }
+.site-footer-support {
+  margin: 0 0 8px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink-2, #c7d0dc);
+}
+.site-footer-support a { color: var(--pixel-accent, #f5c542); }
+.site-footer-sla { color: var(--ink-3); }
+.site-footer-fine {
+  margin: 0;
+  font-size: 0.7rem;
+  line-height: 1.6;
+  color: var(--ink-3);
+}

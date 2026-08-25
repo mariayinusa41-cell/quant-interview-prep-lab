@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SiteFooter from "../../SiteFooter";
 import DarkMode from "../../finance/DarkMode";
 import LegalNav from "../LegalNav";
 import "../legal.css";
@@ -137,10 +138,11 @@ export default function TermsPage() {
             These terms are governed by the laws of [STATE/COUNTRY &mdash; to be completed], without regard to
             conflict-of-laws rules.
           </p>
-          <p>Questions about these terms: [CONTACT EMAIL &mdash; to be completed].</p>
+          <p>Questions about these terms: <a href="mailto:support@outcryarcade.com">support@outcryarcade.com</a>.</p>
 
           <LegalNav />
         </div>
+        <SiteFooter />
       </main>
     </>
   );

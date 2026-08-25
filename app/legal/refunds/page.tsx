@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SiteFooter from "../../SiteFooter";
 import DarkMode from "../../finance/DarkMode";
 import LegalNav from "../LegalNav";
 import "../legal.css";
@@ -73,7 +74,7 @@ export default function RefundsPage() {
 
           <h2>How to request one</h2>
           <p>
-            Email [CONTACT EMAIL &mdash; to be completed] from the address on your account, with the approximate
+            Email <a href="mailto:support@outcryarcade.com">support@outcryarcade.com</a> from the address on your account, with the approximate
             date of the charge. We aim to reply within 2 business days.
           </p>
           <p>
@@ -96,6 +97,7 @@ export default function RefundsPage() {
 
           <LegalNav />
         </div>
+        <SiteFooter />
       </main>
     </>
   );

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SiteFooter from "../SiteFooter";
 import DarkMode from "../finance/DarkMode";
 import LoginForm from "./LoginForm";
 
@@ -16,6 +17,7 @@ export default function LoginPage() {
           &larr; Outcry
         </a>
         <LoginForm />
+        <SiteFooter />
       </main>
     </>
   );

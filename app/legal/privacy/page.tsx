@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SiteFooter from "../../SiteFooter";
 import DarkMode from "../../finance/DarkMode";
 import LegalNav from "../LegalNav";
 import "../legal.css";
@@ -92,7 +93,7 @@ export default function PrivacyPage() {
             it, or export it. You can also complain to your local data protection authority. We do not charge for
             these requests and we will not treat you differently for making one.
           </p>
-          <p>To make a request, email [CONTACT EMAIL &mdash; to be completed] from your account address.</p>
+          <p>To make a request, email <a href="mailto:support@outcryarcade.com">support@outcryarcade.com</a> from your account address.</p>
 
           <h2>7. Cookies</h2>
           <p>
@@ -125,10 +126,11 @@ export default function PrivacyPage() {
           <p>
             We will post any update here and change the date above. Material changes will be notified by email.
           </p>
-          <p>Data controller: [LEGAL ENTITY &mdash; to be completed]. Contact: [CONTACT EMAIL &mdash; to be completed].</p>
+          <p>Data controller: [LEGAL ENTITY &mdash; to be completed]. Contact: <a href="mailto:support@outcryarcade.com">support@outcryarcade.com</a>.</p>
 
           <LegalNav />
         </div>
+        <SiteFooter />
       </main>
     </>
   );
