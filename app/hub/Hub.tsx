@@ -105,10 +105,6 @@ export default function Hub() {
             </p>
             <div className="coming-soon-card">
               <p className="coming-soon-title">Coming soon</p>
-              <p className="coming-soon-body">
-                Not built yet. The board below is a preview of the rounds that are planned — none of them are playable
-                right now.
-              </p>
             </div>
             <div className="coming-soon-preview" aria-hidden="true">
               <MockInterviewBoard />

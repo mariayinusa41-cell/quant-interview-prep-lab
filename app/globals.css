@@ -8886,13 +8886,6 @@ body.exam-mode::after { display: none !important; }
   color: var(--pixel-accent);
 }
 
-.coming-soon-body {
-  margin: 0;
-  font-size: 0.86rem;
-  line-height: 1.5;
-  color: var(--ink-2);
-}
-
 /* The preview underneath is deliberately dimmed and non-interactive, so it
    reads as "here's what's planned" rather than something that's broken. */
 .coming-soon-preview {
