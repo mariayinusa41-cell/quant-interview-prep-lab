@@ -26,7 +26,7 @@ const modes: { id: AccessMode; label: string; detail: string; note: string }[] =
 ];
 
 export default function AccessModePicker() {
-  const { mode, setMode } = useAccess();
+  const { mode, setMode, isDeveloper } = useAccess();
   const { profile, saveProfile, restartOnboarding } = useProfile();
   const router = useRouter();
 
@@ -36,6 +36,12 @@ export default function AccessModePicker() {
     restartOnboarding();
     router.push("/?login=1");
   };
+
+  // This panel switches between Developer, Free and Infinity, so it is a
+  // paywall bypass with a UI. It renders for nobody but a verified
+  // developer — and the verification is the server's answer, not a local
+  // flag, so hiding it here is not the only thing standing in the way.
+  if (!isDeveloper) return null;
 
   return (
     <section className="access-mode-section" aria-labelledby="access-mode-title">

@@ -10,6 +10,8 @@ export const SESSION_ROUNDS = 3;
 
 type AccessContextValue = {
   mode: AccessMode;
+  /** True only when the server has verified a signed developer cookie. */
+  isDeveloper: boolean;
   tokens: number;
   gameSessions: Record<string, number>;
   setMode: (mode: AccessMode) => void;
@@ -163,7 +165,7 @@ const GAME_COSTS: Record<string, number> = {
   "quantdev-concurrency": 30,
   "actuarial-survival-run": 30,
   // Drill Lab's Survival Run (the dino-sprite mental-math runner at
-  // /drills/survival — a different game from Actuarial's Survival Run
+  // /drills/survival — Dino Dash, a different game from Actuarial's Survival Run
   // above). No price was ever specified for it; left at the site default
   // (10) rather than guessed at a different number.
   "drills-survival-run": 10,
@@ -192,7 +194,12 @@ const GAME_COSTS: Record<string, number> = {
 const AccessContext = createContext<AccessContextValue | null>(null);
 
 export function AccessProvider({ children }: { children: React.ReactNode }) {
-  const [mode, setModeState] = useState<AccessMode>("developer");
+  // Free is the default for everyone. This used to default to "developer",
+  // which meant every visitor to the live site got every game unlocked with
+  // no tokens — the paywall existed but nothing ever reached it.
+  const [mode, setModeState] = useState<AccessMode>("free");
+  // Set from the server; developer mode is refused until it is true.
+  const [isDeveloper, setIsDeveloper] = useState(false);
   const [tokens, setTokens] = useState(STARTING_TOKENS);
   const [gameSessions, setGameSessions] = useState<Record<string, number>>({});
   const [lifetimeUses, setLifetimeUses] = useState<Record<string, number>>({});
@@ -203,7 +210,11 @@ export function AccessProvider({ children }: { children: React.ReactNode }) {
     const savedSessions = window.localStorage.getItem(SESSIONS_KEY);
     const savedLifetime = window.localStorage.getItem(LIFETIME_KEY);
 
-    if (savedMode === "developer" || savedMode === "free" || savedMode === "infinity") {
+    // "developer" is deliberately not honoured from localStorage: that value
+    // is editable by anyone with devtools, and it unlocks every paid game.
+    // It is restored below, only after the server confirms a valid signed
+    // developer cookie.
+    if (savedMode === "free" || savedMode === "infinity") {
       setModeState(savedMode);
     }
 
@@ -243,7 +254,34 @@ export function AccessProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  // Ask the server whether this browser holds a valid developer cookie.
+  // Developer mode is only ever enabled from this answer — never from
+  // anything the client could have written itself.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/dev/session", { credentials: "same-origin" });
+        const data = (await res.json()) as { isDeveloper?: boolean };
+        if (cancelled || !data.isDeveloper) return;
+        setIsDeveloper(true);
+        // Restore the developer's last chosen preview mode now that they
+        // are verified, so switching to "free" to test a paywall survives a
+        // reload.
+        const saved = window.localStorage.getItem(MODE_KEY);
+        if (saved === "developer" || saved === null) setModeState("developer");
+      } catch {
+        /* offline or blocked — stay a normal user */
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+
   const setMode = (nextMode: AccessMode) => {
+    // Belt and braces: the picker is already hidden from non-developers,
+    // but the setter is reachable from any component holding the context.
+    if (nextMode === "developer" && !isDeveloper) return;
     setModeState(nextMode);
     window.localStorage.setItem(MODE_KEY, nextMode);
     // The homepage is a product-mode preview, so entering Free mode starts a
@@ -349,6 +387,7 @@ export function AccessProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(
     () => ({
       mode,
+      isDeveloper,
       tokens,
       gameSessions,
       setMode,
@@ -363,7 +402,7 @@ export function AccessProvider({ children }: { children: React.ReactNode }) {
       grantTokens,
       startGameEntry,
     }),
-    [mode, tokens, gameSessions, lifetimeUses],
+    [mode, isDeveloper, tokens, gameSessions, lifetimeUses],
   );
 
   return <AccessContext.Provider value={value}>{children}</AccessContext.Provider>;
