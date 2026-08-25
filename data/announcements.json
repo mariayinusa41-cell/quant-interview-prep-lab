@@ -1,0 +1,21 @@
+{
+  "_comment": "Hand-edited, not scraped. Site news: launches, discount codes, changes. Newest first. Set active:false to hide without deleting. `code` is optional and renders as a copyable promo chip.",
+  "announcements": [
+    {
+      "id": "leaderboards-live",
+      "date": "2026-08-25",
+      "kind": "update",
+      "title": "Per-game leaderboards are live",
+      "body": "Finish a run and you'll see where you land against everyone else, plus your percentile. Bankroll games rank on profit, so everyone starts from the same $100.",
+      "active": true
+    },
+    {
+      "id": "jobs-board",
+      "date": "2026-08-25",
+      "kind": "update",
+      "title": "Job board added",
+      "body": "Openings pulled straight from the firms' own boards, refreshed on demand. Filter by trading, research, engineering, risk or internships.",
+      "active": true
+    }
+  ]
+}
