@@ -43,6 +43,38 @@ export type TechnicalQuestion = {
 // Percentage-error scoring with a CI-band fallback, the way it was sketched
 // out in the drill brief: tight misses still bank a point if they'd have
 // cleared the market on a real desk.
+/**
+ * Interval scoring for technical estimation: the player quotes a LOW and a
+ * HIGH, the same way classic Fermi does.
+ *
+ * Classic Fermi scores tightness in orders of magnitude, which is right when
+ * the answer could be 10^3 or 10^7. Technical answers are precise quantities
+ * — a dice count, a latency in ms — so tightness is measured as relative
+ * width instead, and an order-of-magnitude band would be no skill at all.
+ *
+ * A range that misses scores nothing, and so does a range so wide it cannot
+ * be wrong: quoting 0 to a million always contains the answer and says
+ * nothing, which is exactly the hedge this scoring has to refuse. That
+ * mirrors how a market that wide would be treated in the room.
+ */
+export function scoreTechnicalInterval(
+  low: number,
+  high: number,
+  q: TechnicalQuestion
+): { points: 0 | 1 | 2 | 3; label: string } {
+  if (!Number.isFinite(low) || !Number.isFinite(high)) return { points: 0, label: "No market" };
+  if (high < low) return { points: 0, label: "Inverted market" };
+  if (q.answer < low || q.answer > high) return { points: 0, label: "Missed the market" };
+
+  // Relative to the true answer, so "within 10%" means the same thing
+  // whether the answer is 12 dice or 58.8 ms.
+  const relWidth = (high - low) / Math.max(Math.abs(q.answer), 1e-9);
+  if (relWidth <= 0.1) return { points: 3, label: "Bullseye" };
+  if (relWidth <= 0.25) return { points: 2, label: "Tight market" };
+  if (relWidth <= 0.6) return { points: 1, label: "Wide but inside" };
+  return { points: 0, label: "Too wide to be a market" };
+}
+
 export function scoreTechnical(
   guess: number,
   q: TechnicalQuestion

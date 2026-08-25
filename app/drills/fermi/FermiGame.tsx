@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { fermiQuestions, type FermiQuestion } from "./fermiQuestions";
 import { getProceduralFermiQuestions } from "./proceduralFermi";
-import { curatedTechnicalQuestions, scoreTechnical, type TechnicalQuestion } from "./technicalQuestions";
+import { curatedTechnicalQuestions, scoreTechnicalInterval, type TechnicalQuestion } from "./technicalQuestions";
 import { getProceduralTechnicalQuestions } from "./proceduralTechnical";
 import { CategoryIcon, ResultIcon, StarIcon, TargetIcon } from "./FermiIcons";
 import { AccessStartButton } from "../../access/TokenPlayButton";
@@ -116,7 +116,7 @@ const TECH_ROUND_COUNT = 8;
 type Phase = "menu" | "playing" | "result";
 type Mode = "classic" | "technical";
 type Answered = { q: FermiQuestion; low: number; high: number; points: number; label: string; contains: boolean; widthOom: number };
-type TechAnswered = { q: TechnicalQuestion; guess: number; points: 0 | 1 | 2 | 3; label: string };
+type TechAnswered = { q: TechnicalQuestion; low: number; high: number; points: 0 | 1 | 2 | 3; label: string };
 
 const PIP_LAYOUT: Record<number, boolean[]> = {
   1: [false, false, false, false, true, false, false, false, false],
@@ -296,23 +296,41 @@ export default function FermiGame() {
     setPhase("playing");
   }
 
+  // In-game back. The only way out used to be the page-level "Drill Lab"
+  // link, so backing out of a run left the game entirely and dropped you two
+  // levels up — there was no way to return to the category picker to change
+  // your mind about what to practise.
+  function backToMenu() {
+    setPhase("menu");
+    setInput("");
+    setLowInput("");
+    setHighInput("");
+    setShowResult(false);
+    setLastResult(null);
+    setLastTechResult(null);
+  }
+
   function handleSubmit() {
-    const raw = input.trim().replace(/,/g, "");
-    let guess = parseGuessInput(raw);
+    // Both modes quote a LOW and a HIGH. They score differently — classic
+    // measures tightness in orders of magnitude, technical in relative
+    // width — but the input is the same shape, so the parsing is shared.
+    let boundLow = parseGuessInput(lowInput.trim().replace(/,/g, ""));
+    let boundHigh = parseGuessInput(highInput.trim().replace(/,/g, ""));
 
     if (mode === "technical") {
       if (!currentTechQ) return;
-      const result = scoreTechnical(guess, currentTechQ);
-      const a: TechAnswered = { q: currentTechQ, guess, ...result };
+      const result = scoreTechnicalInterval(boundLow, boundHigh, currentTechQ);
+      const a: TechAnswered = { q: currentTechQ, low: boundLow, high: boundHigh, ...result };
       setLastTechResult(a);
       setTechAnswered((prev) => [...prev, a]);
     } else {
       if (!currentQ) return;
-      let low = parseGuessInput(lowInput.trim().replace(/,/g, ""));
-      let high = parseGuessInput(highInput.trim().replace(/,/g, ""));
       // An unparseable or missing bound is scored as a miss rather than
       // silently coerced into something that might accidentally contain the
-      // answer.
+      // answer. Classic Fermi is log-scaled, so a non-positive bound is
+      // meaningless there (unlike technical, where 0 is a legitimate low).
+      let low = boundLow;
+      let high = boundHigh;
       if (isNaN(low) || low <= 0) low = NaN;
       if (isNaN(high) || high <= 0) high = NaN;
       const result = scoreInterval(low, high, currentQ.answer);
@@ -533,12 +551,18 @@ export default function FermiGame() {
   // ---------- RESULT ----------
   if (phase === "result") {
     const isTech = mode === "technical";
-    // `given` is a pre-formatted string rather than a number: technical mode
-    // still answers with a single estimate, everyday mode now answers with a
-    // low–high range, and the review row just needs to print whichever it was.
+    // `given` is a pre-formatted string rather than a number: both modes now
+    // answer with a low–high range, and the review row just prints it.
     const list: { id: string | number; question: string; given: string; answer: number; unit: string; explanation: string; points: number }[] =
       isTech
-        ? techAnswered.map((a) => ({ ...a.q, given: formatNumber(a.guess), points: a.points }))
+        ? techAnswered.map((a) => ({
+            ...a.q,
+            given:
+              Number.isNaN(a.low) || Number.isNaN(a.high)
+                ? "—"
+                : `${formatNumber(a.low)} – ${formatNumber(a.high)}`,
+            points: a.points,
+          }))
         : answered.map((a) => ({
             ...a.q,
             given:
@@ -600,6 +624,9 @@ export default function FermiGame() {
       <div className="fermi-container">
         <div className="fermi-hud">
           <div className="fermi-hud-left">
+            <button type="button" className="fermi-hud-back" onClick={backToMenu} aria-label="Back to the menu">
+              &larr; Menu
+            </button>
             <span className="fermi-hud-q">Q{idx + 1}/{techDeck.length}</span>
             <span className="fermi-hud-cat">
               {currentTechQ ? TECH_CAT_LABEL[currentTechQ.category] ?? currentTechQ.category : ""}
@@ -634,18 +661,35 @@ export default function FermiGame() {
 
           {!showResult ? (
             <div className="fermi-input-row">
-              <input
-                ref={inputRef}
-                type="text"
-                className="fermi-input"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder={`Your estimate${currentTechQ ? ` (${currentTechQ.unit})` : ""}`}
-                autoComplete="off"
-                autoCorrect="off"
-                spellCheck={false}
-              />
+              <label className="fermi-bound-field">
+                <span className="fermi-bound-label">LOW</span>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  className="fermi-input"
+                  value={lowInput}
+                  onChange={(e) => setLowInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder={currentTechQ ? currentTechQ.unit : "low"}
+                  autoComplete="off"
+                  autoCorrect="off"
+                  spellCheck={false}
+                />
+              </label>
+              <label className="fermi-bound-field">
+                <span className="fermi-bound-label">HIGH</span>
+                <input
+                  type="text"
+                  className="fermi-input"
+                  value={highInput}
+                  onChange={(e) => setHighInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder={currentTechQ ? currentTechQ.unit : "high"}
+                  autoComplete="off"
+                  autoCorrect="off"
+                  spellCheck={false}
+                />
+              </label>
               <button type="button" className="fermi-submit-btn" onClick={handleSubmit}>
                 Lock in
               </button>
@@ -658,9 +702,11 @@ export default function FermiGame() {
               </div>
               <div className="fermi-comparison">
                 <div className="fermi-comp-col">
-                  <span className="fermi-comp-label">Your guess</span>
+                  <span className="fermi-comp-label">Your range</span>
                   <span className="fermi-comp-val">
-                    {Number.isFinite(lastTechResult.guess) ? formatNumber(lastTechResult.guess) : "—"}
+                    {Number.isFinite(lastTechResult.low) && Number.isFinite(lastTechResult.high)
+                      ? `${formatNumber(lastTechResult.low)} – ${formatNumber(lastTechResult.high)}`
+                      : "—"}
                   </span>
                 </div>
                 <div className="fermi-comp-arrow">→</div>
@@ -673,10 +719,10 @@ export default function FermiGame() {
               </div>
               <div className="fermi-oom-bar">
                 <RangeBar
-                  guess={lastTechResult.guess}
+                  guess={(lastTechResult.low + lastTechResult.high) / 2}
                   answer={lastTechResult.q.answer}
-                  low={lastTechResult.q.lowBound}
-                  high={lastTechResult.q.highBound}
+                  low={lastTechResult.low}
+                  high={lastTechResult.high}
                 />
               </div>
               <p className="fermi-explain">{lastTechResult.q.explanation}</p>
@@ -706,6 +752,9 @@ export default function FermiGame() {
     <div className="fermi-container">
       <div className="fermi-hud">
         <div className="fermi-hud-left">
+          <button type="button" className="fermi-hud-back" onClick={backToMenu} aria-label="Back to the menu">
+            &larr; Menu
+          </button>
           <span className="fermi-hud-q">Q{idx + 1}/{deck.length}</span>
           <span className="fermi-hud-cat">
             <CategoryIcon category={currentQ?.category ?? ""} className="fermi-hud-cat-icon" />
