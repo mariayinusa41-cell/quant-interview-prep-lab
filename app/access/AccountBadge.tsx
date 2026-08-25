@@ -33,7 +33,7 @@ export default function AccountBadge() {
 
   return (
     <a href="/login" className="hub-account-badge is-guest">
-      Log in
+      Sign up or log in
     </a>
   );
 }

@@ -14,6 +14,7 @@ import TokenIcon from "../access/TokenIcon";
 import TicketIcon from "../progress/TicketIcon";
 import DailyChallenge from "../daily/DailyChallenge";
 import GiftBox from "../access/GiftBox";
+import GuestGate, { GuestSignupBanner } from "../access/GuestGate";
 import VerifyEmailNotice from "../access/VerifyEmailNotice";
 
 const PASS_LABEL: Record<string, string> = {
@@ -69,6 +70,7 @@ export default function ProfilePanel() {
           </span>
         </div>
 
+        <GuestGate active={profile.account === "guest"}>
         <div className="profile-stats">
           <div className="profile-stat">
             <span className="profile-stat-icon"><TicketIcon /></span>
@@ -108,9 +110,13 @@ export default function ProfilePanel() {
             {STREAK_TARGET - (profile.streak % STREAK_TARGET || STREAK_TARGET)} day(s) to your next spin
           </span>
         </div>
+        </GuestGate>
 
       </section>
 
+      {profile.account === "guest" && <GuestSignupBanner />}
+
+      <GuestGate active={profile.account === "guest"}>
       <DailyChallenge />
 
       <TrackReadiness />
@@ -140,6 +146,7 @@ export default function ProfilePanel() {
           ))}
         </div>
       </section>
+      </GuestGate>
     </div>
   );
 }
