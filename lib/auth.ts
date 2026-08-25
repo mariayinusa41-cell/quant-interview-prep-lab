@@ -171,7 +171,23 @@ export type CurrentUser = {
   emailVerified: boolean;
   welcomeBonusClaimed: boolean;
   isPassHolder: boolean;
+  /** Server-side personalization; null fields mean "never set". */
+  avatar: string | null;
+  tracks: string[] | null;
+  major: string | null;
+  experience: string | null;
+  ageBand: string | null;
 };
+
+function parseTracks(json: string | null): string[] | null {
+  if (!json) return null;
+  try {
+    const parsed = JSON.parse(json);
+    return Array.isArray(parsed) ? parsed.filter((t): t is string => typeof t === "string") : null;
+  } catch {
+    return null;
+  }
+}
 
 // Looks up the session from the request's cookie, expiring it (and telling
 // the caller "no user") rather than trusting an expired token. Every
@@ -199,6 +215,11 @@ export async function getCurrentUser(request: Request): Promise<CurrentUser | nu
         emailVerified: user.emailVerifiedAt !== null,
         welcomeBonusClaimed: user.welcomeBonusClaimedAt !== null,
         isPassHolder: user.isPassHolder === 1,
+        avatar: user.avatar,
+        tracks: parseTracks(user.tracksJson),
+        major: user.major,
+        experience: user.experience,
+        ageBand: user.ageBand,
       }
     : null;
 }

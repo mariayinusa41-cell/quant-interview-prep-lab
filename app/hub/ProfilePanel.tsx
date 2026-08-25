@@ -12,6 +12,7 @@ import { TRACK_BY_ID } from "../profile/tracks";
 import { STREAK_TARGET } from "../daily/challengeBank";
 import TokenIcon from "../access/TokenIcon";
 import TicketIcon from "../progress/TicketIcon";
+import DailyChallenge from "../daily/DailyChallenge";
 import GiftBox from "../access/GiftBox";
 import VerifyEmailNotice from "../access/VerifyEmailNotice";
 
@@ -109,6 +110,8 @@ export default function ProfilePanel() {
         </div>
 
       </section>
+
+      <DailyChallenge />
 
       <TrackReadiness />
 

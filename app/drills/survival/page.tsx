@@ -3,8 +3,8 @@ import DarkMode from "../DarkMode";
 import SurvivalDrill from "./SurvivalDrill";
 
 export const metadata: Metadata = {
-  title: "Survival Run - Drill Lab",
-  description: "An endless mental-math survival run with escalating speed.",
+  title: "Dino Dash - Drill Lab",
+  description: "An endless mental-math dino run: three lives, escalating speed and harder questions.",
 };
 
 export default function SurvivalDrillPage() {

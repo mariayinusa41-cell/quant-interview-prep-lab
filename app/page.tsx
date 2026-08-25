@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import AttractScreen from "./AttractScreen";
 import Onboarding from "./profile/Onboarding";
 import Hub from "./hub/Hub";
+import VerifyResultBanner from "./access/VerifyResultBanner";
 import { useProfile } from "./profile/ProfileContext";
 import { useSound } from "./audio/SoundProvider";
 
@@ -38,6 +39,7 @@ export default function Home() {
 
   return (
     <>
+      <VerifyResultBanner />
       {showAttract && <AttractScreen onStart={startLab} />}
       {needsOnboarding && <Onboarding />}
 

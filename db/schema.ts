@@ -57,6 +57,16 @@ export const users = sqliteTable(
     // (renewal, cancellation, expiry) — see that route's comments for what
     // "wire up next" means here.
     isPassHolder: integer("is_pass_holder").notNull().default(0),
+    // Personalization, so a profile follows the account across devices
+    // instead of living only in one browser's localStorage. All nullable:
+    // an account that has never finished the avatar/tracks flow simply has
+    // none, and the client treats that as "still owed".
+    avatar: text("avatar"),
+    /** JSON array of TrackId strings. */
+    tracksJson: text("tracks_json"),
+    major: text("major"),
+    experience: text("experience"),
+    ageBand: text("age_band"),
     createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => ({

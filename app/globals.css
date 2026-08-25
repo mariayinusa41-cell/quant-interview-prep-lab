@@ -9894,6 +9894,11 @@ body.exam-mode::after { display: none !important; }
   );
 }
 
+/* The scanline texture is decoration; on a panel whose whole point is a
+   block of question text it just sits on top of the words. `is-plain` drops
+   it while keeping the cabinet framing. */
+.arc-hero.is-plain::before { background: none; }
+
 /* Hazard stripes — Assessments only. */
 .arc-hero.is-hazard::before {
   background: repeating-linear-gradient(
@@ -9922,18 +9927,24 @@ body.exam-mode::after { display: none !important; }
   position: relative;
   padding: 8px 14px;
   border-bottom: 3px solid var(--pixel-border);
-  background: repeating-linear-gradient(
-    90deg,
-    var(--pixel-accent) 0 14px,
-    var(--pixel-accent-light) 14px 20px
-  );
+  /* Solid rather than striped: the stripes fought the label for attention
+     and made the pixel type hard to read at 0.52rem. */
+  background: var(--pixel-accent);
 }
+
+/* Ink for anything printed directly on a solid --pixel-accent fill.
+   Dark ink is right on the five dark themes (contrast 6.8-15.2), but Paper
+   and Frost use a deep bronze accent where dark-on-accent falls to 3.1 and
+   2.9 — below AA. Those two flip to light ink, which scores 5.1 and 5.4. */
+:root { --on-accent: #1a1410; }
+[data-theme="paper"] { --on-accent: #fbf8f2; }
+[data-theme="frost"] { --on-accent: #fbfdff; }
 
 .arc-marquee-text {
   font-family: var(--font-pixel);
   font-size: 0.52rem;
   letter-spacing: 0.1em;
-  color: #1a1410;
+  color: var(--on-accent);
 }
 
 /* --- Shared typography --- */
@@ -10373,6 +10384,8 @@ body.exam-mode::after { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   .arc-cta,
   .arc-coin.is-today,
+  .daily-coin.is-today,
+  .daily-card-chev,
   .arc-bolt-dot.is-unmet,
   .arc-live-dot,
   .arc-ticker-track {
@@ -11197,3 +11210,204 @@ body.exam-mode::after { display: none !important; }
 
 .arc-kind.is-new { border-color: var(--pixel-good); color: var(--pixel-good); }
 .arc-kind.is-fix { border-color: var(--pixel-accent); color: var(--pixel-accent); }
+
+/* Collapsed, the card is just its heading row — the accordion control fills
+   the section so the whole strip is clickable. */
+.daily-card-heading { margin: 0; }
+
+.daily-card-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+}
+
+.daily-card-title {
+  font-family: var(--font-pixel);
+  font-weight: 400;
+  font-size: clamp(0.78rem, 1.9vw, 1rem);
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pixel-accent);
+  text-shadow: 2px 2px 0 var(--pixel-border);
+}
+
+.daily-card-toggle:hover .daily-card-title { color: var(--pixel-accent-light); }
+
+.daily-card-status {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  padding: 3px 7px;
+  border: 2px solid var(--pixel-accent);
+  border-radius: 4px;
+  color: var(--pixel-accent);
+}
+
+.daily-card-status.is-done {
+  border-color: rgba(var(--ink-rgb), 0.22);
+  color: rgba(var(--ink-rgb), 0.45);
+}
+
+.daily-card-chev {
+  font-size: 0.7rem;
+  color: rgba(var(--ink-rgb), 0.45);
+  transition: transform 140ms ease;
+}
+
+.daily-card-chev.is-open { transform: rotate(180deg); }
+
+/* Breathing room only once it's actually open. */
+#daily-challenge-body:not([hidden]) { margin-top: 14px; }
+
+/* --- Daily challenge, compact card (profile tab) ------------------------
+   Deliberately a normal .section rather than a hero: it lives among the
+   profile's other cards now, so it should read as one of them, not as the
+   loudest thing on the page. */
+
+.daily-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.daily-card-topic { color: var(--pixel-primary); }
+.daily-card-timer { color: rgba(var(--ink-rgb), 0.45); }
+
+.daily-card-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+/* Streak coins shrink to plain pips here — a token sprite per day was more
+   furniture than the profile tab can spare. */
+.daily-card-coins { display: flex; gap: 4px; }
+
+.daily-coin {
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--pixel-border);
+  border-radius: 2px;
+  background: rgba(var(--void-rgb), 0.4);
+}
+
+.daily-coin.is-on { background: var(--pixel-accent); }
+.daily-coin.is-today { animation: coin-flash 1.6s ease-in-out infinite; }
+
+.daily-card-reward {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--pixel-accent);
+}
+
+.daily-card-reward svg { width: 14px; height: 14px; }
+
+.daily-card-q {
+  margin: 0 0 12px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--pixel-white);
+  text-wrap: pretty;
+}
+
+.daily-card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.daily-card-btn {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  padding: 9px 14px;
+  min-height: 40px;
+  border: 2px solid var(--pixel-accent);
+  border-radius: 5px;
+  background: rgba(244, 197, 66, 0.12);
+  color: var(--pixel-accent);
+  cursor: pointer;
+}
+
+.daily-card-btn:hover { background: rgba(244, 197, 66, 0.2); }
+.daily-card-btn:disabled { opacity: 0.5; cursor: default; }
+
+.daily-card-btn.is-spin {
+  border-color: var(--pixel-good);
+  background: rgba(89, 201, 143, 0.12);
+  color: var(--pixel-good);
+}
+
+.daily-card-choices { display: grid; gap: 6px; }
+
+.daily-choice {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 9px 12px;
+  min-height: 40px;
+  border: 2px solid var(--line-strong, rgba(var(--ink-rgb), 0.22));
+  border-radius: 5px;
+  background: rgba(var(--void-rgb), 0.28);
+  color: var(--pixel-white);
+  font-size: 0.85rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.daily-choice:hover:not(:disabled) { border-color: var(--pixel-accent); }
+.daily-choice:disabled { cursor: default; }
+
+.daily-choice > span:first-child {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: rgba(var(--ink-rgb), 0.45);
+  flex: none;
+}
+
+.daily-choice.is-answer {
+  border-color: var(--pixel-good);
+  background: rgba(89, 201, 143, 0.12);
+  color: var(--pixel-good);
+}
+
+.daily-choice.is-selected {
+  border-color: var(--pixel-bad);
+  background: rgba(231, 76, 76, 0.1);
+  color: var(--pixel-bad);
+}
+
+.daily-card-explain {
+  margin: 10px 0 0;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: rgba(var(--ink-rgb), 0.7);
+}
+
+.daily-card-explain.is-correct { color: var(--pixel-good); }
+.daily-card-explain.is-wrong { color: rgba(var(--ink-rgb), 0.7); }
+
+.daily-card-done,
+.daily-card-streak {
+  margin: 10px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: rgba(var(--ink-rgb), 0.45);
+}

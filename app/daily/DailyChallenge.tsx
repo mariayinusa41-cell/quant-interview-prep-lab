@@ -14,6 +14,8 @@ import {
 } from "./challengeBank";
 import TokenIcon from "../access/TokenIcon";
 
+const OPEN_KEY = "outcry_daily_open";
+
 /** ms until the next UTC midnight, which is when a new question unlocks. */
 function msUntilUtcMidnight(): number {
   const now = new Date();
@@ -41,9 +43,33 @@ export default function DailyChallenge() {
   const [spinResult, setSpinResult] = useState<number | null>(null);
   const [spinning, setSpinning] = useState(false);
   const [revealed, setRevealed] = useState(false);
+  // Collapsed by default — on the profile tab this sits among several other
+  // cards, and an open quiz is the tallest thing there. The choice is
+  // remembered so it doesn't re-collapse on every visit.
+  const [open, setOpen] = useState(false);
   // Null until mounted: the countdown depends on the clock, so rendering it
   // during SSR would disagree with the browser and trip a hydration mismatch.
   const [countdown, setCountdown] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      if (window.localStorage.getItem(OPEN_KEY) === "1") setOpen(true);
+    } catch {
+      /* storage unavailable — stay collapsed */
+    }
+  }, []);
+
+  const toggleOpen = () => {
+    setOpen((prev) => {
+      const next = !prev;
+      try {
+        window.localStorage.setItem(OPEN_KEY, next ? "1" : "0");
+      } catch {
+        /* noop */
+      }
+      return next;
+    });
+  };
 
   useEffect(() => {
     const tick = () => setCountdown(formatCountdown(msUntilUtcMidnight()));
@@ -94,123 +120,123 @@ export default function DailyChallenge() {
   const daysToSpin = STREAK_TARGET - filled;
 
   return (
-    <section className="arc-hero is-plain" aria-label="Daily challenge">
-      <div className="arc-marquee">
-        <span className="arc-marquee-text">Daily challenge &mdash; cabinet of the day</span>
-      </div>
-
-      <div className="arc-hero-split">
-        <div>
-          <p className="arc-eyebrow">
-            {SKILL_LABELS[question.skill]} {"//"} 1 question &middot; resets 00:00 UTC
-          </p>
-          {/* Showing the question up front is most of the win here — it used
-              to take a click to find out what you were even being asked. */}
-          <p className="arc-daily-q">{question.prompt}</p>
-          <div className="arc-stat-row">
-            <span>
-              REWARD <strong className="is-reward">+{DAILY_REWARD} tokens</strong>
-            </span>
-            <span>
-              EXPIRES IN <strong className="is-expiry">{countdown ?? "--:--:--"}</strong>
-            </span>
-          </div>
-        </div>
-
-        <div className="arc-daily-side">
-          <div className="arc-coins" aria-label={`Streak: ${profile.streak} days`}>
-            {Array.from({ length: STREAK_TARGET }).map((_, i) => (
-              <span
-                key={i}
-                className={
-                  i < filled
-                    ? i === filled - 1
-                      ? "arc-coin is-on is-today"
-                      : "arc-coin is-on"
-                    : "arc-coin"
-                }
-                aria-hidden="true"
-              >
-                <TokenIcon />
+    <section className="section daily-card" aria-label="Daily challenge">
+      {/* The heading itself is the control, so the accordion has one
+          keyboard target rather than a heading plus a stray button. */}
+      <h2 className="daily-card-heading">
+        <button
+          type="button"
+          className="daily-card-toggle"
+          aria-expanded={open}
+          aria-controls="daily-challenge-body"
+          onClick={toggleOpen}
+        >
+          <span className="daily-card-title">Daily challenge</span>
+          <span className="daily-card-meta">
+            {/* Collapsed, this status is the only thing telling you whether
+                there is anything left to do today. */}
+            {!isGuest && (
+              <span className={alreadyDone || answered ? "daily-card-status is-done" : "daily-card-status"}>
+                {alreadyDone || answered ? "Done" : `+${DAILY_REWARD}`}
               </span>
-            ))}
+            )}
+            <span className="daily-card-topic">{SKILL_LABELS[question.skill]}</span>
+            <span className="daily-card-timer">{countdown ?? "--:--:--"}</span>
+            <span className={open ? "daily-card-chev is-open" : "daily-card-chev"} aria-hidden="true">
+              &#9662;
+            </span>
+          </span>
+        </button>
+      </h2>
+
+      <div id="daily-challenge-body" hidden={!open}>
+      {isGuest ? (
+        <p className="daily-locked">
+          The daily challenge is the main way a free player earns tokens — it needs an account.
+          Guests can still play every always-free game without limit.
+        </p>
+      ) : (
+        <>
+          <div className="daily-card-row">
+            {/* Coins are the streak at a glance; small, not a feature block. */}
+            <span className="daily-card-coins" aria-label={`Streak: ${profile.streak} days`}>
+              {Array.from({ length: STREAK_TARGET }).map((_, i) => (
+                <span
+                  key={i}
+                  className={
+                    i < filled
+                      ? i === filled - 1
+                        ? "daily-coin is-on is-today"
+                        : "daily-coin is-on"
+                      : "daily-coin"
+                  }
+                  aria-hidden="true"
+                />
+              ))}
+            </span>
+            <span className="daily-card-reward">
+              <TokenIcon /> +{DAILY_REWARD}
+            </span>
           </div>
-          <p className="arc-spin-line">
-            {spinAvailable
-              ? "You've earned a free prize spin — take it."
-              : daysToSpin === STREAK_TARGET
-                ? `Day ${filled} of ${STREAK_TARGET} — ${STREAK_TARGET} more for a free prize spin.`
-                : `Day ${filled} of ${STREAK_TARGET} — ${daysToSpin} more for a free prize spin.`}
-          </p>
 
-          {isGuest ? null : spinAvailable ? (
-            <button type="button" className="arc-cta" disabled={spinning} onClick={spin}>
-              {spinning ? "Spinning…" : spinResult !== null ? `Won ${spinResult}!` : "Spin the wheel"}
-            </button>
+          <p className="daily-card-q">{question.prompt}</p>
+
+          {!showChoices ? (
+            <div className="daily-card-actions">
+              <button type="button" className="daily-card-btn" onClick={() => setRevealed(true)}>
+                Answer today&rsquo;s question
+              </button>
+              {spinAvailable && (
+                <button type="button" className="daily-card-btn is-spin" disabled={spinning} onClick={spin}>
+                  {spinning ? "Spinning…" : spinResult !== null ? `Won ${spinResult}!` : "Free spin"}
+                </button>
+              )}
+            </div>
+          ) : alreadyDone && !answered ? (
+            <p className="daily-card-done">Already answered today. A new question unlocks tomorrow.</p>
           ) : (
-            <button
-              type="button"
-              className="arc-cta"
-              disabled={showChoices}
-              onClick={() => setRevealed(true)}
-            >
-              {alreadyDone && !answered ? "Answered today" : "Play today's challenge"}
-            </button>
+            <div className="daily-card-choices">
+              {question.choices.map((choice, i) => (
+                <button
+                  type="button"
+                  key={choice}
+                  disabled={answered || alreadyDone}
+                  className={
+                    !answered
+                      ? "daily-choice"
+                      : i === question.answer
+                        ? "daily-choice is-answer"
+                        : i === picked
+                          ? "daily-choice is-selected"
+                          : "daily-choice"
+                  }
+                  onClick={() => choose(i)}
+                >
+                  <span>{String.fromCharCode(65 + i)}</span>
+                  {choice}
+                </button>
+              ))}
+            </div>
           )}
-        </div>
-      </div>
 
-      <div className="arc-hero-body" style={{ paddingTop: 0 }}>
-        {isGuest ? (
-          <p className="daily-locked">
-            The daily challenge is the main way a free player earns tokens — it needs an account.
-            Guests can still play every always-free game without limit.
-          </p>
-        ) : (
-          <>
-            {showChoices && (
-              <div className={answered ? (gotItRight ? "quiz-q is-correct" : "quiz-q is-wrong") : "quiz-q"}>
-                {alreadyDone && !answered ? (
-                  <p className="daily-done">Already answered today. A new question unlocks tomorrow.</p>
-                ) : (
-                  <div className="lab-choice-grid">
-                    {question.choices.map((choice, i) => (
-                      <button
-                        type="button"
-                        key={choice}
-                        disabled={answered || alreadyDone}
-                        className={
-                          !answered
-                            ? "lab-choice"
-                            : i === question.answer
-                              ? "lab-choice is-answer"
-                              : i === picked
-                                ? "lab-choice is-selected"
-                                : "lab-choice"
-                        }
-                        onClick={() => choose(i)}
-                      >
-                        <span>{String.fromCharCode(65 + i)}</span>
-                        {choice}
-                      </button>
-                    ))}
-                  </div>
-                )}
+          {answered && (
+            <p className={gotItRight ? "daily-card-explain is-correct" : "daily-card-explain is-wrong"}>
+              {gotItRight ? `Correct — +${DAILY_REWARD} tokens. ` : "Not quite. "}
+              {question.explanation}
+            </p>
+          )}
 
-                {answered && (
-                  <p className={gotItRight ? "quiz-q-explain is-correct" : "quiz-q-explain is-wrong"}>
-                    {gotItRight ? `Correct — +${DAILY_REWARD} tokens. ` : "Not quite. "}
-                    {question.explanation}
-                  </p>
-                )}
-              </div>
-            )}
+          {spinResult !== null && (
+            <p className="daily-card-explain is-correct">Wheel paid out {spinResult} tokens.</p>
+          )}
 
-            {spinResult !== null && (
-              <p className="quiz-q-explain is-correct">Wheel paid out {spinResult} tokens.</p>
-            )}
-          </>
-        )}
+          {!showChoices && !spinAvailable && (
+            <p className="daily-card-streak">
+              Day {filled} of {STREAK_TARGET} — {daysToSpin} more for a free prize spin.
+            </p>
+          )}
+        </>
+      )}
       </div>
     </section>
   );

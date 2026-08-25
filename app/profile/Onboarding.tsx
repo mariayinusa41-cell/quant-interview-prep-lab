@@ -4,53 +4,68 @@ import { useEffect, useState } from "react";
 import { useProfile } from "./ProfileContext";
 import { AGE_BANDS, EXPERIENCE_LEVELS, MAJORS, TRACKS, type TrackId } from "./tracks";
 import { AVATARS, AvatarSprite, type AvatarId } from "./avatars";
-import type { AccountKind } from "./ProfileContext";
 import { ASSESSMENT_TICKETS, ASSESSMENT_ACCURACY } from "../assessments/requirements";
 import TokenIcon from "../access/TokenIcon";
 import TicketIcon from "../progress/TicketIcon";
 
-type Step = "account" | "auth" | "avatar" | "tracks" | "about" | "orientation";
+// One state machine for every way into an account, rebuilt after the old
+// version fell apart at the seams:
+//
+//   choice ──► auth ──► avatar ──► tracks ──► about ──► orientation ──► hub
+//     │                   ▲
+//     │  (live session) ──┘   someone who signed in elsewhere (/login, or a
+//     │                       previous visit) resumes at personalization —
+//     │                       never re-asked for credentials.
+//     └──► guest ──► hub      instant, with defaults; personalization is
+//                             owed, and runs the moment they sign up.
+//
+// The invariants the old flow broke, now held in one place:
+//  - `account` flips to "account" the moment auth succeeds, not at the end
+//    of the flow — so nothing downstream can see a signed-in guest.
+//  - `personalized` is set only by actually finishing avatar/tracks/about.
+//    LoginForm checks it to decide whether to route back through here.
+//  - Personalization can never be skipped by taking a different door into
+//    auth: every door converges on the same steps.
 
-const STEPS: Step[] = ["account", "avatar", "tracks", "about", "orientation"];
+type Step = "choice" | "auth" | "avatar" | "tracks" | "about" | "orientation";
+
+const PROGRESS_STEPS: Step[] = ["choice", "avatar", "tracks", "about", "orientation"];
 
 export default function Onboarding() {
-  const { completeOnboarding } = useProfile();
-  const [step, setStep] = useState<Step>("account");
-  const [tracks, setTracks] = useState<TrackId[]>([]);
-  const [major, setMajor] = useState("");
-  const [experience, setExperience] = useState("");
-  const [ageBand, setAgeBand] = useState("");
-  const [account, setAccount] = useState<AccountKind>("guest");
-  const [authMode, setAuthMode] = useState<"signup" | "login">("signup");
-  const [displayName, setDisplayName] = useState("");
-  const [avatar, setAvatar] = useState<AvatarId>("duck");
+  const { profile, saveProfile, completeOnboarding } = useProfile();
+  const [step, setStep] = useState<Step>("choice");
 
-  // Real fields for the auth step — separate from the local-only
-  // displayName/avatar/tracks above, which stay client-side for now.
+  const [tracks, setTracks] = useState<TrackId[]>(profile.tracks);
+  const [major, setMajor] = useState(profile.major);
+  const [experience, setExperience] = useState(profile.experience);
+  const [ageBand, setAgeBand] = useState(profile.ageBand);
+  const [displayName, setDisplayName] = useState(
+    profile.displayName === "Guest" ? "" : profile.displayName,
+  );
+  const [avatar, setAvatar] = useState<AvatarId>(profile.avatar);
+
+  const [authMode, setAuthMode] = useState<"signup" | "login">("signup");
   const [authEmail, setAuthEmail] = useState("");
   const [authPassword, setAuthPassword] = useState("");
   const [authUsername, setAuthUsername] = useState("");
   const [authSubmitting, setAuthSubmitting] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
 
-  // The auth screen sits outside the numbered steps rather than pretending
-  // to be one of them, since "signup" and "login" aren't really progress —
-  // they're a fork before progress starts.
-  const index = Math.max(0, STEPS.indexOf(step));
+  const index = Math.max(0, PROGRESS_STEPS.indexOf(step === "auth" ? "choice" : step));
 
-  // If a real session already exists — e.g. someone just signed up or
-  // logged in on the standalone /login page and got redirected here — don't
-  // make them click through "Sign up" again. Skip straight to picking a
-  // character, same as finishing the auth step normally would.
+  // A live session means credentials are settled — whether they were entered
+  // here, on /login, or on a previous visit. Resume at personalization.
   useEffect(() => {
     let cancelled = false;
     fetch("/api/auth/me", { credentials: "same-origin" })
       .then((res) => (res.ok ? res.json() : { user: null }))
       .then((data: { user: { displayName: string | null } | null }) => {
         if (cancelled || !data.user) return;
-        setAccount("account");
-        if (data.user.displayName) setDisplayName(data.user.displayName);
-        setStep((current) => (current === "account" ? "avatar" : current));
+        saveProfile({ account: "account" });
+        if (data.user.displayName) {
+          setDisplayName((current) => current || data.user!.displayName!);
+        }
+        setStep((current) => (current === "choice" || current === "auth" ? "avatar" : current));
       })
       .catch(() => {});
     return () => {
@@ -62,8 +77,47 @@ export default function Onboarding() {
   const toggleTrack = (id: TrackId) =>
     setTracks((prev) => (prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id]));
 
-  const finish = () =>
-    completeOnboarding({ account, displayName, avatar, tracks, major, experience, ageBand });
+  // The only exit that marks personalization done.
+  const finish = () => {
+    completeOnboarding({
+      account: profile.account,
+      displayName,
+      avatar,
+      tracks,
+      major,
+      experience,
+      ageBand,
+      personalized: true,
+    });
+    // Mirror to the account so this follows the user to their next device.
+    // Fire-and-forget: local state is already saved, and the /login page can
+    // re-save later if this request loses a race with a flaky network.
+    if (profile.account === "account") {
+      fetch("/api/auth/profile", {
+        method: "PATCH",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ displayName, avatar, tracks, major, experience, ageBand }),
+      }).catch(() => {});
+    }
+  };
+
+  // A guest is here to look around, not to fill in a form — straight in on
+  // defaults. `personalized` stays false, which is the hook LoginForm uses
+  // to route them through avatar/tracks/about when they later sign up.
+  const startAsGuest = () => {
+    const randomAvatar = AVATARS[Math.floor(Math.random() * AVATARS.length)].id;
+    completeOnboarding({
+      account: "guest",
+      displayName: "Guest",
+      avatar: randomAvatar,
+      tracks: [],
+      major: "",
+      experience: "",
+      ageBand: "",
+      personalized: false,
+    });
+  };
 
   const openAuth = (which: "signup" | "login") => {
     setAuthMode(which);
@@ -72,8 +126,7 @@ export default function Onboarding() {
   };
 
   // Real signup/login against app/api/auth/{signup,login}/route.ts — sets an
-  // actual httpOnly session cookie backed by the `users` table. Only on
-  // success does the flow continue to the avatar/track picker.
+  // actual httpOnly session cookie backed by the `users` table.
   const submitAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError(null);
@@ -89,13 +142,18 @@ export default function Onboarding() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      const data = (await res.json()) as { user?: { email: string; username: string | null; displayName: string | null }; error?: string };
+      const data = (await res.json()) as {
+        user?: { email: string; username: string | null; displayName: string | null };
+        error?: string;
+      };
       if (!res.ok) {
         setAuthError(data.error ?? "Something went wrong.");
         return;
       }
+      // Promote immediately — before personalization — so no screen anywhere
+      // can render "guest" against a live session.
+      saveProfile({ account: "account" });
       if (data.user?.displayName && !displayName) setDisplayName(data.user.displayName);
-      setAccount("account");
       setStep("avatar");
     } catch {
       setAuthError("Network error — the request never reached the server.");
@@ -108,12 +166,12 @@ export default function Onboarding() {
     <div className="onboarding-screen">
       <div className="onboarding-panel">
         <div className="onboarding-progress" aria-hidden="true">
-          {STEPS.map((s, i) => (
+          {PROGRESS_STEPS.map((s, i) => (
             <span key={s} className={i <= index ? "onboarding-pip is-on" : "onboarding-pip"} />
           ))}
         </div>
 
-        {step === "account" && (
+        {step === "choice" && (
           <>
             <p className="onboarding-kicker">Player 1</p>
             <h2 className="onboarding-title">Save your progress?</h2>
@@ -129,14 +187,7 @@ export default function Onboarding() {
               <button type="button" className="onboarding-btn" onClick={() => openAuth("login")}>
                 Log in
               </button>
-              <button
-                type="button"
-                className="onboarding-btn"
-                onClick={() => {
-                  setAccount("guest");
-                  setStep("avatar");
-                }}
-              >
+              <button type="button" className="onboarding-btn" onClick={startAsGuest}>
                 Continue as guest
               </button>
             </div>
@@ -207,7 +258,7 @@ export default function Onboarding() {
               )}
 
               <div className="onboarding-actions">
-                <button type="button" className="onboarding-btn" onClick={() => setStep("account")}>Back</button>
+                <button type="button" className="onboarding-btn" onClick={() => setStep("choice")}>Back</button>
                 <button type="submit" className="onboarding-btn is-primary" disabled={authSubmitting}>
                   {authSubmitting ? "Working..." : authMode === "signup" ? "Create account" : "Log in"}
                 </button>
@@ -238,7 +289,6 @@ export default function Onboarding() {
             </div>
 
             <div className="onboarding-actions">
-              <button type="button" className="onboarding-btn" onClick={() => setStep("account")}>Back</button>
               <button type="button" className="onboarding-btn is-primary" onClick={() => setStep("tracks")}>Next</button>
             </div>
           </>

@@ -45,9 +45,9 @@ const subsections = [
   },
   {
     href: "/drills/survival",
-    title: "Survival Run",
+    title: "Dino Dash",
     tag: "Mental math",
-    description: "An endless mental-math run — answer fast enough to keep jumping, or the run ends.",
+    description: "An endless mental-math run — three lives, and the questions get harder the further you get.",
     // Was "drills-sequence-sprint" (a copy/paste leftover) — that made this
     // tile silently free forever AND share Sequence Sprint's session pool.
     // Now its own id, gated for real both here and inside SurvivalDrill.tsx

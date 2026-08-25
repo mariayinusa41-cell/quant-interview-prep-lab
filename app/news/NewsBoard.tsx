@@ -44,6 +44,29 @@ const JOB_FILTERS = [
   { id: "internship", label: "Internships" },
 ] as const;
 
+/**
+ * 2-3 letter mark for a firm, so an opening reads as a cabinet plate.
+ *
+ * Naive initials get this wrong in both directions: "IMC Trading" is not
+ * "IT" (IMC is already the mark) and "WorldQuant" is not "WOR" (the capitals
+ * carry it). So an existing acronym wins, then internal capitals, then
+ * initials, then a truncation.
+ */
+function firmMark(firm: string): string {
+  const words = firm.replace(/[^A-Za-z ]/g, "").trim().split(/\s+/).filter(Boolean);
+  if (words.length === 0) return firm.slice(0, 3).toUpperCase();
+
+  // Already an acronym — "IMC", "SIG", "DRW", "XTX".
+  if (/^[A-Z]{2,4}$/.test(words[0])) return words[0];
+
+  // CamelCase compound — "WorldQuant" -> "WQ".
+  const caps = words[0].match(/[A-Z]/g);
+  if (words.length === 1 && caps && caps.length >= 2) return caps.slice(0, 3).join("");
+
+  if (words.length >= 2) return (words[0][0] + words[1][0]).toUpperCase();
+  return words[0].slice(0, 3).toUpperCase();
+}
+
 /** "3 days ago" reads faster than a date when scanning for what's new. */
 function timeAgo(iso: string | null): string {
   if (!iso) return "";
@@ -102,12 +125,40 @@ export default function NewsBoard() {
 
   const liveAnnouncements = announcements.filter((a) => a.active);
 
+  // Ticker copy comes from the same openings the board lists — a short slice,
+  // since the track is rendered twice and a long list makes the loop crawl.
+  const tickerItems = useMemo(
+    () => news.jobs.slice(0, 12).map((j) => `// ${firmMark(j.firm)} · ${j.title}`),
+    [news],
+  );
+
   return (
     <div className="answer-content news-board">
-      <p className="pirate-kicker">Outcry</p>
-      <h1 className="pirate-story-line answer-title">News</h1>
+      <section className="arc-hero" aria-label="Latest openings">
+        <div className="arc-ticker-bar">
+          {/* Only claim "live" when /api/news actually answered with fresh
+              data — the bundled snapshot says so instead. */}
+          {isLive ? (
+            <span className="arc-live-dot">&#9679; LIVE</span>
+          ) : (
+            <span className="arc-snapshot-chip">SNAPSHOT</span>
+          )}
+          <div className="arc-ticker-window">
+            {/* Rendered twice so translateX(-50%) loops without a seam. */}
+            <div className="arc-ticker-track" aria-hidden="true">
+              {[...tickerItems, ...tickerItems].map((t, i) => (
+                <span key={i}>{t}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="arc-hero-body">
+          <p className="arc-eyebrow">Bulletin board // refreshed {timeAgo(news.generatedAt) || "recently"}</p>
+          <h1 className="arc-hero-title" style={{ marginBottom: 0 }}>News</h1>
+        </div>
+      </section>
 
-      <div className="news-tabs" role="tablist">
+      <div className="arc-chip-row" role="tablist">
         {([
           ["jobs", `Jobs (${news.jobs.length})`],
           ["reading", `Reading (${news.articles.length})`],
@@ -118,7 +169,7 @@ export default function NewsBoard() {
             type="button"
             role="tab"
             aria-selected={tab === id}
-            className={tab === id ? "news-tab is-active" : "news-tab"}
+            className={tab === id ? "arc-chip is-on" : "arc-chip"}
             onClick={() => setTab(id)}
           >
             {label}
@@ -128,12 +179,12 @@ export default function NewsBoard() {
 
       {tab === "jobs" && (
         <>
-          <div className="news-filter-row">
+          <div className="arc-news-filters">
             {JOB_FILTERS.map((f) => (
               <button
                 key={f.id}
                 type="button"
-                className={jobFilter === f.id ? "news-chip is-active" : "news-chip"}
+                className={jobFilter === f.id ? "arc-news-chip is-on" : "arc-news-chip"}
                 onClick={() => setJobFilter(f.id)}
               >
                 {f.label}
@@ -155,23 +206,29 @@ export default function NewsBoard() {
             {visibleJobs.length} opening{visibleJobs.length === 1 ? "" : "s"}
           </p>
 
-          <ul className="news-list">
-            {visibleJobs.slice(0, 120).map((j) => (
-              <li key={j.id} className="news-row">
-                {/* Third-party destination: noopener/noreferrer so the target
-                    can't reach back through window.opener. */}
-                <a href={j.url} target="_blank" rel="noopener noreferrer" className="news-row-link">
-                  <span className="news-row-title">{j.title}</span>
-                  <span className="news-row-meta">
-                    <span className="news-firm">{j.firm}</span>
-                    <span className="news-loc">{j.location}</span>
-                    <span className={`news-cat is-${j.category}`}>{j.category}</span>
-                    <span className="news-age">{timeAgo(j.postedAt)}</span>
+          <div className="arc-open-list">
+            {visibleJobs.slice(0, 120).map((j) => {
+              const age = timeAgo(j.postedAt);
+              const fresh = age === "today" || age === "yesterday";
+              return (
+                /* Third-party destination: noopener/noreferrer so the target
+                   can't reach back through window.opener. */
+                <a key={j.id} href={j.url} target="_blank" rel="noopener noreferrer" className="arc-open">
+                  <span className="arc-open-mark" aria-hidden="true">{firmMark(j.firm)}</span>
+                  <span style={{ minWidth: 0 }}>
+                    <strong className="arc-open-title">{j.title}</strong>
+                    <span className="arc-open-meta">
+                      {j.firm} &middot; {j.location} &middot; {j.category}
+                    </span>
+                  </span>
+                  <span className="arc-open-side">
+                    {age && <span className={fresh ? "arc-age is-fresh" : "arc-age"}>{age}</span>}
+                    <span className="arc-open-apply">Apply &rarr;</span>
                   </span>
                 </a>
-              </li>
-            ))}
-          </ul>
+              );
+            })}
+          </div>
           {visibleJobs.length > 120 && (
             <p className="news-count">Showing the 120 newest. Narrow by firm or category to see more.</p>
           )}
@@ -180,45 +237,43 @@ export default function NewsBoard() {
       )}
 
       {tab === "reading" && (
-        <ul className="news-list">
+        <div className="arc-read-grid">
           {news.articles.map((a) => (
-            <li key={a.id} className="news-row">
-              <a href={a.url} target="_blank" rel="noopener noreferrer" className="news-row-link">
-                <span className="news-row-title">{a.title}</span>
-                {a.summary && <span className="news-row-summary">{a.summary}</span>}
-                <span className="news-row-meta">
-                  <span className="news-firm">{a.source}</span>
-                  <span className={`news-cat is-${a.topic}`}>{a.topic}</span>
-                  <span className="news-age">{timeAgo(a.publishedAt)}</span>
-                </span>
-              </a>
-            </li>
+            <a key={a.id} href={a.url} target="_blank" rel="noopener noreferrer" className="arc-read">
+              <span className="arc-read-topic">{a.topic}</span>
+              <strong className="arc-read-title">{a.title}</strong>
+              {a.summary && <span className="arc-read-summary">{a.summary}</span>}
+              <span className="arc-read-source">
+                {a.source}
+                {timeAgo(a.publishedAt) ? ` \u00b7 ${timeAgo(a.publishedAt)}` : ""}
+              </span>
+            </a>
           ))}
-        </ul>
+        </div>
       )}
 
       {tab === "site" && (
-        <ul className="news-list">
+        <div className="arc-note-list">
           {liveAnnouncements.map((a) => (
-            <li key={a.id} className="news-row is-announcement">
-              <span className="news-row-title">{a.title}</span>
-              <span className="news-row-summary">{a.body}</span>
-              {a.code && (
-                <span className="news-code">
-                  CODE <strong>{a.code}</strong>
-                </span>
-              )}
-              <span className="news-row-meta">
-                <span className={`news-cat is-${a.kind}`}>{a.kind}</span>
-                <span className="news-age">{a.date}</span>
+            <div key={a.id} className="arc-site-note">
+              <span className={`arc-kind is-${a.kind.toLowerCase()}`}>{a.kind}</span>
+              <span>
+                <strong className="arc-open-title">{a.title}</strong>
+                <span className="arc-read-summary">{a.body}</span>
+                {a.code && (
+                  <span className="news-code">
+                    CODE <strong>{a.code}</strong>
+                  </span>
+                )}
+                <span className="arc-read-source">{a.date}</span>
               </span>
-            </li>
+            </div>
           ))}
-          {liveAnnouncements.length === 0 && <p className="news-empty">No site news right now.</p>}
-        </ul>
+          {liveAnnouncements.length === 0 && <p className="arc-note">No site news right now.</p>}
+        </div>
       )}
 
-      <p className="news-generated">
+      <p className="arc-note">
         Jobs and reading last refreshed {timeAgo(news.generatedAt)}
         {isLive ? " by the daily job." : " (built-in snapshot)."} Openings come straight from each firm&rsquo;s own
         careers board.

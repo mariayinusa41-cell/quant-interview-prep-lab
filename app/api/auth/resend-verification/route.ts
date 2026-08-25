@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { getDb } from "../../../../db";
 import { users } from "../../../../db/schema";
 import { generateVerificationToken, getCurrentUser, newVerificationExpiry } from "../../../../lib/auth";
-import { sendVerificationEmail } from "../../../../lib/email";
+import { isLocalRequest, sendVerificationEmail } from "../../../../lib/email";
 
 export async function POST(request: Request) {
   const me = await getCurrentUser(request);
@@ -19,5 +19,14 @@ export async function POST(request: Request) {
   const verifyUrl = `${new URL(request.url).origin}/api/auth/verify?token=${verificationToken}`;
   const result = await sendVerificationEmail(me.email, verifyUrl);
 
-  return Response.json(result.sent ? { sent: true } : { sent: false, devVerifyUrl: result.verifyUrl });
+  return Response.json(
+    result.sent
+      ? { sent: true }
+      : {
+          sent: false,
+          reason: result.reason,
+          // Local development only — never on a real host.
+          ...(isLocalRequest(request) ? { devVerifyUrl: verifyUrl } : {}),
+        },
+  );
 }

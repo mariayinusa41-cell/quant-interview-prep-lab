@@ -52,6 +52,20 @@ export async function POST(request: Request) {
           username: user.username,
           displayName: user.displayName,
           emailVerified: user.emailVerifiedAt !== null,
+          // Personalization travels with the account: a fresh device
+          // hydrates from this instead of re-running the avatar/track flow.
+          avatar: user.avatar,
+          tracks: (() => {
+            try {
+              const parsed = user.tracksJson ? JSON.parse(user.tracksJson) : null;
+              return Array.isArray(parsed) ? parsed : null;
+            } catch {
+              return null;
+            }
+          })(),
+          major: user.major,
+          experience: user.experience,
+          ageBand: user.ageBand,
         },
       },
       { status: 200, headers: { "Set-Cookie": setSessionCookieHeader(token) } }

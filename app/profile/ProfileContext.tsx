@@ -16,6 +16,14 @@ export type Profile = {
   experience: string;
   ageBand: string;
   onboarded: boolean;
+  /**
+   * True only after the avatar/tracks/about steps have actually been
+   * completed. `onboarded` alone can't tell the difference between "finished
+   * the full flow" and "skipped in as a guest" — and that ambiguity is how a
+   * guest who later signed up on /login ended up with an account but no
+   * avatar, no tracks and no way to ever be asked again.
+   */
+  personalized: boolean;
   /** Day-key of the last daily challenge attempt (one attempt per day). */
   dailyAttempted: string;
   /** Consecutive days seen, used for the 7-day wheel spin. */
@@ -36,6 +44,7 @@ const EMPTY: Profile = {
   experience: "",
   ageBand: "",
   onboarded: false,
+  personalized: false,
   dailyAttempted: "",
   streak: 0,
   lastSeen: "",
@@ -68,6 +77,14 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
           ...EMPTY,
           ...parsed,
           account: parsed.account === "account" ? "account" : "guest",
+          // Profiles saved before `personalized` existed: anyone who picked
+          // tracks or a name went through the full flow; an instant guest
+          // has neither.
+          personalized:
+            typeof parsed.personalized === "boolean"
+              ? parsed.personalized
+              : (parsed.tracks?.length ?? 0) > 0 ||
+                (!!parsed.displayName && parsed.displayName !== "Guest"),
           tracks: Array.isArray(parsed.tracks) ? (parsed.tracks as TrackId[]) : [],
           onboarded: parsed.onboarded === true,
         };
@@ -91,6 +108,40 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
       setReady(true);
     }
   }, []);
+
+  // Reconcile the local profile with the real session. The account flag
+  // used to be local-only, so signing up on /login left the profile saying
+  // "guest" forever — which blocked the daily challenge and mislabelled the
+  // profile card even though a session cookie existed. One fetch on mount
+  // fixes both directions: a live session promotes, a definitive "no
+  // session" answer demotes an expired one. A network failure does neither.
+  useEffect(() => {
+    if (!ready) return;
+    let cancelled = false;
+    fetch("/api/auth/me", { credentials: "same-origin" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { user: { displayName: string | null } | null } | null) => {
+        if (cancelled || data === null) return; // request failed: change nothing
+        setProfile((prev) => {
+          if (data.user) {
+            const serverName = data.user.displayName ?? "";
+            const keepLocal = prev.displayName && prev.displayName !== "Guest";
+            const next = {
+              ...prev,
+              account: "account" as const,
+              displayName: keepLocal ? prev.displayName : serverName || prev.displayName,
+            };
+            return next.account === prev.account && next.displayName === prev.displayName ? prev : next;
+          }
+          return prev.account === "account" ? { ...prev, account: "guest" as const } : prev;
+        });
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+    // Run once when the stored profile is ready — not on every profile edit.
+  }, [ready]);
 
   useEffect(() => {
     if (!ready) return;

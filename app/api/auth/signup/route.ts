@@ -13,7 +13,7 @@ import {
   normalizeEmailForUniqueness,
   setSessionCookieHeader,
 } from "../../../../lib/auth";
-import { sendVerificationEmail } from "../../../../lib/email";
+import { isLocalRequest, sendVerificationEmail } from "../../../../lib/email";
 
 function toRouteErrorMessage(error: unknown) {
   const message = error instanceof Error ? error.message : "Unexpected error";
@@ -111,9 +111,13 @@ export async function POST(request: Request) {
         user,
         verification: emailResult.sent
           ? { sent: true }
-          : // No email provider configured yet — surface the real link
-            // instead of a silent no-op, so the flow stays honestly testable.
-            { sent: false, devVerifyUrl: emailResult.verifyUrl },
+          : {
+              sent: false,
+              reason: emailResult.reason,
+              // Local development only. On a real host the link must never
+              // come back in the response — see isLocalRequest for why.
+              ...(isLocalRequest(request) ? { devVerifyUrl: verifyUrl } : {}),
+            },
       },
       { status: 201, headers: { "Set-Cookie": setSessionCookieHeader(token) } }
     );

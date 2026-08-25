@@ -82,16 +82,43 @@ export default function JobsPanel() {
   };
 
   const counts = STAGES.map((stage) => ({ stage, n: rows.filter((r) => r.stage === stage).length }));
+  const total = rows.length;
+  const stageClass = (stage: Stage) => `stage-${stage.toLowerCase()}`;
 
   return (
     <div className="hub-panel">
-      <section className="section">
-        <h2>My Jobs</h2>
+      <section className="arc-hero is-neutral" aria-label="Application pipeline">
+        <div className="arc-hero-body">
+          <p className="arc-eyebrow">
+            Run in progress // {total} application{total === 1 ? "" : "s"} live
+          </p>
+          <h2 className="arc-hero-title">The pipeline</h2>
+          <div className="arc-stage-grid">
+            {counts.map(({ stage, n }) => (
+              <div className="arc-stage" key={stage}>
+                <span className={`arc-stage-n ${stageClass(stage)}`}>{n}</span>
+                <span className="arc-stage-label">{stage}</span>
+                {/* Share of the whole run, which is what makes this read as a
+                    funnel rather than six unrelated numbers. */}
+                <span className="arc-stage-bar" aria-hidden="true">
+                  <span
+                    className={stageClass(stage)}
+                    style={{ width: total === 0 ? "0%" : `${Math.round((n / total) * 100)}%` }}
+                  />
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-        <div className="jobs-add-row">
+      <section className="section">
+        <h2>Applications</h2>
+
+        <div className="arc-job-add">
           <input
             type="text"
-            className="jobs-add-input"
+            className="arc-job-input"
             placeholder="Company"
             value={company}
             onChange={(e) => setCompany(e.target.value)}
@@ -99,29 +126,20 @@ export default function JobsPanel() {
           />
           <input
             type="text"
-            className="jobs-add-input"
+            className="arc-job-input"
             placeholder="Role"
             value={role}
             onChange={(e) => setRole(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && addJob()}
           />
-          <button type="button" className="chip-btn" disabled={!company.trim() || !role.trim()} onClick={addJob}>
-            Add application
+          <button type="button" className="arc-job-add-btn" disabled={!company.trim() || !role.trim()} onClick={addJob}>
+            + Add application
           </button>
         </div>
 
-        <div className="jobs-summary">
-          {counts.map(({ stage, n }) => (
-            <div className="jobs-stat" key={stage}>
-              <strong>{n}</strong>
-              <span>{stage}</span>
-            </div>
-          ))}
-        </div>
-
         {rows.length > 0 ? (
-          <div className="jobs-table" role="table" aria-label="Job applications">
-            <div className="jobs-row is-head" role="row">
+          <div className="arc-job-table" role="table" aria-label="Job applications">
+            <div className="arc-job-head" role="row">
               <span role="columnheader">Company</span>
               <span role="columnheader">Role</span>
               <span role="columnheader">Applied</span>
@@ -129,13 +147,13 @@ export default function JobsPanel() {
               <span role="columnheader" aria-hidden="true" />
             </div>
             {rows.map((r) => (
-              <div className="jobs-row" role="row" key={r.id}>
-                <span role="cell"><strong>{r.company}</strong></span>
-                <span role="cell">{r.role}</span>
-                <span role="cell" className="jobs-date">{r.applied}</span>
+              <div className="arc-job-row" role="row" key={r.id}>
+                <span role="cell" className="arc-job-company">{r.company}</span>
+                <span role="cell" className="arc-job-role">{r.role}</span>
+                <span role="cell" className="arc-job-date">{r.applied}</span>
                 <span role="cell">
                   <select
-                    className={`jobs-stage-select is-${r.stage.toLowerCase()}`}
+                    className={`arc-job-stage ${stageClass(r.stage)}`}
                     value={r.stage}
                     onChange={(e) => setStage(r.id, e.target.value as Stage)}
                     aria-label={`Stage for ${r.company} ${r.role}`}
@@ -148,7 +166,7 @@ export default function JobsPanel() {
                   </select>
                 </span>
                 <span role="cell">
-                  <button type="button" className="jobs-remove-btn" onClick={() => removeJob(r.id)} aria-label={`Remove ${r.company}`}>
+                  <button type="button" className="arc-job-remove" onClick={() => removeJob(r.id)} aria-label={`Remove ${r.company}`}>
                     ✕
                   </button>
                 </span>
@@ -156,10 +174,10 @@ export default function JobsPanel() {
             ))}
           </div>
         ) : (
-          <p className="jobs-empty">No applications yet — add your first one above.</p>
+          <p className="arc-note">No applications yet — add your first one above.</p>
         )}
 
-        <p className="assess-footnote">
+        <p className="arc-note">
           Saved in this browser. There&rsquo;s no account system yet, so this list won&rsquo;t follow you to another
           device — once there is one, syncing this list is a small change, not a rebuild.
         </p>

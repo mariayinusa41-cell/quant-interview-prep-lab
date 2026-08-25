@@ -32,70 +32,158 @@ interface Question {
   answer: string;
 }
 
+const rand = (min: number, max: number) => min + Math.floor(Math.random() * (max - min + 1));
+const pickOne = <T,>(arr: readonly T[]): T => arr[Math.floor(Math.random() * arr.length)];
+
+const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
+
+// Multiply before dividing. (110 / 100) * 180 is 198.00000000000003 in
+// binary floating point, and that full string is what the answer key would
+// have demanded the player type.
+const pctOf = (pct: number, base: number): number => (pct * base) / 100;
+
+// Ten tiers, ten questions each. Tier 1 is deliberately trivial — single
+// digit sums, half of a round number — because the failure mode for a drill
+// like this isn't being too easy, it's a new player bouncing off question
+// three and never coming back. The ramp is gentle enough that each tier feels
+// like a small step up from the one before rather than a wall.
+const TIER_SIZE = 10;
+const TIER_COUNT = 10;
+
+export function difficultyTier(score: number): number {
+  return Math.min(TIER_COUNT - 1, Math.floor(score / TIER_SIZE));
+}
+
+// Score at which the last tier begins — both the speed and spacing ramps are
+// pinned to this so maximum pace lands exactly when the hardest questions do,
+// instead of the two curves drifting apart when either is retuned.
+const RAMP_SCORE = (TIER_COUNT - 1) * TIER_SIZE;
+
+// One difficulty ladder, not three parallel ones. A tier is a *mix* of
+// question kinds chosen to sit at the same level of hard, so "tier 4" means
+// the same amount of effort whether it hands you a times table, a quarter of
+// something, or a third of something.
+//
+// Tiers 1-2 are deliberately smooth — single-digit sums, halving a round
+// number — because the failure mode for a drill isn't being too easy, it's a
+// new player bouncing off question three. From tier 3 the difficulty climbs
+// steadily, and tiers 8-10 are meant to be genuinely hard.
+//
+// Every generated answer is a whole number or a fraction already in lowest
+// terms: checking is string equality, so an answer key of "2/8" would mark a
+// player wrong for correctly typing "1/4".
+
+type QCat = "ARITHMETIC" | "FRACTIONS" | "PERCENTAGES";
+type Gen = { cat: QCat; make: () => Question };
+
+const A = (make: () => Question): Gen => ({ cat: "ARITHMETIC", make });
+const F = (make: () => Question): Gen => ({ cat: "FRACTIONS", make });
+const P = (make: () => Question): Gen => ({ cat: "PERCENTAGES", make });
+
+// --- arithmetic, modelled on zetamac. Subtraction and division are built
+// backwards from their inverse, so answers are whole and never negative. ---
+const add = (lo: number, hi: number) => (): Question => {
+  const a = rand(lo, hi);
+  const b = rand(lo, hi);
+  return { prompt: `${a} + ${b}`, answer: `${a + b}` };
+};
+const sub = (lo: number, hi: number) => (): Question => {
+  const result = rand(lo, hi);
+  const b = rand(lo, hi);
+  return { prompt: `${result + b} - ${b}`, answer: `${result}` };
+};
+const mul = (aLo: number, aHi: number, bLo: number, bHi: number) => (): Question => {
+  const a = rand(aLo, aHi);
+  const b = rand(bLo, bHi);
+  return { prompt: `${a} × ${b}`, answer: `${a * b}` };
+};
+const div = (dLo: number, dHi: number, qLo: number, qHi: number) => (): Question => {
+  const d = rand(dLo, dHi);
+  const q = rand(qLo, qHi);
+  return { prompt: `${d * q} ÷ ${d}`, answer: `${q}` };
+};
+
+// --- percentages. Every (pct, base) pairing keeps the result whole: a
+// decimal answer in a speed drill is a typo waiting to happen. ---
+const pct = (pcts: readonly number[], mult: number, maxMult: number) => (): Question => {
+  const base = rand(1, maxMult) * mult;
+  const p = pickOne(pcts);
+  return { prompt: `${p}% of ${base}`, answer: `${pctOf(p, base)}` };
+};
+const pctChange = (pcts: readonly number[], mult: number, maxMult: number) => (): Question => {
+  const base = rand(1, maxMult) * mult;
+  const p = pickOne(pcts);
+  const delta = pctOf(p, base);
+  return Math.random() > 0.5
+    ? { prompt: `${base} increased by ${p}%`, answer: `${base + delta}` }
+    : { prompt: `${base} decreased by ${p}%`, answer: `${base - delta}` };
+};
+
+// --- fractions. "n/d of base" divides evenly because base is a multiple of
+// d, and n is drawn coprime with d so a late tier can't quietly reduce to
+// "1/2 of 24" and land easier than an earlier one. ---
+const unitFrac = (dens: readonly number[], maxMult: number) => (): Question => {
+  const d = pickOne(dens);
+  const base = d * rand(2, maxMult);
+  return { prompt: `1/${d} of ${base}`, answer: `${base / d}` };
+};
+const partFrac = (dens: readonly number[], loMult: number, hiMult: number) => (): Question => {
+  const den = pickOne(dens);
+  const base = den * rand(loMult, hiMult);
+  const options: number[] = [];
+  for (let n = 2; n < den; n++) if (gcd(n, den) === 1) options.push(n);
+  const num = options.length > 0 ? pickOne(options) : 1;
+  return { prompt: `${num}/${den} of ${base}`, answer: `${(base / den) * num}` };
+};
+// Numerators forced to an odd sum so the result is already in lowest terms.
+const eighths = (): Question => {
+  const n1 = pickOne([1, 2, 3] as const);
+  const n2 = n1 % 2 === 0 ? pickOne([1, 3] as const) : pickOne([2, 4] as const);
+  return { prompt: `${n1}/8 + ${n2}/8`, answer: `${n1 + n2}/8` };
+};
+const classicPairs = (): Question =>
+  pickOne([
+    { prompt: "1/2 + 1/4", answer: "3/4" },
+    { prompt: "3/4 - 1/2", answer: "1/4" },
+    { prompt: "1/3 + 1/3", answer: "2/3" },
+    { prompt: "1 - 1/5", answer: "4/5" },
+    { prompt: "2/3 + 1/6", answer: "5/6" },
+  ]);
+
+// A generator listed more than once in a tier simply comes up more often —
+// that's how the early tiers stay weighted toward plain arithmetic while
+// still occasionally showing an easy fraction or percentage.
+const TIERS: Gen[][] = [
+  // 1 — smooth. Single-digit sums, halving, half of an even number.
+  [A(add(1, 9)), A(add(1, 9)), A(add(1, 9)), P(pct([50], 10, 10)), F(unitFrac([2], 10))],
+  // 2 — still smooth. Subtraction appears; 10% is just moving the decimal.
+  [A(add(1, 9)), A(add(2, 20)), A(sub(1, 9)), P(pct([10], 10, 10)), F(unitFrac([2, 4], 8))],
+  // 3 — starts asking for something.
+  [A(add(2, 20)), A(sub(2, 20)), A(mul(2, 9, 2, 9)), P(pct([10, 50], 10, 12)), F(unitFrac([2, 3, 4], 8))],
+  // 4 — full times tables, quarters, thirds.
+  [A(add(5, 40)), A(sub(5, 40)), A(mul(2, 12, 2, 12)), P(pct([10, 20, 25], 20, 10)), F(unitFrac([3, 4, 5], 9))],
+  // 5 — two-digit work and the first non-unit numerators.
+  [A(add(10, 60)), A(sub(10, 60)), A(mul(2, 12, 2, 15)), P(pct([20, 25, 50, 75], 20, 12)), F(partFrac([3, 4], 2, 8))],
+  // 6 — zetamac's stock ranges; awkward-but-round percentages.
+  [A(add(2, 100)), A(sub(2, 100)), A(mul(2, 12, 2, 25)), P(pct([5, 15, 30, 40], 20, 12)), F(eighths)],
+  // 7 — division joins; over 100%; unlike denominators.
+  [A(add(2, 100)), A(sub(2, 100)), A(div(2, 12, 2, 25)), P(pct([15, 30, 40, 110], 20, 12)), F(classicPairs)],
+  // 8 — zetamac's default multiplication; percentage change.
+  [A(add(20, 100)), A(sub(20, 100)), A(mul(2, 12, 13, 100)), A(div(2, 12, 2, 100)), P(pctChange([10, 25, 50], 20, 12)), F(partFrac([3, 4, 5, 6], 2, 9))],
+  // 9 — three digits creeping in; harder deltas; sevenths and eighths.
+  [A(add(50, 300)), A(sub(50, 300)), A(mul(11, 25, 11, 25)), A(div(3, 15, 3, 40)), P(pctChange([5, 15, 25, 35], 20, 12)), F(partFrac([6, 7, 8], 3, 10))],
+  // 10 — long form: three-digit add/sub, two-by-two multiplication.
+  [A(add(100, 999)), A(sub(100, 999)), A(mul(11, 40, 11, 40)), A(div(3, 25, 3, 40)), P(pct([12, 18, 24, 36, 44], 50, 8)), F(partFrac([6, 7, 8, 9, 12], 4, 12))],
+];
+
 function generateQuestion(category: Category, score: number): Question {
-  const activeCategory =
-    category === "ALL"
-      ? (["ARITHMETIC", "FRACTIONS", "PERCENTAGES"][Math.floor(Math.random() * 3)] as Category)
-      : category;
-
-  const difficulty = Math.floor(score / 4);
-
-  if (activeCategory === "ARITHMETIC") {
-    if (difficulty === 0) {
-      const a = Math.floor(Math.random() * 9) + 1;
-      const b = Math.floor(Math.random() * 9) + 1;
-      return { prompt: `${a} + ${b}`, answer: `${a + b}` };
-    } else if (difficulty === 1) {
-      const a = Math.floor(Math.random() * 11) + 2;
-      const b = Math.floor(Math.random() * 9) + 2;
-      return { prompt: `${a} × ${b}`, answer: `${a * b}` };
-    } else {
-      const a = Math.floor(Math.random() * 50) + 15;
-      const b = Math.floor(Math.random() * 40) + 10;
-      return Math.random() > 0.5
-        ? { prompt: `${a + b} - ${a}`, answer: `${b}` }
-        : { prompt: `${a} + ${b}`, answer: `${a + b}` };
-    }
-  }
-
-  if (activeCategory === "PERCENTAGES") {
-    if (difficulty === 0) {
-      const base = (Math.floor(Math.random() * 10) + 1) * 10;
-      const pct = Math.random() > 0.5 ? 10 : 50;
-      return { prompt: `${pct}% of ${base}`, answer: `${(pct / 100) * base}` };
-    } else if (difficulty === 1) {
-      const base = (Math.floor(Math.random() * 15) + 1) * 10;
-      const pct = [20, 25, 50, 75][Math.floor(Math.random() * 4)];
-      return { prompt: `${pct}% of ${base}`, answer: `${(pct / 100) * base}` };
-    } else {
-      const base = (Math.floor(Math.random() * 8) + 1) * 50;
-      const pct = [15, 30, 40, 110][Math.floor(Math.random() * 4)];
-      return { prompt: `${pct}% of ${base}`, answer: `${(pct / 100) * base}` };
-    }
-  }
-
-  if (activeCategory === "FRACTIONS") {
-    if (difficulty === 0) {
-      const base = (Math.floor(Math.random() * 8) + 1) * 4;
-      return { prompt: `1/4 of ${base}`, answer: `${base / 4}` };
-    } else if (difficulty === 1) {
-      const num1 = Math.floor(Math.random() * 3) + 1;
-      const num2 = Math.floor(Math.random() * 3) + 1;
-      const den = 8;
-      return { prompt: `${num1}/${den} + ${num2}/${den}`, answer: `${num1 + num2}/${den}` };
-    } else {
-      const pairs = [
-        { prompt: "1/2 + 1/4", answer: "3/4" },
-        { prompt: "3/4 - 1/2", answer: "1/4" },
-        { prompt: "1/3 + 1/3", answer: "2/3" },
-        { prompt: "1 - 1/5", answer: "4/5" },
-        { prompt: "2/3 + 1/6", answer: "5/6" },
-      ];
-      return pairs[Math.floor(Math.random() * pairs.length)];
-    }
-  }
-
-  return { prompt: "2 + 2", answer: "4" };
+  const pool = TIERS[difficultyTier(score)];
+  // The category chips filter the tier's mix rather than selecting a separate
+  // ladder, so "FRACTIONS at tier 4" is the same difficulty as everything
+  // else at tier 4. Every tier carries at least one generator per category,
+  // so the filtered pool is never empty.
+  const filtered = category === "ALL" ? pool : pool.filter((g) => g.cat === category);
+  return pickOne(filtered.length > 0 ? filtered : pool).make();
 }
 
 // ---- sprite sheet geometry, copied from the original Runner/Trex/Obstacle
@@ -111,6 +199,48 @@ const HORIZON_SEG = 600; // width of one horizon tile in the sprite
 const DIGIT_W = 10;
 const DIGIT_H = 13;
 const GAMEOVER_SRC = { x: 0, y: 13, w: 191, h: 11 };
+
+const FPS = 60;
+
+const STARTING_LIVES = 3;
+
+// How far ahead of the dino a banked jump fires, expressed in frames of
+// travel so it scales with speed. The hop hangs ~37 frames, so launching
+// ~16 frames out puts the dino near its apex as the cactus passes under.
+const JUMP_LEAD_FRAMES = 16;
+// Width of a "double cactus" cluster: one hop clears the pair, so one
+// correct answer should too.
+const CLUSTER_SPAN = 60;
+// Frames of mercy after a hit: long enough to clear the cactus you just hit
+// and read the next prompt, rather than losing all three lives to one
+// obstacle in three consecutive frames.
+const INVULN_FRAMES = 100;
+
+// The gap between obstacles IS the time to answer, since every obstacle needs
+// one solved question. The old game opened at ~1.7s, which is not enough to
+// read a prompt, do the arithmetic and type it — this opens two seconds
+// slower and tightens as the score climbs, reaching the old pace around
+// score 30.
+// Both ramps run out at RAMP_SCORE — the score the final question tier starts
+// at — so speed and difficulty escalate together instead of the board hitting
+// maximum pace while you're still on easy arithmetic.
+const START_GAP_SEC = 4.0;
+const MIN_GAP_SEC = 1.7;
+const GAP_DECAY_PER_POINT = (START_GAP_SEC - MIN_GAP_SEC) / RAMP_SCORE;
+
+const START_SPEED = 3.6;
+const MAX_SPEED = 12;
+const SPEED_PER_POINT = (MAX_SPEED - START_SPEED) / RAMP_SCORE;
+
+function gapFramesFor(score: number): number {
+  const seconds = Math.max(MIN_GAP_SEC, START_GAP_SEC - score * GAP_DECAY_PER_POINT);
+  // Jitter shrinks with the gap so late-game spacing stays tight and fair.
+  return seconds * FPS + Math.random() * (seconds * 0.15 * FPS);
+}
+
+function speedFor(score: number): number {
+  return Math.min(MAX_SPEED, START_SPEED + score * SPEED_PER_POINT);
+}
 
 function useSprites() {
   const [ready, setReady] = useState(false);
@@ -151,9 +281,13 @@ export default function SurvivalDrill() {
   const [category, setCategory] = useState<Category>("ALL");
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
+  const [lives, setLives] = useState(STARTING_LIVES);
   const [question, setQuestion] = useState<Question>({ prompt: "", answer: "" });
   const [input, setInput] = useState("");
   const [isWrongShake, setIsWrongShake] = useState(false);
+  // Briefly flashed over the canvas when a life is lost, so a hit reads as an
+  // event rather than the score just quietly failing to go up.
+  const [hitFlash, setHitFlash] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -164,16 +298,18 @@ export default function SurvivalDrill() {
   const inputRef2 = useRef(input);
   const questionRef = useRef(question);
   const scoreRef = useRef(score);
+  const highScoreRef = useRef(highScore);
   statusRef.current = status;
   inputRef2.current = input;
   questionRef.current = question;
   scoreRef.current = score;
+  highScoreRef.current = highScore;
 
   const engineRef = useRef<{
     running: boolean;
     speed: number;
     tRex: { x: number; y: number; vy: number; jumping: boolean; groundY: number; width: number; height: number };
-    obstacles: Array<{ x: number; y: number; width: number; height: number; large: boolean }>;
+    obstacles: Array<{ x: number; y: number; width: number; height: number; large: boolean; cleared?: boolean }>;
     horizonX: [number, number];
     horizonBumpy: [boolean, boolean];
     clouds: Array<{ x: number; y: number; speed: number }>;
@@ -183,9 +319,12 @@ export default function SurvivalDrill() {
     reqId: number;
     idleTimer: number;
     idleFrame: number;
+    lives: number;
+    invuln: number;
+    jumpCredits: number;
   }>({
     running: false,
-    speed: 5.5,
+    speed: START_SPEED,
     tRex: { x: 50, y: GROUND_Y, vy: 0, jumping: false, groundY: GROUND_Y, width: TREX_W, height: TREX_H },
     obstacles: [],
     horizonX: [0, HORIZON_SEG],
@@ -197,15 +336,24 @@ export default function SurvivalDrill() {
     reqId: 0,
     idleTimer: 0,
     idleFrame: 0,
+    lives: STARTING_LIVES,
+    invuln: 0,
+    jumpCredits: 0,
   });
 
-  const triggerJump = useCallback(() => {
+  // A correct answer banks a jump instead of firing one immediately.
+  //
+  // Jumping on the keystroke looked right but played wrong: the hop lasts
+  // ~0.6s while a freshly spawned cactus needs up to 2.6s to arrive, so
+  // answering *quickly* meant landing long before the obstacle got there and
+  // losing a life despite being correct. The engine now spends the credit
+  // when the cactus is actually in range, which makes the arithmetic the only
+  // thing being tested — which is the point of the drill.
+  const bankJump = useCallback(() => {
     const eng = engineRef.current;
-    if (!eng.tRex.jumping && eng.running) {
-      eng.tRex.jumping = true;
-      eng.tRex.vy = -11;
-      playSfx("correct");
-    }
+    if (!eng.running) return;
+    eng.jumpCredits += 1;
+    playSfx("correct");
   }, [playSfx]);
 
   const handleGameOver = useCallback(() => {
@@ -216,7 +364,38 @@ export default function SurvivalDrill() {
     playSfx("wrong");
   }, [playSfx]);
 
+  // A crash costs one life rather than the run. The obstacles on screen are
+  // cleared along with it — resuming into the same cactus you just hit would
+  // burn the remaining lives before the mercy window could help.
+  const handleHit = useCallback(() => {
+    const eng = engineRef.current;
+    eng.lives -= 1;
+    setLives(eng.lives);
+    playSfx("wrong");
+
+    if (eng.lives <= 0) {
+      handleGameOver();
+      return false;
+    }
+
+    eng.invuln = INVULN_FRAMES;
+    eng.obstacles = [];
+    eng.jumpCredits = 0;
+    eng.spawnTimer = gapFramesFor(scoreRef.current);
+    eng.tRex.y = eng.tRex.groundY;
+    eng.tRex.jumping = false;
+    eng.tRex.vy = 0;
+    setHitFlash(true);
+    setTimeout(() => setHitFlash(false), 320);
+    return true;
+  }, [handleGameOver, playSfx]);
+
   const startGame = useCallback(() => {
+    const eng = engineRef.current;
+    eng.lives = STARTING_LIVES;
+    eng.invuln = 0;
+    eng.jumpCredits = 0;
+    setLives(STARTING_LIVES);
     setScore(0);
     setInput("");
     setQuestion(generateQuestion(category, 0));
@@ -234,16 +413,16 @@ export default function SurvivalDrill() {
     if (startGameEntry(GAME_ID)) startGame();
   }, [startGameEntry, startGame]);
 
-  // Correct answer -> jump + advance. Wrong -> shake, no penalty beyond the
-  // obstacle still bearing down. Called from both the global space-bar
-  // handler and (as a fallback) the input's own Enter key.
+  // Correct answer -> bank a jump + advance. Wrong -> shake, no penalty
+  // beyond the obstacle still bearing down. Called from both the global
+  // space-bar handler and (as a fallback) the input's own Enter key.
   const submitAnswer = useCallback(() => {
     if (statusRef.current !== "playing") return;
     const q = questionRef.current;
     const isCorrect = inputRef2.current.trim().toLowerCase() === q.answer.trim().toLowerCase();
 
     if (isCorrect) {
-      triggerJump();
+      bankJump();
       const nextScore = scoreRef.current + 1;
       setScore(nextScore);
       setHighScore((h) => Math.max(h, nextScore));
@@ -254,7 +433,7 @@ export default function SurvivalDrill() {
       playSfx("wrong");
       setTimeout(() => setIsWrongShake(false), 350);
     }
-  }, [category, playSfx, triggerJump]);
+  }, [category, playSfx, bankJump]);
 
   // The space bar is bound globally — like the real dino game — instead of
   // depending on the answer input having focus. It submits the current
@@ -283,17 +462,20 @@ export default function SurvivalDrill() {
 
     const eng = engineRef.current;
     eng.running = true;
-    eng.speed = 5.5 + Math.min(score * 0.25, 6.5);
+    eng.speed = speedFor(scoreRef.current);
     eng.tRex.y = eng.tRex.groundY;
     eng.tRex.jumping = false;
     eng.tRex.vy = 0;
     eng.obstacles = [];
+    eng.jumpCredits = 0;
     eng.runTimer = 0;
     eng.clouds = [
       { x: 150, y: 30, speed: 0.8 },
       { x: 400, y: 20, speed: 0.6 },
     ];
-    eng.spawnTimer = 90;
+    // First cactus gets the full opening gap — the old fixed 90 frames threw
+    // one at you before you'd read the first prompt.
+    eng.spawnTimer = gapFramesFor(0);
 
     const gravity = 0.6;
 
@@ -315,6 +497,13 @@ export default function SurvivalDrill() {
       const dt = eng.lastFrameTime ? Math.min((timestamp - eng.lastFrameTime) / 16.6, 2) : 1;
       eng.lastFrameTime = timestamp;
       eng.runTimer += dt;
+      if (eng.invuln > 0) eng.invuln = Math.max(0, eng.invuln - dt);
+
+      // Pace tracks the live score. Reading it from the ref (rather than
+      // re-creating this whole effect on every point) is what keeps the field
+      // continuous — the old deps list restarted the engine each answer,
+      // which wiped the cactus mid-approach and reset the spawn clock.
+      const liveScore = scoreRef.current;
 
       // 1. T-Rex jump arc.
       if (eng.tRex.jumping) {
@@ -375,7 +564,27 @@ export default function SurvivalDrill() {
             large,
           });
         }
-        eng.spawnTimer = Math.max(70, 120 - eng.speed * 3.5) + Math.random() * 45;
+        eng.spawnTimer = gapFramesFor(liveScore);
+      }
+
+      // Spend a banked jump on the nearest obstacle once it's close enough
+      // that the hop will actually cover it. The lead scales with speed so
+      // the launch looks right at tier 1 and tier 10 alike.
+      if (eng.jumpCredits > 0) {
+        const lead = JUMP_LEAD_FRAMES * eng.speed;
+        const next = eng.obstacles.find((o) => !o.cleared && o.x + o.width > eng.tRex.x);
+        if (next && next.x - eng.tRex.x <= lead) {
+          eng.jumpCredits -= 1;
+          // A "double" spawn is two hitboxes a few px apart that one hop
+          // clears — mark the whole cluster so it doesn't cost two answers.
+          for (const o of eng.obstacles) {
+            if (!o.cleared && o.x >= next.x - 1 && o.x <= next.x + CLUSTER_SPAN) o.cleared = true;
+          }
+          if (!eng.tRex.jumping) {
+            eng.tRex.jumping = true;
+            eng.tRex.vy = -11;
+          }
+        }
       }
 
       for (let i = eng.obstacles.length - 1; i >= 0; i--) {
@@ -384,19 +593,22 @@ export default function SurvivalDrill() {
 
         const t = eng.tRex;
         const collision =
+          !obs.cleared &&
           t.x + 6 < obs.x + obs.width - 3 &&
           t.x + t.width - 6 > obs.x + 3 &&
           t.y + 6 < obs.y + obs.height &&
           t.y + t.height - 2 > obs.y + 3;
 
-        if (collision) {
-          handleGameOver();
-          return;
+        if (collision && eng.invuln <= 0) {
+          // handleHit returns false when that was the last life, in which
+          // case it has already stopped the engine.
+          if (!handleHit()) return;
+          break;
         }
         if (obs.x + obs.width < -10) eng.obstacles.splice(i, 1);
       }
 
-      if (eng.speed < 12) eng.speed += 0.0018 * dt * 16.6;
+      eng.speed = speedFor(liveScore);
 
       // ---- render ----
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -422,10 +634,17 @@ export default function SurvivalDrill() {
         const legFrame = Math.floor((eng.runTimer * 16.6) / 90) % 2;
         srcX = TREX_FRAME.RUNNING[legFrame];
       }
-      ctx.drawImage(imgs.trex, srcX, 0, TREX_W, TREX_H, t.x, t.y, TREX_W, TREX_H);
+      // Blink through the mercy window so it's obvious the hit registered and
+      // that you're briefly untouchable.
+      const blinkOff = eng.invuln > 0 && Math.floor(eng.runTimer / 5) % 2 === 0;
+      if (!blinkOff) {
+        ctx.drawImage(imgs.trex, srcX, 0, TREX_W, TREX_H, t.x, t.y, TREX_W, TREX_H);
+      }
 
-      drawDigits(score, 5, canvas.width - 12, 8);
-      if (highScore > 0) drawDigits(highScore, 5, canvas.width - 12 - 6 * DIGIT_W, 8, true);
+      drawDigits(liveScore, 5, canvas.width - 12, 8);
+      if (highScoreRef.current > 0) {
+        drawDigits(highScoreRef.current, 5, canvas.width - 12 - 6 * DIGIT_W, 8, true);
+      }
 
       eng.reqId = requestAnimationFrame(loop);
     };
@@ -437,7 +656,11 @@ export default function SurvivalDrill() {
       cancelAnimationFrame(eng.reqId);
       eng.running = false;
     };
-  }, [status, score, handleGameOver, spritesReady, imgs, highScore]);
+    // Deliberately does NOT depend on score/highScore: those are read from
+    // refs inside the loop. Listing them here tore down and rebuilt the whole
+    // engine on every correct answer, which cleared the obstacles mid-flight
+    // and made the time you actually get to answer unpredictable.
+  }, [status, handleGameOver, handleHit, spritesReady, imgs]);
 
   // Idle render for the menu and game-over screens (static frame, no rAF
   // loop needed) so the sprites are visible before a run starts.
@@ -579,6 +802,12 @@ export default function SurvivalDrill() {
           font-size: 0.85rem;
           color: #777;
         }
+        .lives-hit { animation: lives-pop 0.32s ease-out; }
+        @keyframes lives-pop {
+          0% { transform: scale(1); }
+          35% { transform: scale(1.35); }
+          100% { transform: scale(1); }
+        }
         kbd {
           display: inline-block;
           padding: 1px 7px;
@@ -594,9 +823,18 @@ export default function SurvivalDrill() {
 
       <div className="math-dino-wrap">
         <div style={{ display: "flex", justifyContent: "space-between", width: "100%", marginBottom: 8 }}>
-          <span style={{ fontWeight: "bold", color: "#555" }}>DRILL: SURVIVAL RUN</span>
-          <div>
-            <span style={{ marginRight: 14, color: "#888" }}>HI: {String(highScore).padStart(5, "0")}</span>
+          <span style={{ fontWeight: "bold", color: "#555" }}>DRILL: DINO DASH</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            {status !== "menu" && (
+              <span className={hitFlash ? "lives-hit" : ""} aria-label={`${lives} lives remaining`}>
+                {Array.from({ length: STARTING_LIVES }, (_, i) => (
+                  <span key={i} style={{ color: i < lives ? "#d9534f" : "#d8d8d8", fontSize: "1.05rem" }}>
+                    {"♥"}
+                  </span>
+                ))}
+              </span>
+            )}
+            <span style={{ color: "#888" }}>HI: {String(highScore).padStart(5, "0")}</span>
             <span style={{ fontWeight: "bold", color: "#2f8f60" }}>SCORE: {String(score).padStart(5, "0")}</span>
           </div>
         </div>
@@ -607,10 +845,14 @@ export default function SurvivalDrill() {
 
         {status === "menu" && (
           <div style={{ textAlign: "center", marginTop: 20 }}>
-            <h2 style={{ fontSize: "1.3rem", marginBottom: 8 }}>Mental Math Dino Run</h2>
+            <h2 style={{ fontSize: "1.3rem", marginBottom: 8 }}>Dino Dash</h2>
             <p className="space-hint" style={{ marginBottom: 16 }}>
               Type the answer, then hit <kbd>SPACE</kbd> to jump the cactus — space is bound the whole
               page over, just like the real game.
+            </p>
+            <p className="space-hint" style={{ marginBottom: 16 }}>
+              You get <strong>{STARTING_LIVES} lives</strong>. It starts slow and speeds up, and the
+              questions climb through ten difficulty tiers as your score builds.
             </p>
             <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 18 }}>
               {CATEGORIES.map((c) => (
@@ -634,7 +876,7 @@ export default function SurvivalDrill() {
             </div>
             <AccessStartButton
               gameId={GAME_ID}
-              title="Survival Run"
+              title="Dino Dash"
               defaultLabel="Start Run"
               onStart={startGame}
               style={{
@@ -675,11 +917,13 @@ export default function SurvivalDrill() {
         {status === "gameover" && (
           <div style={{ textAlign: "center", marginTop: 20 }}>
             <p style={{ color: "#666", marginBottom: 14 }}>
-              The answer was <strong>{question.answer}</strong>. You cleared <strong>{score}</strong> obstacles!
+              All three lives gone. The answer was <strong>{question.answer}</strong> — you cleared{" "}
+              <strong>{score}</strong> obstacles at difficulty tier{" "}
+              <strong>{difficultyTier(score) + 1}</strong>.
             </p>
             <AccessStartButton
               gameId={GAME_ID}
-              title="Survival Run"
+              title="Dino Dash"
               defaultLabel="Try Again"
               onStart={startGame}
               style={{
