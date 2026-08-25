@@ -36,6 +36,17 @@ const localBindingConfig = {
         },
       ]
     : [],
+  // Keep the *.workers.dev URL alive. Wrangler DISABLES it by default the
+  // moment it is not explicitly set, which silently 404'd the live site on
+  // a deploy that was only meant to add a custom domain. It stays on as a
+  // permanent fallback so the site is never reachable only via DNS that
+  // might still be propagating.
+  workers_dev: true,
+  // Custom domains are attached in the Cloudflare dashboard rather than
+  // here. Declaring them as `routes` fails while the zone still holds the
+  // A/CNAME records Cloudflare imported from the registrar
+  // (error 100117: "already has externally managed DNS records"), and
+  // removing those needs zone-edit permission this token does not have.
 };
 
 export default defineConfig(async () => {
