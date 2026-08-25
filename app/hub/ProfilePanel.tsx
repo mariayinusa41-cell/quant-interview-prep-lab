@@ -12,6 +12,7 @@ import { TRACK_BY_ID } from "../profile/tracks";
 import { STREAK_TARGET } from "../daily/challengeBank";
 import TokenIcon from "../access/TokenIcon";
 import TicketIcon from "../progress/TicketIcon";
+import QuestionsIcon from "../progress/QuestionsIcon";
 import DailyChallenge from "../daily/DailyChallenge";
 import GiftBox from "../access/GiftBox";
 import GuestGate, { GuestSignupBanner } from "../access/GuestGate";
@@ -97,7 +98,7 @@ export default function ProfilePanel() {
             <span>Day streak</span>
           </div>
           <div className="profile-stat">
-            <span className="profile-stat-icon" aria-hidden="true">?</span>
+            <span className="profile-stat-icon"><QuestionsIcon /></span>
             <strong>{graded}</strong>
             <span>Questions</span>
           </div>
