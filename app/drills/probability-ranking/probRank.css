@@ -179,3 +179,33 @@
   color: var(--ink-3, rgba(255, 255, 255, 0.5));
   margin-top: 0.1rem;
 }
+
+/* ---- Scatter-plot questions (read an actual x/y plane) ---- */
+.prob-scatter-wrap {
+  margin: 0.75rem 0 1.1rem;
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+}
+.prob-scatter {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+}
+.prob-scatter-tick {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  fill: var(--ink-3, #9aa4b2);
+}
+.prob-scatter-axis {
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  fill: var(--ink-2, #c7d0dc);
+}
+.prob-scatter-point-label {
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  fill: var(--pixel-white, #f4f0e8);
+}

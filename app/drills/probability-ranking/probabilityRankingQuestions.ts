@@ -14,7 +14,8 @@ export type ProbCategory =
   | "distribution-density"
   | "dice-and-cards"
   | "poisson-arrivals"
-  | "bayesian-urns";
+  | "bayesian-urns"
+  | "scatter-plots";
 
 export type OptionItem = {
   id: string;
@@ -43,6 +44,22 @@ export type DistributionContext = {
   targetRange: [number, number];
 };
 
+// A real x/y scatter the player has to READ. Every probability in a scatter
+// question is a plain count over the plotted points (how many fall in a
+// region / total), so the answer key is exact and the only way to get it is
+// to actually look at the plot rather than reason about it verbally.
+export type ScatterContext = {
+  xLabel: string;
+  yLabel: string;
+  xUnit?: string;
+  yUnit?: string;
+  points: Array<{ label: string; x: number; y: number }>;
+  // Drawn as dashed guide lines so a region like "x > 5" is readable off
+  // the axes instead of requiring the player to eyeball pixel positions.
+  xGuides?: number[];
+  yGuides?: number[];
+};
+
 export type ProbabilityRankingQuestion = {
   id: string;
   category: ProbCategory;
@@ -53,6 +70,7 @@ export type ProbabilityRankingQuestion = {
   timeLimitSec: number;
   tableData?: TableDataContext;
   distributionData?: DistributionContext;
+  scatterData?: ScatterContext;
   options: OptionItem[]; // The items to rank or pick from
   correctRankOrder: string[]; // Option IDs ordered from MOST likely (index 0) to LEAST likely
   explanation: string;

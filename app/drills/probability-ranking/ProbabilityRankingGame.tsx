@@ -6,6 +6,7 @@ import {
   scoreRanking,
   type OptionItem,
   type ProbabilityRankingQuestion,
+  type ScatterContext,
 } from "./probabilityRankingQuestions";
 import { getProceduralProbabilityQuestions } from "./proceduralProbabilityRanking";
 import { AccessStartButton } from "../../access/TokenPlayButton";
@@ -21,6 +22,7 @@ const CATEGORIES = [
   "dice-and-cards",
   "poisson-arrivals",
   "bayesian-urns",
+  "scatter-plots",
 ] as const;
 const CAT_LABEL: Record<string, string> = {
   "student-performance": "Student Performance",
@@ -28,6 +30,7 @@ const CAT_LABEL: Record<string, string> = {
   "dice-and-cards": "Dice & Cards",
   "poisson-arrivals": "Poisson Arrivals",
   "bayesian-urns": "Bayesian / Urns",
+  "scatter-plots": "Read the Plot",
 };
 const DIFFICULTIES = ["all", "1", "2", "3"] as const;
 const DIFF_LABEL: Record<string, string> = { "1": "Warm-up", "2": "Interview", "3": "Hard" };
@@ -50,6 +53,98 @@ function shuffle<T>(arr: T[]): T[] {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+}
+
+// Renders a scatter question's x/y plane. Deliberately shows the axis
+// values and the threshold guide lines: the question is "count the points
+// in this region", which should be a reading exercise, not a
+// pixel-eyeballing one.
+function ScatterPlot({ data }: { data: ScatterContext }) {
+  const W = 460, H = 300, PAD_L = 52, PAD_B = 40, PAD_T = 14, PAD_R = 14;
+  const xs = data.points.map((p) => p.x);
+  const ys = data.points.map((p) => p.y);
+  const xMin = Math.min(...xs, ...(data.xGuides ?? []));
+  const xMax = Math.max(...xs, ...(data.xGuides ?? []));
+  const yMin = Math.min(...ys, ...(data.yGuides ?? []));
+  const yMax = Math.max(...ys, ...(data.yGuides ?? []));
+  // Pad the domain so no point sits exactly on the frame — but never pad a
+  // non-negative quantity below zero, which printed axis floors like
+  // "-7.2 monthly sales ($k)".
+  const xPad = (xMax - xMin) * 0.08 || 1;
+  const yPad = (yMax - yMin) * 0.08 || 1;
+  const x0 = xMin >= 0 ? Math.max(0, xMin - xPad) : xMin - xPad;
+  const y0 = yMin >= 0 ? Math.max(0, yMin - yPad) : yMin - yPad;
+  const x1 = xMax + xPad, y1 = yMax + yPad;
+
+  const sx = (x: number) => PAD_L + ((x - x0) / (x1 - x0)) * (W - PAD_L - PAD_R);
+  const sy = (y: number) => H - PAD_B - ((y - y0) / (y1 - y0)) * (H - PAD_T - PAD_B);
+
+  const xTicks = [x0, (x0 + x1) / 2, x1];
+  const yTicks = [y0, (y0 + y1) / 2, y1];
+  const fmtTick = (v: number) => (Math.abs(v) >= 100 ? Math.round(v).toString() : v.toFixed(1).replace(/\.0$/, ""));
+
+  return (
+    <div className="prob-scatter-wrap">
+      <svg viewBox={`0 0 ${W} ${H}`} className="prob-scatter" role="img"
+        aria-label={`Scatter plot of ${data.yLabel} against ${data.xLabel} with ${data.points.length} labelled points`}>
+        <rect x={PAD_L} y={PAD_T} width={W - PAD_L - PAD_R} height={H - PAD_T - PAD_B}
+          fill="rgba(255,255,255,0.03)" stroke="var(--pixel-border)" strokeWidth="2" />
+
+        {yTicks.map((t, i) => (
+          <g key={`yt${i}`}>
+            <text x={PAD_L - 8} y={sy(t) + 4} textAnchor="end" className="prob-scatter-tick">{fmtTick(t)}</text>
+          </g>
+        ))}
+        {xTicks.map((t, i) => (
+          <text key={`xt${i}`} x={sx(t)} y={H - PAD_B + 18} textAnchor="middle" className="prob-scatter-tick">
+            {fmtTick(t)}
+          </text>
+        ))}
+
+        {(data.xGuides ?? []).map((g, i) => (
+          <g key={`xg${i}`}>
+            <line x1={sx(g)} y1={PAD_T} x2={sx(g)} y2={H - PAD_B}
+              stroke="var(--pixel-accent, #f5c542)" strokeWidth="2" strokeDasharray="5 4" opacity="0.85" />
+          </g>
+        ))}
+        {(data.yGuides ?? []).map((g, i) => (
+          <line key={`yg${i}`} x1={PAD_L} y1={sy(g)} x2={W - PAD_R} y2={sy(g)}
+            stroke="var(--pixel-accent, #f5c542)" strokeWidth="2" strokeDasharray="5 4" opacity="0.85" />
+        ))}
+
+        {/* Nudge a label that would land on top of an already-placed one.
+            Points this close are still individually countable, but the text
+            was overlapping into an unreadable smudge. */}
+        {(() => {
+          const placed: Array<{ x: number; y: number }> = [];
+          return data.points.map((p, i) => {
+            const px = sx(p.x), py = sy(p.y);
+            let lx = px + 8, ly = py + 3;
+            for (let guard = 0; guard < 6; guard++) {
+              const clash = placed.some((q) => Math.abs(q.x - lx) < 44 && Math.abs(q.y - ly) < 11);
+              if (!clash) break;
+              ly += 11;
+            }
+            placed.push({ x: lx, y: ly });
+            return (
+              <g key={i}>
+                <rect x={px - 4} y={py - 4} width="8" height="8" fill="var(--pixel-good, #47f0c2)" />
+                <text x={lx} y={ly} className="prob-scatter-point-label">{p.label}</text>
+              </g>
+            );
+          });
+        })()}
+
+        <text x={(PAD_L + W - PAD_R) / 2} y={H - 4} textAnchor="middle" className="prob-scatter-axis">
+          {data.xLabel}{data.xUnit ? ` (${data.xUnit})` : ""}
+        </text>
+        <text x={12} y={(PAD_T + H - PAD_B) / 2} textAnchor="middle" className="prob-scatter-axis"
+          transform={`rotate(-90 12 ${(PAD_T + H - PAD_B) / 2})`}>
+          {data.yLabel}{data.yUnit ? ` (${data.yUnit})` : ""}
+        </text>
+      </svg>
+    </div>
+  );
 }
 
 export default function ProbabilityRankingGame() {
@@ -344,6 +439,8 @@ export default function ProbabilityRankingGame() {
             </table>
           </div>
         )}
+
+        {currentQ?.scatterData && <ScatterPlot data={currentQ.scatterData} />}
 
         {currentQ?.distributionData && (
           <div className="prob-dist-grid">

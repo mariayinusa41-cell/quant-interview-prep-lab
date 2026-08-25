@@ -536,6 +536,156 @@ function genBayesianQuestions(): ProbabilityRankingQuestion[] {
   return out;
 }
 
+
+/* ---------------------------------------------------------------------
+ * Scatter-plot questions: an actual x/y plane the player has to read.
+ *
+ * Every probability here is a plain count over the plotted points, so the
+ * answer key is exact by construction and there is no way to shortcut it
+ * verbally — you have to look at the plot and count. Ties are rejected at
+ * generation time, because two events with identical counts would make the
+ * "correct" ordering between them arbitrary and mark a right answer wrong.
+ * ------------------------------------------------------------------- */
+type ScatterSet = {
+  noun: string;
+  labels: string[];
+  xLabel: string;
+  yLabel: string;
+  // Rendered as `${prefix}${value}${unit}` so money reads "$370k" rather
+  // than "370$k".
+  xUnit: string;
+  yUnit: string;
+  xPrefix?: string;
+  yPrefix?: string;
+  xRange: [number, number];
+  yRange: [number, number];
+};
+
+const SCATTER_SETS: ScatterSet[] = [
+  {
+    noun: "car",
+    labels: ["Toyota", "Honda", "Ford", "BMW", "Kia", "Audi", "Mazda", "Volvo", "Subaru", "Tesla", "Lexus", "Jeep"],
+    xLabel: "Age", yLabel: "Repair cost", xUnit: "yr", yUnit: "", yPrefix: "$",
+    xRange: [1, 12], yRange: [200, 2400],
+  },
+  {
+    noun: "stock",
+    labels: ["ALTR", "BRDG", "CNVX", "DELP", "EVRN", "FRST", "GLDN", "HRTH", "IONQ", "JVLN", "KRTX", "LMND"],
+    xLabel: "Volatility", yLabel: "Daily volume", xUnit: "%", yUnit: "k",
+    xRange: [5, 60], yRange: [50, 900],
+  },
+  {
+    noun: "store",
+    labels: ["Aster", "Boyd", "Cedar", "Dune", "Elm", "Fable", "Grove", "Hale", "Iris", "Juno", "Kite", "Lark"],
+    xLabel: "Floor area", yLabel: "Monthly sales", xUnit: "k sqft", yUnit: "k", yPrefix: "$",
+    xRange: [2, 30], yRange: [40, 700],
+  },
+];
+
+function genScatterQuestions(): ProbabilityRankingQuestion[] {
+  const out: ProbabilityRankingQuestion[] = [];
+
+  for (const set of SCATTER_SETS) {
+    for (let variant = 0; variant < 4; variant++) {
+      // Random point clouds tie surprisingly often, and a tie makes the
+      // ordering between the tied pair arbitrary. Resample rather than drop
+      // the variant, so the pool doesn't silently thin out to a handful.
+      for (let attempt = 0; attempt < 40; attempt++) {
+      const n = randInt(10, 12);
+      const labels = [...set.labels].sort(() => Math.random() - 0.5).slice(0, n);
+
+      const xLo = set.xRange[0], xHi = set.xRange[1];
+      const yLo = set.yRange[0], yHi = set.yRange[1];
+      const points = labels.map((label) => ({
+        label,
+        x: Math.round(xLo + Math.random() * (xHi - xLo)),
+        y: Math.round((yLo + Math.random() * (yHi - yLo)) / 10) * 10,
+      }));
+
+      // Guides sit at the thresholds the events actually use, so a region
+      // is readable off the axes rather than eyeballed.
+      const xCut = Math.round((xLo + xHi) / 2);
+      const yCut = Math.round((yLo + yHi) / 2 / 10) * 10;
+
+      const total = points.length;
+      const count = (fn: (p: { x: number; y: number }) => boolean) => points.filter(fn).length;
+      const fx = (v: number) => `${set.xPrefix ?? ""}${v}${set.xUnit}`;
+      const fy = (v: number) => `${set.yPrefix ?? ""}${v}${set.yUnit}`;
+
+      const events = [
+        {
+          id: "hi-x",
+          label: `${set.xLabel} above ${fx(xCut)}`,
+          hits: count((p) => p.x > xCut),
+          rationale: `${count((p) => p.x > xCut)} of ${total} points sit right of the ${fx(xCut)} line.`,
+        },
+        {
+          id: "hi-y",
+          label: `${set.yLabel} above ${fy(yCut)}`,
+          hits: count((p) => p.y > yCut),
+          rationale: `${count((p) => p.y > yCut)} of ${total} points sit above the ${fy(yCut)} line.`,
+        },
+        {
+          id: "both",
+          label: `Both above (${fx(xCut)} and ${fy(yCut)})`,
+          hits: count((p) => p.x > xCut && p.y > yCut),
+          rationale: `${count((p) => p.x > xCut && p.y > yCut)} of ${total} points are in the upper-right quadrant.`,
+        },
+        {
+          id: "neither",
+          label: `Both below (${fx(xCut)} and ${fy(yCut)})`,
+          hits: count((p) => p.x <= xCut && p.y <= yCut),
+          rationale: `${count((p) => p.x <= xCut && p.y <= yCut)} of ${total} points are in the lower-left quadrant.`,
+        },
+      ];
+
+      // A tie makes the ordering between the tied pair arbitrary, which
+      // would mark a correct reading wrong. Drop the variant instead.
+      const hitCounts = events.map((e) => e.hits);
+      if (new Set(hitCounts).size !== hitCounts.length) continue; // resample
+
+      const options: OptionItem[] = events.map((e) => ({
+        id: e.id,
+        label: e.label,
+        probValue: e.hits / total,
+        formattedProb: `${e.hits}/${total}`,
+        rationale: e.rationale,
+      }));
+
+      out.push({
+        id: nextId("scatter"),
+        category: "scatter-plots",
+        type: "rank-order",
+        title: `Read the Plot: ${set.xLabel} vs ${set.yLabel}`,
+        scenarioText: `Each point is one ${set.noun}. One is picked at random. Rank these events from MOST LIKELY to LEAST LIKELY by reading the plot.`,
+        difficulty: 2,
+        timeLimitSec: 60,
+        scatterData: {
+          xLabel: set.xLabel,
+          yLabel: set.yLabel,
+          xUnit: set.xPrefix ? `${set.xPrefix}${set.xUnit}` : set.xUnit,
+          yUnit: set.yPrefix ? `${set.yPrefix}${set.yUnit}` : set.yUnit,
+          points,
+          xGuides: [xCut],
+          yGuides: [yCut],
+        },
+        options,
+        correctRankOrder: rankOrderFromOptions(options),
+        explanation: `Count the points in each region out of ${total} total: ${rankOrderFromOptions(options)
+          .map((id) => {
+            const o = options.find((x) => x.id === id);
+            return `${o?.label} = ${o?.formattedProb}`;
+          })
+          .join(" > ")}.`,
+      });
+      break; // got a tie-free plot for this variant
+      }
+    }
+  }
+
+  return out;
+}
+
 /**
  * Builds the full procedural pool. Called fresh on every menu visit so the
  * specific numbers (and which options get drawn) vary between plays.
@@ -547,5 +697,6 @@ export function getProceduralProbabilityQuestions(): ProbabilityRankingQuestion[
     ...genDiceCardQuestions(),
     ...genPoissonQuestions(),
     ...genBayesianQuestions(),
+    ...genScatterQuestions(),
   ];
 }
