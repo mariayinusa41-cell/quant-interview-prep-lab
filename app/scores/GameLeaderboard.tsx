@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { getGameLimit } from "../../lib/gameLimits";
+import { recordRun } from "../progress/lastRun";
 
 // Drop-in end-of-run leaderboard. A game renders this on its game-over
 // screen with the score it just produced; the component submits that run
@@ -70,6 +72,22 @@ export default function GameLeaderboard({
   useEffect(() => {
     if (submitted.current) return;
     submitted.current = true;
+
+    // This component already sits on every results screen and already knows
+    // the game and the score, so recording the run here wires the profile's
+    // CONTINUE? panel for every game with a board at once, instead of
+    // editing each game's end screen separately.
+    const limit = getGameLimit(gameId);
+    if (limit?.href) {
+      recordRun({
+        game: limit.label,
+        href: limit.href,
+        score,
+        // Bankroll games rank on profit and have no meaningful maximum, so
+        // the panel shows a bare number rather than "x / y" for those.
+        total: limit.unit === "dollars" ? null : limit.maxScore,
+      });
+    }
 
     let cancelled = false;
 

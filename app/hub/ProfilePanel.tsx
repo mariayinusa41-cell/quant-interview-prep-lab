@@ -6,6 +6,7 @@ import { useProgress } from "../progress/ProgressContext";
 import { AvatarSprite } from "../profile/avatars";
 import { buildAchievements } from "../profile/achievements";
 import { getProgression } from "../progress/progression";
+import ContinuePanel from "./ContinuePanel";
 import SkillMap from "./SkillMap";
 import TrackReadiness from "./TrackReadiness";
 import { TRACK_BY_ID } from "../profile/tracks";
@@ -41,6 +42,9 @@ export default function ProfilePanel() {
 
   return (
     <div className="hub-panel">
+      {/* Renders only when a run finished in the last 30 minutes. */}
+      <ContinuePanel />
+
       <section className="section profile-card">
         <div className="profile-head">
           <div className="profile-avatar">

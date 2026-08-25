@@ -4,6 +4,7 @@ import { useProgress } from "../progress/ProgressContext";
 import { SKILL_LABELS, type SkillTag } from "../progress/skills";
 import { MAX_SKILL_LEVEL, allSkillLevels, weakestSkills } from "../progress/progression";
 import { useSound } from "../audio/SoundProvider";
+import { SKILL_HREF } from "../progress/skillLinks";
 
 // Every graded question fills a bar, and every weak skill is a link to the
 // lab that trains it — so the panel answers "what am I bad at" and "where do
@@ -21,34 +22,6 @@ const DOMAINS: { name: string; skills: SkillTag[] }[] = [
   { name: "Reasoning", skills: ["game-theory", "logic-puzzles", "estimation", "mental-math", "pattern-recognition"] },
 ];
 
-// Where each skill is actually trained. A weak bar is only useful if it
-// leads somewhere.
-const SKILL_HREF: Record<SkillTag, string> = {
-  "conditional-probability": "/probability",
-  combinatorics: "/probability",
-  "expected-value": "/probability/quitters-never-lose/casino/dice-lab",
-  distributions: "/statistics/distributions",
-  regression: "/statistics/crack-the-bot",
-  "selection-bias": "/statistics/backtests",
-  "hypothesis-testing": "/statistics",
-  approximation: "/calculus-linear-algebra",
-  optimization: "/calculus-linear-algebra",
-  "linear-algebra": "/calculus-linear-algebra",
-  "markov-chains": "/stochastic-processes/ruin-walker",
-  "optional-stopping": "/stochastic-processes/martingale-mutiny",
-  complexity: "/algorithms",
-  "dynamic-programming": "/algorithms",
-  "data-structures": "/quantdev/order-book",
-  "monte-carlo": "/algorithms",
-  "coding-implementation": "/quantdev",
-  "options-greeks": "/finance/delta-defender",
-  "market-making": "/finance/market-maker",
-  "game-theory": "/brain-teasers",
-  "logic-puzzles": "/brain-teasers",
-  estimation: "/drills/fermi",
-  "mental-math": "/drills/arithmetic",
-  "pattern-recognition": "/drills/sequences",
-};
 
 function Meter({ level }: { level: number }) {
   const tone = level >= 4 ? "is-strong" : level >= 2 ? "is-mid" : "is-weak";

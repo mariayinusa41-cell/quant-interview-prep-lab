@@ -9906,3 +9906,527 @@ body.exam-mode::after { display: none !important; }
   .skill-weakest-card { transition: none; }
   .skill-weakest-card:hover { transform: none; }
 }
+
+/* ==========================================================================
+   HUB — ARCADE REDESIGN
+   Shared shell used by Enter Arcade, Assessments, Leaderboard, My Jobs and
+   News. Everything below is built from the channel tokens only, so all seven
+   themes work without a per-theme override — including Paper and Frost,
+   which flip --ink-rgb / --void-rgb.
+   ========================================================================== */
+
+/* --- Hero panel: the "loud move" on a screen. Same shape as .section, but
+   sunk into the void with a scanline overlay so it reads as a cabinet. --- */
+.arc-hero {
+  position: relative;
+  border: 3px solid var(--pixel-accent);
+  border-radius: 8px;
+  background: rgba(var(--void-rgb), 0.72);
+  box-shadow: 4px 4px 0 rgba(var(--shadow-rgb), 0.55);
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+/* Assessments and Jobs get their loudness from content, not border colour. */
+.arc-hero.is-neutral {
+  border-color: var(--pixel-border);
+}
+
+.arc-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(var(--void-rgb), 0.28) 0 1px,
+    transparent 1px 3px
+  );
+}
+
+/* Hazard stripes — Assessments only. */
+.arc-hero.is-hazard::before {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(244, 197, 66, 0.05) 0 10px,
+    transparent 10px 20px
+  );
+}
+
+.arc-hero-body {
+  position: relative;
+  padding: clamp(20px, 3vw, 30px);
+}
+
+.arc-hero-split {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 22px;
+  padding: clamp(20px, 3vw, 30px);
+  align-items: center;
+}
+
+/* Marquee strip across the top of a hero or a cabinet card. */
+.arc-marquee {
+  position: relative;
+  padding: 8px 14px;
+  border-bottom: 3px solid var(--pixel-border);
+  background: repeating-linear-gradient(
+    90deg,
+    var(--pixel-accent) 0 14px,
+    var(--pixel-accent-light) 14px 20px
+  );
+}
+
+.arc-marquee-text {
+  font-family: var(--font-pixel);
+  font-size: 0.52rem;
+  letter-spacing: 0.1em;
+  color: #1a1410;
+}
+
+/* --- Shared typography --- */
+.arc-eyebrow {
+  margin: 0 0 10px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--pixel-primary);
+}
+
+.arc-eyebrow.is-bad { color: var(--pixel-bad); }
+
+.arc-hero-title {
+  margin: 0 0 12px;
+  font-family: var(--font-pixel);
+  font-weight: 400;
+  font-size: clamp(0.9rem, 2.4vw, 1.3rem);
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  color: var(--pixel-white);
+  text-shadow: 3px 3px 0 var(--pixel-border);
+}
+
+/* Count line that sits beside a section h2. */
+.arc-count {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(var(--ink-rgb), 0.45);
+}
+
+.arc-head-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.arc-intro {
+  margin: 0 0 16px;
+  font-size: 0.9rem;
+  max-width: 66ch;
+  color: rgba(var(--ink-rgb), 0.60);
+  text-wrap: pretty;
+}
+
+.arc-note {
+  margin: 16px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.6;
+  color: rgba(var(--ink-rgb), 0.45);
+}
+
+/* --- Filter / sort chip: one class, used by the lab filter, the leaderboard
+   sort and the news sub-tabs. 40px tall so it stays a comfortable target. --- */
+.arc-chip {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 9px 12px;
+  min-height: 40px;
+  border: 2px solid rgba(var(--ink-rgb), 0.22);
+  border-radius: 5px;
+  background: transparent;
+  color: rgba(var(--ink-rgb), 0.60);
+  cursor: pointer;
+  transition: border-color 120ms, color 120ms, background 120ms;
+}
+
+.arc-chip:hover { color: var(--pixel-white); }
+
+.arc-chip.is-on {
+  border-color: var(--pixel-accent);
+  background: rgba(244, 197, 66, 0.14);
+  color: var(--pixel-accent);
+}
+
+.arc-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+/* --- Primary CTA --- */
+.arc-cta {
+  font-family: var(--font-pixel);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  padding: 14px 18px;
+  border: 3px solid var(--pixel-bad);
+  border-radius: 6px;
+  background: linear-gradient(180deg, #e74c4c, #c23333);
+  color: #f7f4ee;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+  animation: cta-pulse 1.6s ease-in-out infinite;
+}
+
+.arc-cta:active { transform: translate(2px, 2px); }
+.arc-cta:disabled { opacity: 0.5; cursor: default; animation: none; }
+
+@keyframes cta-pulse {
+  0%, 100% { box-shadow: 4px 4px 0 var(--pixel-border), 0 0 0 0 rgba(231, 76, 76, 0.55); }
+  50%      { box-shadow: 4px 4px 0 var(--pixel-border), 0 0 0 9px rgba(231, 76, 76, 0); }
+}
+
+@keyframes bolt-throb {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1; }
+}
+
+@keyframes arc-ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* --- Screen 1: cabinet floor -------------------------------------------- */
+
+.arc-cab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.arc-cab {
+  display: block;
+  border: 3px solid var(--pixel-border);
+  border-radius: 8px;
+  background: rgba(var(--void-rgb), 0.28);
+  box-shadow: 4px 4px 0 rgba(var(--shadow-rgb), 0.45);
+  overflow: hidden;
+  text-decoration: none;
+  transition: transform 120ms, box-shadow 120ms;
+}
+
+.arc-cab:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 rgba(var(--shadow-rgb), 0.55);
+}
+
+/* The marquee takes the lab's tone colour at full saturation, with dark ink
+   printed on it — same dark-on-tone treatment PixelTileIcon already uses, and
+   deliberately theme-independent so a cabinet looks like a cabinet on Paper
+   and Frost too. */
+.arc-cab-marquee {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 12px;
+  border-bottom: 3px solid var(--pixel-border);
+}
+
+.arc-cab-marquee.tone-blue   { background: #4fb3e0; }
+.arc-cab-marquee.tone-amber  { background: #f4c542; }
+.arc-cab-marquee.tone-green  { background: #59c98f; }
+.arc-cab-marquee.tone-violet { background: #b98bff; }
+.arc-cab-marquee.tone-cyan   { background: #47f0c2; }
+.arc-cab-marquee.tone-rose   { background: #ff7b9c; }
+
+.arc-cab-marquee .teaser-tile-icon,
+.arc-cab-marquee svg {
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+
+.arc-cab-tag {
+  font-family: var(--font-pixel);
+  font-size: 0.46rem;
+  letter-spacing: 0.08em;
+  color: #1a1410;
+}
+
+.arc-cab-body { display: block; padding: 14px; }
+
+.arc-cab-title {
+  display: block;
+  margin-bottom: 7px;
+  font-family: var(--font-pixel);
+  font-size: 0.58rem;
+  line-height: 1.5;
+  color: var(--pixel-white);
+}
+
+.arc-cab-desc {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: rgba(var(--ink-rgb), 0.60);
+  text-wrap: pretty;
+}
+
+.arc-cab-foot {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 10px;
+  padding-top: 11px;
+  border-top: 2px solid rgba(var(--ink-rgb), 0.12);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: rgba(var(--ink-rgb), 0.45);
+}
+
+.arc-cab-foot strong { font-weight: 700; }
+.arc-cab-foot .is-free { color: var(--pixel-good); }
+.arc-cab-foot .is-cost { color: var(--pixel-accent); }
+.arc-cab-foot .is-pays { color: var(--pixel-good); }
+.arc-cab-foot .is-best { color: var(--pixel-white); }
+
+.arc-cab-play {
+  text-align: right;
+  color: var(--pixel-bad);
+  font-weight: 600;
+}
+
+/* --- Screen 1: daily challenge hero ------------------------------------- */
+
+.arc-daily-q {
+  margin: 0 0 12px;
+  font-size: 1.02rem;
+  line-height: 1.55;
+  color: var(--pixel-white);
+  text-wrap: pretty;
+}
+
+.arc-stat-row {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: rgba(var(--ink-rgb), 0.60);
+}
+
+.arc-stat-row strong { color: var(--pixel-white); }
+.arc-stat-row .is-reward { color: var(--pixel-accent); }
+.arc-stat-row .is-expiry { color: var(--pixel-bad); }
+
+.arc-daily-side {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+
+.arc-coins {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.arc-coin {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--pixel-border);
+  border-radius: 4px;
+  background: rgba(var(--void-rgb), 0.4);
+  opacity: 0.35;
+}
+
+.arc-coin.is-on { opacity: 1; background: rgba(244, 197, 66, 0.14); }
+.arc-coin.is-today { animation: coin-flash 1.6s ease-in-out infinite; }
+
+.arc-coin svg { width: 16px; height: 16px; }
+
+@keyframes coin-flash {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 197, 66, 0.5); }
+  50%      { box-shadow: 0 0 0 5px rgba(244, 197, 66, 0); }
+}
+
+.arc-spin-line {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: rgba(var(--ink-rgb), 0.45);
+}
+
+/* ---------- Profile: CONTINUE? panel ---------- */
+.continue-panel {
+  position: relative;
+  border: 3px solid var(--pixel-accent);
+  border-radius: 8px;
+  background: rgba(var(--void-rgb), 0.72);
+  box-shadow: 4px 4px 0 rgba(var(--shadow-rgb), 0.55);
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+.continue-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(to bottom, rgba(var(--void-rgb), 0.30) 0 1px, transparent 1px 3px),
+    radial-gradient(circle at 50% 40%, transparent 0 42%, rgba(var(--void-rgb), 0.65) 100%);
+}
+.continue-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  padding: clamp(20px, 3vw, 32px);
+  align-items: center;
+}
+.continue-eyebrow {
+  margin: 0 0 10px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--pixel-good);
+}
+.continue-title {
+  margin: 0;
+  font-family: var(--font-pixel);
+  font-size: clamp(1rem, 3vw, 1.6rem);
+  line-height: 1.4;
+  color: var(--pixel-accent);
+  text-shadow: 3px 3px 0 var(--pixel-border);
+}
+.continue-count {
+  margin: 10px 0;
+  font-family: var(--font-pixel);
+  font-size: 1.5rem;
+  color: var(--pixel-white);
+  animation: continue-blink 1s steps(1, end) infinite;
+}
+@keyframes continue-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.15; }
+}
+.continue-result {
+  margin: 0;
+  display: flex;
+  gap: 18px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: rgba(var(--ink-rgb), 0.6);
+}
+.continue-result strong { color: var(--pixel-white); }
+.continue-right { display: grid; gap: 12px; }
+.continue-next-label {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(var(--ink-rgb), 0.45);
+}
+.continue-card {
+  border: 3px solid var(--pixel-border);
+  border-radius: 6px;
+  background: rgba(var(--ink-rgb), 0.05);
+  padding: 14px;
+}
+.continue-card-title {
+  margin: 0 0 6px;
+  font-family: var(--font-pixel);
+  font-size: 0.6rem;
+  line-height: 1.5;
+  color: var(--pixel-white);
+}
+.continue-card-body {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: rgba(var(--ink-rgb), 0.6);
+}
+.continue-card-body strong { color: var(--pixel-primary); }
+.continue-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.continue-coin {
+  font-family: var(--font-pixel);
+  font-size: 0.62rem;
+  padding: 14px 18px;
+  border: 3px solid var(--pixel-bad);
+  border-radius: 6px;
+  background: linear-gradient(180deg, #e74c4c, #c23333);
+  color: var(--on-fill, #fff);
+  text-shadow: 1px 1px 0 rgba(var(--shadow-rgb), 0.55);
+  cursor: pointer;
+  animation: continue-pulse 1.6s ease-in-out infinite;
+}
+.continue-coin:active { transform: translate(2px, 2px); }
+@keyframes continue-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(231, 76, 76, 0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(231, 76, 76, 0); }
+}
+.continue-ghost {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  padding: 12px 14px;
+  border: 2px solid rgba(var(--ink-rgb), 0.25);
+  border-radius: 5px;
+  background: transparent;
+  color: rgba(var(--ink-rgb), 0.6);
+  cursor: pointer;
+}
+.continue-ghost:hover { border-color: var(--pixel-accent); color: var(--pixel-accent); }
+.continue-price {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: rgba(var(--ink-rgb), 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .continue-count, .continue-coin { animation: none; }
+}
+
+/* The lab icon is printed dark on its tone strip, the way a real cabinet
+   marquee is screen-printed — brightness(0) flattens PixelTileIcon's own
+   palette to ink without needing a second copy of every sprite. */
+.arc-cab-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  filter: brightness(0);
+  opacity: 0.82;
+}
+
+.arc-cab-icon svg { display: block; width: 22px; height: 22px; }
+
+.arc-cab-foot .arc-cab-play { grid-column: 1 / -1; }
+
+/* Every new decorative animation is opt-out, matching the block that already
+   covers .hub-tab.is-arcade. */
+@media (prefers-reduced-motion: reduce) {
+  .arc-cta,
+  .arc-coin.is-today,
+  .arc-bolt-dot.is-unmet,
+  .arc-live-dot,
+  .arc-ticker-track {
+    animation: none !important;
+  }
+  .arc-cab { transition: none; }
+}

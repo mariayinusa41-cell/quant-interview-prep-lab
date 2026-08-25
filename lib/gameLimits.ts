@@ -36,23 +36,25 @@ export type GameLimit = {
   label: string;
   /** Shown on the board so a profit column is not mistaken for points. */
   unit?: "points" | "dollars";
+  /** Route to play it again — used by the profile's CONTINUE? panel. */
+  href?: string;
 };
 
 export const GAME_LIMITS: Record<string, GameLimit> = {
   // ROUND_COUNT (10) x 4 points per interval question.
-  "drills-fermi-classic": { maxScore: 40, label: "Fermi Estimation" },
+  "drills-fermi-classic": { maxScore: 40, label: "Fermi Estimation", href: "/drills/fermi" },
   // TECH_ROUND_COUNT (8) x 3 points per technical interval question.
-  "drills-fermi-technical": { maxScore: 24, label: "Technical Estimation" },
+  "drills-fermi-technical": { maxScore: 24, label: "Technical Estimation", href: "/drills/fermi" },
   // ROUND_COUNT (8) x 3 points per ranking.
-  "drills-probability-ranking": { maxScore: 24, label: "Likelihood Ranking" },
+  "drills-probability-ranking": { maxScore: 24, label: "Likelihood Ranking", href: "/drills/probability-ranking" },
   // ROUND_COUNT (10) x 3 points per EV question.
-  "probability-casino-dice-ev-lab": { maxScore: 30, label: "Dice EV Lab" },
+  "probability-casino-dice-ev-lab": { maxScore: 30, label: "Dice EV Lab", href: "/probability/quitters-never-lose/casino/dice-lab" },
   // 5 cases x (80 base + 50 moment + 40 speed + 30 data) + 150 CLT round.
-  "statistics-read-the-shape": { maxScore: 1150, label: "Read the Shape" },
+  "statistics-read-the-shape": { maxScore: 1150, label: "Read the Shape", href: "/statistics/distributions" },
   // 4 levels x 250 for correctly funding the one real edge.
-  "statistics-twenty-backtests": { maxScore: 1000, label: "Twenty Backtests" },
+  "statistics-twenty-backtests": { maxScore: 1000, label: "Twenty Backtests", href: "/statistics/backtests" },
   // 5 cases x (100 base + 50 speed + 40 data + PREDICTIONS(3) x 10 hits).
-  "statistics-crack-the-bot": { maxScore: 1100, label: "Crack the Bot" },
+  "statistics-crack-the-bot": { maxScore: 1100, label: "Crack the Bot", href: "/statistics/crack-the-bot" },
 
   // --- Bankroll games: ranked on PROFIT, not final chips ---
   //
@@ -69,12 +71,10 @@ export const GAME_LIMITS: Record<string, GameLimit> = {
   // Ruin Walker: 40k simulated runs per loading gave a net surplus between
   // -82 and +119; at the $10 max stake that is roughly -820 to +1190.
   "stochastic-ruin-walker": {
-    minScore: -5000, maxScore: 5000, label: "Ruin Walker", unit: "dollars",
-  },
+    minScore: -5000, maxScore: 5000, label: "Ruin Walker", unit: "dollars", href: "/stochastic-processes/ruin-walker" },
   // Market Maker: 10 rounds of tick P&L at up to $50 per tick.
   "finance-market-maker": {
-    minScore: -30000, maxScore: 30000, label: "Market Maker", unit: "dollars",
-  },
+    minScore: -30000, maxScore: 30000, label: "Market Maker", unit: "dollars", href: "/finance/market-maker" },
 };
 
 /** How many runs one player may record per game per hour. */
