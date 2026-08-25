@@ -43,6 +43,13 @@
       "when": 1787602882218,
       "tag": "0005_tiny_lilith",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1787631319145,
+      "tag": "0006_unknown_chronomancer",
+      "breakpoints": true
     }
   ]
 }

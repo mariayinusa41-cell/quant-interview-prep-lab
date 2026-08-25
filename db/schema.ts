@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+import { index, integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 // Real accounts. `passwordHash`/`passwordSalt` are PBKDF2-SHA256 output
 // (100k iterations) via Web Crypto, not a plaintext or reversibly-encrypted
@@ -92,3 +92,40 @@ export const drillRuns = sqliteTable("drill_runs", {
   cardTimesJson: text("card_times_json"),
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
+
+// Per-game scores, one row per completed run.
+//
+// Separate from `drill_runs`, which is specific to the arithmetic race and
+// carries its own ghost-replay columns (splits, card times, seed). This one
+// is deliberately game-agnostic: every game reduces to a single ranked
+// `score`, with accuracy and duration as optional secondary stats, and
+// anything game-specific goes in `metaJson` rather than earning a column.
+//
+// Boards rank each player's BEST run, not every run — otherwise whoever
+// replays the most floods the top of the table, which measures persistence
+// rather than skill. The aggregation happens in the query; every run is
+// still stored so a personal best can be recomputed.
+export const gameScores = sqliteTable(
+  "game_scores",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id),
+    gameId: text("game_id").notNull(),
+    score: integer("score").notNull(),
+    // 0-100, or null for games with no notion of right/wrong.
+    accuracy: integer("accuracy"),
+    // Null for untimed games. Lower is better where it applies, so it is a
+    // display/tiebreak stat rather than the ranked one.
+    durationMs: integer("duration_ms"),
+    metaJson: text("meta_json"),
+    createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => ({
+    // The leaderboard query: filter by game, order by score.
+    gameScoreIdx: index("game_scores_game_score_idx").on(table.gameId, table.score),
+    // "my best at this game", and the per-user aggregation behind ranking.
+    userGameIdx: index("game_scores_user_game_idx").on(table.userId, table.gameId),
+  }),
+);

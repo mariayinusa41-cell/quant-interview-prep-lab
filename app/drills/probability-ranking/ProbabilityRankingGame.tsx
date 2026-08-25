@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import GameLeaderboard from "../../scores/GameLeaderboard";
 import {
   curatedProbabilityQuestions,
   scoreRanking,
@@ -359,6 +360,8 @@ export default function ProbabilityRankingGame() {
             <span className="fermi-score-of">/ {maxPts}</span>
           </div>
           <p className="fermi-pct">{pct}% accuracy</p>
+
+          <GameLeaderboard gameId={"drills-probability-ranking"} score={score} accuracy={pct} title="Likelihood Ranking leaderboard" />
 
           <div className="fermi-review">
             {answered.map((a, i) => (

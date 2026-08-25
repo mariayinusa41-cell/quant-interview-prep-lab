@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import GameLeaderboard from "../../../../scores/GameLeaderboard";
 import { generateDiceEVQuestions, type DiceEVQuestion, type DiceMechanic } from "./diceEVEngine";
 import { DiceVisualizer } from "./DiceVisualizer";
 import { AccessStartButton } from "../../../../access/TokenPlayButton";
@@ -262,6 +263,8 @@ export default function DiceEVGame() {
             <span className="fermi-score-of">/ {maxPts}</span>
           </div>
           <p className="fermi-pct">{pct}% accuracy</p>
+
+          <GameLeaderboard gameId={"probability-casino-dice-ev-lab"} score={score} accuracy={pct} title="Dice EV Lab leaderboard" />
 
           <div className="fermi-review">
             {answered.map((a, i) => (

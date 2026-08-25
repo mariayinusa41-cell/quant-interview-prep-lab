@@ -9355,3 +9355,76 @@ body.exam-mode::after { display: none !important; }
   line-height: 1.6;
   color: var(--ink-3, #9aa4b2);
 }
+
+/* ---------- Per-game end-of-run leaderboard ---------- */
+.gl-panel {
+  margin: 18px auto 6px;
+  max-width: 460px;
+  border: 3px solid var(--pixel-border);
+  border-radius: 6px;
+  background: rgba(var(--void-rgb), 0.34);
+  padding: 12px 14px 14px;
+  text-align: left;
+}
+.gl-title {
+  margin: 0 0 10px;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.gl-you {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 12px;
+  padding: 9px 11px;
+  border: 2px solid var(--pixel-accent, #f5c542);
+  border-radius: 5px;
+  background: rgba(244, 197, 66, 0.08);
+}
+.gl-you-place {
+  font-family: var(--font-pixel);
+  font-size: 0.8rem;
+  color: var(--pixel-accent, #f5c542);
+}
+.gl-you-meta {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--ink-3);
+}
+.gl-list { list-style: none; margin: 0; padding: 0; }
+.gl-row {
+  display: grid;
+  grid-template-columns: 1.6rem 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 4px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+.gl-row:last-child { border-bottom: none; }
+.gl-row.is-you {
+  background: rgba(244, 197, 66, 0.1);
+  border-radius: 4px;
+}
+.gl-rank { color: var(--ink-3); text-align: right; }
+.gl-name {
+  color: var(--pixel-white);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Pass holders keep the gold treatment they have on the global board. */
+.gl-name.is-pass { color: var(--pixel-accent, #f5c542); }
+.gl-stats { display: flex; align-items: center; gap: 9px; color: var(--ink-3); }
+.gl-score { color: var(--pixel-good, #59c98f); font-size: 0.8rem; }
+.gl-empty, .gl-signedout {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--ink-3);
+}
+.gl-signedout a { color: var(--pixel-accent, #f5c542); }
