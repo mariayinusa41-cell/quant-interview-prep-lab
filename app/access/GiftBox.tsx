@@ -44,14 +44,14 @@ export default function GiftBox() {
       const res = await fetch("/api/auth/claim-welcome-bonus", { method: "POST", credentials: "same-origin" });
       const data = (await res.json()) as { claimed?: boolean; tokens?: number; error?: string };
       if (!res.ok || !data.claimed) {
-        setErrorMsg(data.error ?? "Couldn't open it — try again.");
+        setErrorMsg(data.error ?? "Couldn't open it - try again.");
         setStatus("available");
         return;
       }
       grantTokens(data.tokens ?? 100);
       setStatus("opened");
     } catch {
-      setErrorMsg("Network error — try again.");
+      setErrorMsg("Network error - try again.");
       setStatus("available");
     }
   };

@@ -152,7 +152,7 @@ export default function DailyChallenge() {
       <div id="daily-challenge-body" hidden={!open}>
       {isGuest ? (
         <p className="daily-locked">
-          The daily challenge is the main way a free player earns tokens — it needs an account.
+          The daily challenge is the main way a free player earns tokens - it needs an account.
           Guests can still play every always-free game without limit.
         </p>
       ) : (
@@ -221,7 +221,7 @@ export default function DailyChallenge() {
 
           {answered && (
             <p className={gotItRight ? "daily-card-explain is-correct" : "daily-card-explain is-wrong"}>
-              {gotItRight ? `Correct — +${DAILY_REWARD} tokens. ` : "Not quite. "}
+              {gotItRight ? `Correct - +${DAILY_REWARD} tokens. ` : "Not quite. "}
               {question.explanation}
             </p>
           )}
@@ -232,7 +232,7 @@ export default function DailyChallenge() {
 
           {!showChoices && !spinAvailable && (
             <p className="daily-card-streak">
-              Day {filled} of {STREAK_TARGET} — {daysToSpin} more for a free prize spin.
+              Day {filled} of {STREAK_TARGET} - {daysToSpin} more for a free prize spin.
             </p>
           )}
         </>

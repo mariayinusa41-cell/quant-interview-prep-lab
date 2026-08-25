@@ -46,7 +46,7 @@ export default function DPBuilder() {
   return (
     <div className="calc-subgame">
       <p className="calc-subgame-intro">
-        Fill in the memo table left to right, one cell at a time. The base cases are given — every other cell
+        Fill in the memo table left to right, one cell at a time. The base cases are given - every other cell
         follows from the recurrence below.
       </p>
 

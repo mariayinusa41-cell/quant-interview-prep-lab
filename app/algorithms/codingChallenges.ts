@@ -44,7 +44,7 @@ const BASE_CHALLENGES: CodingChallenge[] = [
         prompt: "What's the time complexity of reversing a string of length n this way?",
         choices: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
         answer: 2,
-        explanation: "Each of split/reverse/join touches every character once — linear work.",
+        explanation: "Each of split/reverse/join touches every character once - linear work.",
       },
     ],
     postQuestions: [
@@ -52,7 +52,7 @@ const BASE_CHALLENGES: CodingChallenge[] = [
         prompt: "What would calling your function twice in a row on the same string return?",
         choices: ["The original string back", "An error", "An empty string", "Undefined behavior"],
         answer: 0,
-        explanation: "Reversing is its own inverse — reverse(reverse(s)) === s.",
+        explanation: "Reversing is its own inverse - reverse(reverse(s)) === s.",
       },
       {
         prompt: "What's the space complexity of the split/reverse/join approach?",
@@ -110,7 +110,7 @@ const BASE_CHALLENGES: CodingChallenge[] = [
       {
         prompt: "What's a correct (if slower) alternative that avoids bitwise operators entirely?",
         choices: [
-          "Repeatedly divide by 2, checking the remainder each time, until you hit 1 or an odd remainder — O(log n)",
+          "Repeatedly divide by 2, checking the remainder each time, until you hit 1 or an odd remainder - O(log n)",
           "Sort the digits of n",
           "Convert n to a string and check its length",
           "Always return true",
@@ -167,10 +167,10 @@ const BASE_CHALLENGES: CodingChallenge[] = [
       {
         prompt: "Why does your solution return -2 for an all-negative input like [-5, -2, -8]?",
         choices: [
-          "It's a bug — it should return 0",
+          "It's a bug - it should return 0",
           "Because the least-negative single element is the best any contiguous subarray can do here",
           "Because the array length is 3",
-          "It shouldn't — that's undefined behavior",
+          "It shouldn't - that's undefined behavior",
         ],
         answer: 1,
         explanation: "With every element negative, any subarray longer than one element only makes the sum worse, so the best is the least-bad single element.",
@@ -187,7 +187,7 @@ const BASE_CHALLENGES: CodingChallenge[] = [
     level: "advanced",
     title: "Fast Fibonacci",
     prompt:
-      "Write fib(n) that returns the nth Fibonacci number (fib(0) = 0, fib(1) = 1). One of the test cases uses n = 42 under a 3-second limit — naive recursion is order-of-seconds too slow for that, so it specifically tests whether your solution avoids exponential blowup.",
+      "Write fib(n) that returns the nth Fibonacci number (fib(0) = 0, fib(1) = 1). One of the test cases uses n = 42 under a 3-second limit - naive recursion is order-of-seconds too slow for that, so it specifically tests whether your solution avoids exponential blowup.",
     functionName: "fib",
     starterCode: `function fib(n) {
   // your code here — naive recursion will time out on the larger test case
@@ -204,7 +204,7 @@ const BASE_CHALLENGES: CodingChallenge[] = [
       { args: [1], expected: 1, label: "fib(1)" },
       { args: [10], expected: 55, label: "fib(10)" },
       { args: [20], expected: 6765, label: "fib(20)" },
-      { args: [42], expected: 267914296, label: "fib(42) — under a 3s limit" },
+      { args: [42], expected: 267914296, label: "fib(42) - under a 3s limit" },
     ],
     preQuestions: [
       {
@@ -229,19 +229,19 @@ const BASE_CHALLENGES: CodingChallenge[] = [
       {
         prompt: "If your fib(42) test passed within the time limit, what does that actually tell you?",
         choices: [
-          "That your implementation avoids naive O(2ⁿ) recursion — it's doing something closer to O(n)",
-          "Nothing — the test case was too easy either way",
+          "That your implementation avoids naive O(2ⁿ) recursion - it's doing something closer to O(n)",
+          "Nothing - the test case was too easy either way",
           "That JavaScript is always fast enough for recursion",
           "That the test case was wrong",
         ],
         answer: 0,
-        explanation: "Naive recursive fib(42) makes on the order of hundreds of millions of redundant calls (multiple seconds even in a fast engine) — finishing instantly is direct evidence you're reusing work instead of recomputing it.",
+        explanation: "Naive recursive fib(42) makes on the order of hundreds of millions of redundant calls (multiple seconds even in a fast engine) - finishing instantly is direct evidence you're reusing work instead of recomputing it.",
       },
       {
         prompt: "What's the space complexity of an iterative Fibonacci that only keeps the last two values?",
         choices: ["O(1)", "O(n)", "O(2ⁿ)", "O(log n)"],
         answer: 0,
-        explanation: "You only need `a` and `b` at any point — constant extra space, independent of n.",
+        explanation: "You only need `a` and `b` at any point - constant extra space, independent of n.",
       },
     ],
   },

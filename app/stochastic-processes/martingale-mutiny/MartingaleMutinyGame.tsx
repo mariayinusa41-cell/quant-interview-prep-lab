@@ -22,7 +22,7 @@ import "./mutiny.css";
 // The guided fill-in-the-blank option is only offered for the first few
 // legs — after that it's just "Sail on" like normal, no standing toggle.
 const GUIDED_LEGS = 3;
-const BLANK_TOLERANCE = 0.5; // absolute cargo units — see blankFormulaAnswer's rounding-gap note
+const BLANK_TOLERANCE = 0.5; // absolute cargo units - see blankFormulaAnswer's rounding-gap note
 
 type Phase = "briefing" | "sailing" | "predicting" | "busted" | "targeted" | "stopped";
 
@@ -161,18 +161,18 @@ export default function MartingaleMutinyGame() {
           <p className="quiz-panel-title">A positive edge. A proportional storm. When do you drop anchor?</p>
           <p>
             Your boat sets out with {GAME.X0} in cargo, aiming for the island. Each leg of the crossing you either
-            gain {GAME.MU} on average (rougher water the further you go), or — with a small Poisson-arrival chance —
+            gain {GAME.MU} on average (rougher water the further you go), or - with a small Poisson-arrival chance -
             a storm hits and halves everything in your hold. Sail on for more expected cargo, or drop anchor and bank
             what you've got.
           </p>
           <div className="stochastic-rule-grid">
             <div><strong>EDGE</strong><span>+{GAME.MU} avg/leg</span><small>growing swell each leg</small></div>
             <div><strong>STORM</strong><span>λ = {GAME.LAMBDA}</span><small>~{pct(P_SHOCK)} chance/leg, halves your hold</small></div>
-            <div><strong>ANCHOR</strong><span>bank now</span><small>a valid stopping time — you'll have to predict first</small></div>
+            <div><strong>ANCHOR</strong><span>bank now</span><small>a valid stopping time - you'll have to predict first</small></div>
           </div>
           <p className="mm-step-hint">
             Interview lens: a flat edge against a proportional loss doesn't compound forever. Before you can drop
-            anchor, you'll have to estimate the recursion's expected value yourself — no live readout while you sail.
+            anchor, you'll have to estimate the recursion's expected value yourself - no live readout while you sail.
           </p>
           <AccessStartButton gameId="stochastic-martingale-mutiny" title="Martingale Mutiny" defaultLabel="Set sail" className="continue-btn" onStart={start}>
             Set sail
@@ -218,7 +218,7 @@ export default function MartingaleMutinyGame() {
       phase === "busted"
         ? { outcome: "loss" as const, title: "SHIPWRECKED", sub: "A storm (or a run of bad legs) dropped your hold to the shipwreck line. The crew's out." }
         : phase === "targeted"
-          ? { outcome: "win" as const, title: "ISLAND REACHED", sub: `You cleared the ${GAME.TARGET}-cargo island — well above the ~${EQUILIBRIUM_CEILING.toFixed(0)} typical crossing.` }
+          ? { outcome: "win" as const, title: "ISLAND REACHED", sub: `You cleared the ${GAME.TARGET}-cargo island - well above the ~${EQUILIBRIUM_CEILING.toFixed(0)} typical crossing.` }
           : {
               outcome: (x >= theoreticalNow ? "win" : "loss") as "win" | "loss",
               title: x >= theoreticalNow ? "BANKED AHEAD OF THEORY" : "BANKED BEHIND THEORY",
@@ -327,12 +327,12 @@ export default function MartingaleMutinyGame() {
 
         {pendingStep ? (
           <div className="stochastic-explain mutiny-blank-panel">
-            <p className="label">Fill in the blank — leg {step + 1}</p>
+            <p className="label">Fill in the blank - leg {step + 1}</p>
             {pendingStep.shocked ? (
               <>
                 <p>
                   Storm check: a Poisson-arrival event with rate <TeX>{String.raw`\lambda`}</TeX> = {GAME.LAMBDA} gives{" "}
-                  <TeX>{String.raw`P(\text{storm}) = 1 - e^{-\lambda}`}</TeX> = {pct(P_SHOCK)} per leg — it hit this
+                  <TeX>{String.raw`P(\text{storm}) = 1 - e^{-\lambda}`}</TeX> = {pct(P_SHOCK)} per leg - it hit this
                   time. A storm takes a fixed FRACTION, so it costs more the more you are carrying.
                 </p>
                 <TeX block>{String.raw`X_{n} = X_{n-1} \times ${GAME.SHOCK_MULTIPLIER}`}</TeX>
@@ -344,7 +344,7 @@ export default function MartingaleMutinyGame() {
             ) : (
               <>
                 <p>
-                  Storm check: <TeX>{String.raw`1 - e^{-\lambda}`}</TeX> = {pct(P_SHOCK)} per leg — didn&rsquo;t hit
+                  Storm check: <TeX>{String.raw`1 - e^{-\lambda}`}</TeX> = {pct(P_SHOCK)} per leg - didn&rsquo;t hit
                   this time. So this leg is a calm-water draw:
                 </p>
                 <TeX block>{String.raw`X_{n} = X_{n-1} + \mu + \sigma_{n} \cdot z`}</TeX>
@@ -357,7 +357,7 @@ export default function MartingaleMutinyGame() {
 
             {/* Where each number in the line above actually comes from. Two of
                 the three are computed, not constants, and nothing on screen
-                said so — the drift is fixed, the spread GROWS every leg, and
+                said so - the drift is fixed, the spread GROWS every leg, and
                 z is a fresh random draw. */}
             <details className="mutiny-sheet">
               <summary>Where do these numbers come from?</summary>
@@ -371,7 +371,7 @@ export default function MartingaleMutinyGame() {
                 <div>
                   <dt><TeX>{String.raw`\mu`}</TeX></dt>
                   <dd>
-                    Calm-water drift. A <em>fixed</em> <strong>+{GAME.MU}</strong> every calm leg — this one never
+                    Calm-water drift. A <em>fixed</em> <strong>+{GAME.MU}</strong> every calm leg - this one never
                     changes.
                   </dd>
                 </div>
@@ -390,7 +390,7 @@ export default function MartingaleMutinyGame() {
                   <dt><TeX>{String.raw`z`}</TeX></dt>
                   <dd>
                     A fresh draw from the standard Normal{" "}
-                    <TeX>{String.raw`\mathcal{N}(0,1)`}</TeX> — mean 0, spread 1. This leg it came up{" "}
+                    <TeX>{String.raw`\mathcal{N}(0,1)`}</TeX> - mean 0, spread 1. This leg it came up{" "}
                     <strong>{(Math.round((pendingStep.zUsed ?? 0) * 100) / 100).toFixed(2)}</strong>. Negative means a
                     bad draw, positive a good one. This is the only genuinely random part.
                   </dd>

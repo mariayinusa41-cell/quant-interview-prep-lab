@@ -178,7 +178,7 @@ export default function ScratchOffGame() {
         if (!r) return null;
         const checked = { ...r.checked };
         r.questionSet.forEach((_, i) => {
-          if (!checked[i]) checked[i] = true; // forfeited — ungraded, so it reads as incorrect
+          if (!checked[i]) checked[i] = true; // forfeited - ungraded, so it reads as incorrect
         });
         return { ...r, checked, forfeited: true, phase: "decision" };
       });
@@ -494,11 +494,11 @@ export default function ScratchOffGame() {
         <div className="quiz-panel">
           {round.forfeited && (
             <p className="qty-hint" style={{ color: "#f05a5a" }}>
-              Time ran out — any unanswered questions were marked incorrect.
+              Time ran out - any unanswered questions were marked incorrect.
             </p>
           )}
           <p className="quiz-panel-title">
-            Knowing the true odds and the expected payout — how many {TICKET_THEMES[round.price].name} tickets do you
+            Knowing the true odds and the expected payout - how many {TICKET_THEMES[round.price].name} tickets do you
             want in total?
           </p>
           <div className="ticket-qty-picker">
@@ -517,11 +517,11 @@ export default function ScratchOffGame() {
           </div>
           <p className="qty-hint">
             {round.pendingQty === 0
-              ? `Walk away — your ${fmt(round.price)} is refunded.`
+              ? `Walk away - your ${fmt(round.price)} is refunded.`
               : `Total cost: ${fmt(round.pendingQty * round.price)} (bankroll allows up to ${maxQtyFor(round.price)} at once).`}
           </p>
           <button type="button" className="continue-btn" onClick={confirmQuantity}>
-            {round.pendingQty === 0 ? "Confirm — walk away" : `Buy ${round.pendingQty}`}
+            {round.pendingQty === 0 ? "Confirm - walk away" : `Buy ${round.pendingQty}`}
           </button>
         </div>
       )}
@@ -530,7 +530,7 @@ export default function ScratchOffGame() {
         <div className="scratch-stage">
           {round.quantity === 0 && (
             <p className="pirate-story-line" style={{ fontSize: "0.95rem", color: "rgba(255,255,255,0.6)" }}>
-              You walked away — your {fmt(round.price)} is refunded. Here's what that ticket would have paid, for the
+              You walked away - your {fmt(round.price)} is refunded. Here's what that ticket would have paid, for the
               record.
             </p>
           )}
@@ -610,7 +610,7 @@ export default function ScratchOffGame() {
             {questionsAnsweredTotal === 1 ? "" : "s"} answered), you spent {fmt(totalSpent)} and won back {fmt(totalWon)}.
           </p>
           <p className="pirate-story-line" style={{ fontSize: "0.95rem", color: "rgba(255,255,255,0.55)" }}>
-            Most tickets in this game pay out 7/8 of what you paid — a 12.5% house edge. Every once in a while the
+            Most tickets in this game pay out 7/8 of what you paid - a 12.5% house edge. Every once in a while the
             odds flip in your favor; the trick is spotting it on the flip-reveal and sizing up before you scratch.
             Either way, the only guaranteed way to keep what you're up is to stop.
           </p>
@@ -817,7 +817,7 @@ function QuestionCard({
         </div>
         {isChecked && (
           <p className={isCorrect ? "quiz-q-explain is-correct" : "quiz-q-explain is-wrong"}>
-            {isCorrect ? "✓ Correct. " : `✗ Not quite — the answer is ${display}. `}
+            {isCorrect ? "✓ Correct. " : `✗ Not quite - the answer is ${display}. `}
             {explanation}
           </p>
         )}

@@ -15,13 +15,13 @@ import { useSound } from "../../audio/SoundProvider";
 // price-time priority, fills print at the resting (maker) price, a cancelled
 // order must be invisible to later matching.
 const SCRIPT: ScriptStep[] = [
-  { op: "add", label: "Rest SELL a1 — 5 @ 101", id: "a1", side: "sell", price: 101, qty: 5, expected: [] },
-  { op: "add", label: "Rest SELL a2 — 3 @ 101 (behind a1)", id: "a2", side: "sell", price: 101, qty: 3, expected: [] },
-  { op: "add", label: "Rest SELL a3 — 10 @ 102", id: "a3", side: "sell", price: 102, qty: 10, expected: [] },
-  { op: "add", label: "BUY b1 — 4 @ 100 does not cross", id: "b1", side: "buy", price: 100, qty: 4, expected: [] },
+  { op: "add", label: "Rest SELL a1 - 5 @ 101", id: "a1", side: "sell", price: 101, qty: 5, expected: [] },
+  { op: "add", label: "Rest SELL a2 - 3 @ 101 (behind a1)", id: "a2", side: "sell", price: 101, qty: 3, expected: [] },
+  { op: "add", label: "Rest SELL a3 - 10 @ 102", id: "a3", side: "sell", price: 102, qty: 10, expected: [] },
+  { op: "add", label: "BUY b1 - 4 @ 100 does not cross", id: "b1", side: "buy", price: 100, qty: 4, expected: [] },
   {
     op: "add",
-    label: "BUY b2 — 6 @ 101 sweeps a1 then a2",
+    label: "BUY b2 - 6 @ 101 sweeps a1 then a2",
     id: "b2", side: "buy", price: 101, qty: 6,
     expected: [
       { price: 101, qty: 5, maker: "a1", taker: "b2" },
@@ -29,11 +29,11 @@ const SCRIPT: ScriptStep[] = [
     ],
   },
   { op: "cancel", label: "Cancel a2 (2 left resting)", id: "a2", expected: true },
-  { op: "cancel", label: "Cancel a2 again — already gone", id: "a2", expected: false },
+  { op: "cancel", label: "Cancel a2 again - already gone", id: "a2", expected: false },
   { op: "cancel", label: "Cancel an unknown id", id: "zz", expected: false },
   {
     op: "add",
-    label: "BUY b3 — 5 @ 102 must skip cancelled a2",
+    label: "BUY b3 - 5 @ 102 must skip cancelled a2",
     id: "b3", side: "buy", price: 102, qty: 5,
     expected: [{ price: 102, qty: 5, maker: "a3", taker: "b3" }],
   },
@@ -203,7 +203,7 @@ export default function OrderBookGame() {
         <div className="pixel-stage lab-briefing">
           <p className="quiz-panel-title">Build the book. Then survive the cancel storm.</p>
           <p>
-            An exchange matching engine sees far more cancels than fills — most resting orders never
+            An exchange matching engine sees far more cancels than fills - most resting orders never
             trade. Getting the matching logic right is table stakes; the interview is really about
             what your <code>cancel</code> costs.
           </p>
@@ -216,8 +216,8 @@ export default function OrderBookGame() {
             ].map(([t, s]) => <div key={t}><strong>{t}</strong><span>{s}</span></div>)}
           </div>
           <p className="mm-step-hint">
-            Interview lens: nearly everyone writes a working book. The follow-up — &ldquo;now cancel
-            is on the hot path, what does it cost you?&rdquo; — is what separates candidates.
+            Interview lens: nearly everyone writes a working book. The follow-up - &ldquo;now cancel
+            is on the hot path, what does it cost you?&rdquo; - is what separates candidates.
           </p>
           <AccessStartButton
             gameId="quantdev-order-book"
@@ -311,7 +311,7 @@ export default function OrderBookGame() {
               {!result.latencyPassed && (
                 <p className="quiz-q-explain is-wrong">
                   The book is correct but the cancel path is not constant time. A hash map from id
-                  to order is only half the fix — <code>splice</code> still shifts every element
+                  to order is only half the fix - <code>splice</code> still shifts every element
                   after the one you removed. Mark the order dead and skip it while matching instead.
                 </p>
               )}

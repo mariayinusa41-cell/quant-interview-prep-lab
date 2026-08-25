@@ -113,7 +113,7 @@ export default function PickGame() {
       {phase === "pick" && (
         <div className="pixel-stage" style={{ marginTop: 16 }}>
           <p className="quiz-panel-title" style={{ marginBottom: 16 }}>
-            Fill in one digit per column — this is your ticket. ${WAGER} wager.
+            Fill in one digit per column - this is your ticket. ${WAGER} wager.
           </p>
           <div className="pick-ticket-grid">
             {Array.from({ length: n }, (_, col) => (
@@ -236,7 +236,7 @@ function PickQuestionCard({
         </div>
         {isChecked && (
           <p className={isCorrect ? "quiz-q-explain is-correct" : "quiz-q-explain is-wrong"}>
-            {isCorrect ? "✓ Correct. " : `✗ Not quite — the answer is ${display}. `}
+            {isCorrect ? "✓ Correct. " : `✗ Not quite - the answer is ${display}. `}
             {explanation}
           </p>
         )}

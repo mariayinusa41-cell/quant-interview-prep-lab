@@ -58,19 +58,19 @@ export default function InterviewQuestionsPanel() {
       <section className="section">
         <h2>Interview Questions</h2>
         <p className="section-intro">
-          Real questions pulled from public forum threads — Reddit and LeetCode Discuss so far — filtered for
+          Real questions pulled from public forum threads - Reddit and LeetCode Discuss so far - filtered for
           actual OA/interview reports and tagged by firm and topic.
         </p>
 
         <div className="iq-disclaimer">
           Community-sourced, not firm-confirmed. Wording, exact numbers, and even the firm attribution can be
-          off — treat these as "here's roughly what people are reporting," not a verified question bank. Click
+          off - treat these as "here's roughly what people are reporting," not a verified question bank. Click
           through to the source thread before trusting any specific detail.
         </div>
 
         {QUESTIONS.length <= 5 && (
           <div className="iq-disclaimer iq-disclaimer-seed">
-            Only {QUESTIONS.length} example entries right now — this is the scraper's seed data, not a live
+            Only {QUESTIONS.length} example entries right now - this is the scraper's seed data, not a live
             scrape. Run <code>python3 quant_scraper.py</code> from the repo root (needs internet access) to pull
             fresh threads into <code>data/interview-questions.json</code>, then redeploy.
           </div>
@@ -176,7 +176,7 @@ export default function InterviewQuestionsPanel() {
         </div>
 
         <p className="assess-footnote">
-          Sourced from public forum posts by quant_scraper.py — reddit.com and leetcode.com discussion threads,
+          Sourced from public forum posts by quant_scraper.py - reddit.com and leetcode.com discussion threads,
           filtered by firm name and interview-signal keywords. Not affiliated with or endorsed by any of the
           firms named above.
         </p>

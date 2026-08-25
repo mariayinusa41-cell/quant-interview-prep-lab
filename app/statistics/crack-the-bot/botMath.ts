@@ -7,11 +7,11 @@
 export type BotRule = "momentum" | "reversion" | "lag3" | "trend" | "random";
 
 export const RULE_LABEL: Record<BotRule, string> = {
-  momentum: "Momentum — follows the last move",
-  reversion: "Mean reversion — fades the last move",
-  lag3: "Delayed — reacts to the move 3 ticks ago",
-  trend: "Trend — follows the 5-tick average",
-  random: "No rule — it's trading randomly",
+  momentum: "Momentum - follows the last move",
+  reversion: "Mean reversion - fades the last move",
+  lag3: "Delayed - reacts to the move 3 ticks ago",
+  trend: "Trend - follows the 5-tick average",
+  random: "No rule - it's trading randomly",
 };
 
 export const RULE_ORDER: BotRule[] = ["momentum", "reversion", "lag3", "trend", "random"];

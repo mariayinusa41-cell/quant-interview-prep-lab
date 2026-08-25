@@ -160,11 +160,11 @@ export default function ArithmeticDrillGame() {
         error?: string;
       };
       if (data.error) {
-        setSetupMsg("Couldn't reach the leaderboard — starting solo instead.");
+        setSetupMsg("Couldn't reach the leaderboard - starting solo instead.");
         setMode("solo");
         setGhostRun(null);
       } else if (!data.run) {
-        setSetupMsg("No one has set a run yet — play solo and you'll become the first ghost.");
+        setSetupMsg("No one has set a run yet - play solo and you'll become the first ghost.");
         setMode("solo");
         setGhostRun(null);
       } else {
@@ -177,7 +177,7 @@ export default function ArithmeticDrillGame() {
         });
       }
     } catch {
-      setSetupMsg("Couldn't reach the leaderboard — starting solo instead.");
+      setSetupMsg("Couldn't reach the leaderboard - starting solo instead.");
       setMode("solo");
       setGhostRun(null);
     } finally {
@@ -263,7 +263,7 @@ export default function ArithmeticDrillGame() {
       <p className="pirate-kicker">Outcry</p>
       <h1 className="pirate-story-line answer-title">Arithmetic Drill</h1>
       <p className="quiz-q-prompt" style={{ marginTop: 6, marginBottom: 16 }}>
-        {DECK_SIZE} cards, one at a time. Take a card first and it's <strong>+1</strong> — answer wrong and it's{" "}
+        {DECK_SIZE} cards, one at a time. Take a card first and it's <strong>+1</strong> - answer wrong and it's{" "}
         <strong>−1</strong> and gone. One shot per card, so don't buzz until you're sure.
       </p>
 
@@ -387,7 +387,7 @@ export default function ArithmeticDrillGame() {
             <ResultBanner
               outcome={outcome === "loss" ? "loss" : "win"}
               title={outcome === "win" ? "YOU WIN" : outcome === "loss" ? "OPPONENT WINS" : "TIE"}
-              sub={`You took ${yourScore} cards — opponent took ${ghostScore} of ${deck.length}`}
+              sub={`You took ${yourScore} cards - opponent took ${ghostScore} of ${deck.length}`}
             />
           ) : (
             <ResultBanner

@@ -11,12 +11,12 @@ type Step = { term: string; body: string; note?: string; demo?: "table" | "tstat
 const STEPS: Step[] = [
   {
     term: "The job",
-    body: "A rival algorithm is trading in your market. It follows one fixed rule. Nobody will tell you what it is — you have to work it out from what it does.",
+    body: "A rival algorithm is trading in your market. It follows one fixed rule. Nobody will tell you what it is - you have to work it out from what it does.",
     note: "Crack it, and you can predict its next move before it makes it.",
   },
   {
     term: "What you see",
-    body: "Each tick you get the price move and what the bot did — BUY, or SELL. That's it. The rule is hidden underneath.",
+    body: "Each tick you get the price move and what the bot did - BUY, or SELL. That's it. The rule is hidden underneath.",
     demo: "table",
   },
   {
@@ -32,13 +32,13 @@ const STEPS: Step[] = [
   },
   {
     term: "The trap",
-    body: "You're testing three hypotheses at once. Test enough things and one WILL cross 2 by luck alone — roughly a 1-in-7 chance across three tests even when nothing is there.",
+    body: "You're testing three hypotheses at once. Test enough things and one WILL cross 2 by luck alone - roughly a 1-in-7 chance across three tests even when nothing is there.",
     demo: "trap",
     note: "So the honest bar for three tests is p < 0.0167, not 0.05. That's a Bonferroni correction.",
   },
   {
     term: "The clock",
-    body: "More data means a sharper t-stat — but you're on a timer, and every extra tick you request burns it. Deciding when you have enough evidence IS the skill.",
+    body: "More data means a sharper t-stat - but you're on a timer, and every extra tick you request burns it. Deciding when you have enough evidence IS the skill.",
     note: "Call it early and right for the biggest score. Call it wrong and you lose the case.",
   },
 ];
@@ -75,7 +75,7 @@ function DemoTable() {
 function DemoTStat({ trap }: { trap?: boolean }) {
   const rows = trap
     ? [
-        { label: "Previous tick", t: 2.11, p: 0.035, verdict: "looks real — but see below" },
+        { label: "Previous tick", t: 2.11, p: 0.035, verdict: "looks real - but see below" },
         { label: "3 ticks ago", t: 0.44, p: 0.66, verdict: "noise" },
         { label: "5-tick average", t: 1.02, p: 0.31, verdict: "noise" },
       ]
@@ -94,7 +94,7 @@ function DemoTStat({ trap }: { trap?: boolean }) {
           <span className="ctb-tstat-verdict">{r.verdict}</span>
         </div>
       ))}
-      {trap && <p className="ctb-demo-warning">p = 0.035 clears 0.05 — but not the corrected 0.0167 bar. This is a false positive.</p>}
+      {trap && <p className="ctb-demo-warning">p = 0.035 clears 0.05 - but not the corrected 0.0167 bar. This is a false positive.</p>}
     </div>
   );
 }

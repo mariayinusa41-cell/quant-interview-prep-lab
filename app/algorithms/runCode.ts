@@ -64,7 +64,7 @@ export function runTests(
     };
 
     const timer = setTimeout(() => {
-      finish({ results: [], crashed: true, timedOut: true, crashMessage: "Timed out — likely an infinite loop or an approach too slow for the input size." });
+      finish({ results: [], crashed: true, timedOut: true, crashMessage: "Timed out - likely an infinite loop or an approach too slow for the input size." });
     }, timeoutMs);
 
     worker.onmessage = (e: MessageEvent<RunResult>) => finish(e.data);

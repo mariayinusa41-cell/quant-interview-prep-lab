@@ -18,7 +18,7 @@ export const LABS = [
     href: "/brain-teasers",
     tag: "Logic",
     title: "Brain Teasers",
-    desc: "Invariants, symmetry, and induction — played out step by step.",
+    desc: "Invariants, symmetry, and induction - played out step by step.",
     tone: "blue" as const,
     icon: "target" as const,
     tracks: ["econ-consulting", "quant-trading"] as TrackId[],

@@ -69,13 +69,13 @@ export const curatedLevels: LevelPuzzle[] = [
     ],
     solution: { actions: { c1: 1, c2: 1, c3: -1, c4: -1 }, pnl: 2.0 },
     explanation:
-      "Alpha (1G+1S) + Beta (1S+1Pt) − 1 Silver = exactly 1 Gold + 1 Silver + 1 Platinum, same as the ETF. Cost = $63 + $99 − $12 = $150. Sell the ETF at $152. Every commodity nets to 0. PnL = +$2.00. (Sizing this hedge up — buying more of each leg — locks in more PnL for the same zero risk, up to the position cap.)",
+      "Alpha (1G+1S) + Beta (1S+1Pt) − 1 Silver = exactly 1 Gold + 1 Silver + 1 Platinum, same as the ETF. Cost = $63 + $99 − $12 = $150. Sell the ETF at $152. Every commodity nets to 0. PnL = +$2.00. (Sizing this hedge up - buying more of each leg - locks in more PnL for the same zero risk, up to the position cap.)",
   },
   {
     id: "lvl-4",
     level: 4,
     title: "Industrial & Energy Mega-Basket",
-    description: "4 commodities — Gold, Silver, Copper, Oil. Net all four exposures to zero.",
+    description: "4 commodities - Gold, Silver, Copper, Oil. Net all four exposures to zero.",
     timeLimitSec: 50,
     cards: [
       { id: "c1", name: "Energy Bar (2 Oil)", composition: { oil: 2 }, bid: 70, ask: 74 },

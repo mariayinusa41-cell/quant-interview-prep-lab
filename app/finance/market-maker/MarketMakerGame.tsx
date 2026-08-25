@@ -20,7 +20,7 @@ const STAKE_OPTIONS = [5, 10, 20, 50]; // dollars per tick of P&L
 const ROUNDS = 10;
 const START_FAIR = 100;
 const STEP_DELAY = 1400;
-const R_TOLERANCE = 0.15; // ticks — how close a typed reservation-price guess must be
+const R_TOLERANCE = 0.15; // ticks - how close a typed reservation-price guess must be
 
 function fmt2(n: number) {
   return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -60,44 +60,44 @@ function GlossaryHud() {
         <div className="hilo-hud-body">
           <p className="hilo-hud-section-title">GLOSSARY</p>
           <p className="mm-gloss-row">
-            <strong>Tick</strong> — smallest price step (think: one cent).
+            <strong>Tick</strong> - smallest price step (think: one cent).
           </p>
           <p className="mm-gloss-row">
-            <strong>Fair</strong> — what it's actually worth right now.
+            <strong>Fair</strong> - what it's actually worth right now.
           </p>
           <p className="mm-gloss-row">
-            <strong>Your bid</strong> — the price you'll BUY at (below fair).
+            <strong>Your bid</strong> - the price you'll BUY at (below fair).
           </p>
           <p className="mm-gloss-row">
-            <strong>Your ask</strong> — the price you'll SELL at (above fair).
+            <strong>Your ask</strong> - the price you'll SELL at (above fair).
           </p>
           <p className="mm-gloss-row">
-            <strong>Half-spread</strong> — how far each side sits from fair. Wider = more profit per trade, fewer trades.
+            <strong>Half-spread</strong> - how far each side sits from fair. Wider = more profit per trade, fewer trades.
           </p>
           <p className="mm-gloss-row">
-            <strong>Skew</strong> — slides BOTH prices up/down together without changing the gap.
+            <strong>Skew</strong> - slides BOTH prices up/down together without changing the gap.
           </p>
           <p className="mm-gloss-row">
-            <strong>Inventory</strong> — what you're left holding. +1 long, −1 short. Costs you to clear at the end.
+            <strong>Inventory</strong> - what you're left holding. +1 long, −1 short. Costs you to clear at the end.
           </p>
           <p className="mm-gloss-row">
-            <strong>Informed flow</strong> — a counterparty who already knows the price is about to move against you.
+            <strong>Informed flow</strong> - a counterparty who already knows the price is about to move against you.
           </p>
           <p className="mm-gloss-row">
-            <strong>Reservation price (r)</strong> — the price you'd be indifferent to buying or selling at, given the
+            <strong>Reservation price (r)</strong> - the price you'd be indifferent to buying or selling at, given the
             inventory you're carrying. Flat inventory: r = fair. Long: r drops below fair. Short: r rises above fair.
           </p>
           <p className="mm-gloss-row">
-            <strong>Risk aversion (γ)</strong> — how much inventory risk bothers you. Higher γ skews r harder and widens
+            <strong>Risk aversion (γ)</strong> - how much inventory risk bothers you. Higher γ skews r harder and widens
             your spread.
           </p>
           <p className="mm-gloss-row">
-            <strong>Volatility (σ)</strong> — how much fair value jumps around per round. Higher σ means inventory is
+            <strong>Volatility (σ)</strong> - how much fair value jumps around per round. Higher σ means inventory is
             riskier to hold, so it also widens spread and skew.
           </p>
           <p className="mm-gloss-row">
-            <strong>Time-to-horizon (T−t)</strong> — how much of the session is left. Skew and spread both shrink as it
-            runs down — less time for inventory risk to bite.
+            <strong>Time-to-horizon (T−t)</strong> - how much of the session is left. Skew and spread both shrink as it
+            runs down - less time for inventory risk to bite.
           </p>
         </div>
       )}
@@ -190,10 +190,10 @@ export default function MarketMakerGame() {
       setHistory((h) => [...h, { truth, filled: result.filled, informed: truth.informed, side: result.side }]);
 
       if (!result.filled) {
-        setStatusMsg(`No fill. This round's flow was ${truth.informed ? "informed" : "noise"} — price moved ${fmtTicks(truth.move)}.`);
+        setStatusMsg(`No fill. This round's flow was ${truth.informed ? "informed" : "noise"} - price moved ${fmtTicks(truth.move)}.`);
       } else {
         setStatusMsg(
-          `Filled — ${result.side === "buy" ? "they lifted your ask" : "they hit your bid"}. That flow was ${
+          `Filled - ${result.side === "buy" ? "they lifted your ask" : "they hit your bid"}. That flow was ${
             truth.informed ? "informed" : "noise"
           }, price moved ${fmtTicks(truth.move)}.`
         );
@@ -302,11 +302,11 @@ export default function MarketMakerGame() {
             </div>
             <div className="mm-price-tile">
               <span className="mm-price-label">YOU BUY AT</span>
-              <span className="mm-price-value is-good">{half !== null && skew !== null ? fmt2(fair - half + skew) : "—"}</span>
+              <span className="mm-price-value is-good">{half !== null && skew !== null ? fmt2(fair - half + skew) : "-"}</span>
             </div>
             <div className="mm-price-tile">
               <span className="mm-price-label">YOU SELL AT</span>
-              <span className="mm-price-value is-bad">{half !== null && skew !== null ? fmt2(fair + half + skew) : "—"}</span>
+              <span className="mm-price-value is-bad">{half !== null && skew !== null ? fmt2(fair + half + skew) : "-"}</span>
             </div>
             <div className="mm-price-tile">
               <span className="mm-price-label">INVENTORY</span>
@@ -340,7 +340,7 @@ export default function MarketMakerGame() {
               }
             >
               {truth.signal
-                ? `TIP: informed ${truth.signal === "buy" ? "BUYING" : "SELLING"} may be coming — price likely to move ${
+                ? `TIP: informed ${truth.signal === "buy" ? "BUYING" : "SELLING"} may be coming - price likely to move ${
                     truth.signal === "buy" ? "UP" : "DOWN"
                   }`
                 : "TIP: no read on the flow this round"}
@@ -351,7 +351,7 @@ export default function MarketMakerGame() {
             <div className="quiz-panel" style={{ marginTop: 10 }}>
               <p className="quiz-panel-title">Compute your reservation price</p>
               <div className={rChecked ? (rCorrect ? "quiz-q is-correct" : "quiz-q is-wrong") : "quiz-q"}>
-                <p className="quiz-q-topic">Avellaneda–Stoikov</p>
+                <p className="quiz-q-topic">Avellaneda-Stoikov</p>
                 <p className="quiz-q-prompt">
                   r = fair − q·γ·σ²·(T−t). Fair = {fair}, inventory q = {inventory >= 0 ? "+" : ""}
                   {inventory}, γ = {GAMMA}, σ = {SIGMA}, round {round + 1}/{ROUNDS} (T−t = {(1 - round / ROUNDS).toFixed(2)}).
@@ -374,14 +374,14 @@ export default function MarketMakerGame() {
                 )}
                 {rChecked && (
                   <p className={rCorrect ? "quiz-q-explain is-correct" : "quiz-q-explain is-wrong"}>
-                    {rCorrect ? "✓ Correct. " : `✗ Not quite — it's ${fmt2(asQuote.r)}. `}
+                    {rCorrect ? "✓ Correct. " : `✗ Not quite - it's ${fmt2(asQuote.r)}. `}
                     Optimal spread δ = γσ²(T−t) + (2/γ)ln(1+γ/κ) = {fmt2(asQuote.spread)} ticks (κ = {KAPPA}), so bid ={" "}
                     {fmt2(asQuote.bid)}, ask = {fmt2(asQuote.ask)}.{" "}
                     {inventory > 0
-                      ? "You're long, so r sits below fair — you're keener to sell than buy."
+                      ? "You're long, so r sits below fair - you're keener to sell than buy."
                       : inventory < 0
-                        ? "You're short, so r sits above fair — you're keener to buy than sell."
-                        : "Flat inventory, so r sits right at fair — no lean either way."}
+                        ? "You're short, so r sits above fair - you're keener to buy than sell."
+                        : "Flat inventory, so r sits right at fair - no lean either way."}
                   </p>
                 )}
               </div>
@@ -442,7 +442,7 @@ export default function MarketMakerGame() {
 
                 {checked && (
                   <p className={isCorrect ? "quiz-q-explain is-correct" : "quiz-q-explain is-wrong"}>
-                    {isCorrect ? "✓ Correct. " : `✗ Not quite — it's ${answerCheck!.display}. `}
+                    {isCorrect ? "✓ Correct. " : `✗ Not quite - it's ${answerCheck!.display}. `}
                     {question.explanation(ctx)}
                   </p>
                 )}
@@ -467,9 +467,9 @@ export default function MarketMakerGame() {
             title={pnlDollars >= 0 ? "SESSION PROFIT" : "SESSION LOSS"}
             sub={`${fmt(pnlDollars)} over ${Math.min(round + 1, ROUNDS)} rounds (incl. ${fmt(
               flattenCostPaid * (stake ?? 0)
-            )} flatten cost) — ended at ${fmt(bankroll)}`}
+            )} flatten cost) - ended at ${fmt(bankroll)}`}
           />
-          {/* Profit, not final bankroll — same reasoning as Ruin Walker. */}
+          {/* Profit, not final bankroll - same reasoning as Ruin Walker. */}
           <GameLeaderboard
             gameId="finance-market-maker"
             score={Math.round(pnlDollars)}

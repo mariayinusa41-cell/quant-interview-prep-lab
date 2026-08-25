@@ -23,7 +23,7 @@ const subsections = [
     href: "/drills/fermi",
     title: "Fermi Estimation",
     tag: "Order of magnitude",
-    description: "Estimate real-world quantities — piano tuners in Chicago, atoms in a body, golf balls in a bus. A quant interview staple.",
+    description: "Estimate real-world quantities - piano tuners in Chicago, atoms in a body, golf balls in a bus. A quant interview staple.",
     tone: "green" as const,
     icon: "target" as const,
     // Only used as a display key here — the tile is a plain link. The real
@@ -47,7 +47,7 @@ const subsections = [
     href: "/drills/survival",
     title: "Dino Dash",
     tag: "Mental math",
-    description: "An endless mental-math run — three lives, and the questions get harder the further you get.",
+    description: "An endless mental-math run - three lives, and the questions get harder the further you get.",
     // Was "drills-sequence-sprint" (a copy/paste leftover) — that made this
     // tile silently free forever AND share Sequence Sprint's session pool.
     // Now its own id, gated for real both here and inside SurvivalDrill.tsx
@@ -62,7 +62,7 @@ const subsections = [
     href: "/drills/probability-ranking",
     title: "Likelihood Ranking",
     tag: "Probability",
-    description: "Order students, distributions, and dice/card/urn events from most likely to least likely — the \"which is most likely\" screen question.",
+    description: "Order students, distributions, and dice/card/urn events from most likely to least likely - the \"which is most likely\" screen question.",
     tone: "cyan" as const,
     icon: "bars" as const,
     gameId: "drills-probability-ranking",
@@ -72,7 +72,7 @@ const subsections = [
     href: "/drills/duck-intersection",
     title: "Crossroad Multitasker",
     tag: "Task switching",
-    description: "A duck at a 4-way crossroad. Track whether it matches the road arrows and whether the live corner's math is even — the question keeps switching on you.",
+    description: "A duck at a 4-way crossroad. Track whether it matches the road arrows and whether the live corner's math is even - the question keeps switching on you.",
     tone: "rose" as const,
     icon: "crossroad" as const,
     gameId: "drills-duck-intersection",
@@ -93,7 +93,7 @@ export default function DrillsPage() {
           <p className="pirate-kicker">Outcry</p>
           <h1 className="pirate-story-line teasers-title">Drill Lab</h1>
           <p className="pirate-story-line teasers-subtitle">
-            Speed reps, not concept reps — the mental math that has to be automatic before an interview starts.
+            Speed reps, not concept reps - the mental math that has to be automatic before an interview starts.
           </p>
 
           <div className="lab-link-list">

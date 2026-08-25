@@ -33,7 +33,7 @@ const CONFOUNDERS: Confounder[] = [
     label: "Northgate warehouse fire",
     detail: "A fire took Northgate's main distribution centre offline for six weeks in the post period. Southvale was unaffected.",
     biases: true,
-    why: "Treated group only, inside the post window — nothing in the control difference offsets it, so it is absorbed into the estimate as if the defendant caused it.",
+    why: "Treated group only, inside the post window - nothing in the control difference offsets it, so it is absorbed into the estimate as if the defendant caused it.",
   },
   {
     id: "baseline",
@@ -106,7 +106,7 @@ export default function CausalConfounderGame() {
           <p className="quiz-panel-title">You are the testifying economist. The other side has one too.</p>
           <p>
             Northgate Retail is suing over a pricing policy it says destroyed its sales. Sales did
-            fall. The entire case is whether <em>the policy</em> caused the fall — and how much of it.
+            fall. The entire case is whether <em>the policy</em> caused the fall - and how much of it.
           </p>
           <div className="lab-topic-grid">
             {[
@@ -175,14 +175,14 @@ export default function CausalConfounderGame() {
         </div>
         <p className="tri-note">
           Pre-trend gap: {trendGap.toFixed(1)} per month. They were moving together before the
-          policy, so the design is admissible — the levels differ, but the <em>trends</em> match.
+          policy, so the design is admissible - the levels differ, but the <em>trends</em> match.
         </p>
       </div>
 
       {/* ---------- Phase 1 ---------- */}
       {phase === "naive" && (
         <div className="stochastic-explain">
-          <p className="quiz-panel-title">Step 1 — the naive estimate</p>
+          <p className="quiz-panel-title">Step 1 - the naive estimate</p>
           <p className="mm-step-hint">
             Southvale tells you what Northgate would have done anyway. Subtract it out.
           </p>
@@ -224,7 +224,7 @@ export default function CausalConfounderGame() {
       {/* ---------- Phase 2 ---------- */}
       {phase === "confounder" && (
         <div className="stochastic-explain">
-          <p className="quiz-panel-title">Step 2 — which one actually biases the estimate?</p>
+          <p className="quiz-panel-title">Step 2 - which one actually biases the estimate?</p>
           <p className="mm-step-hint">
             Discovery turns up three facts. Only one of them contaminates a DiD. Pick it.
           </p>
@@ -250,7 +250,7 @@ export default function CausalConfounderGame() {
               >
                 <strong>{c.label}</strong>
                 <span>{c.detail}</span>
-                {pickChecked && <em>{c.biases ? "BIASES THE ESTIMATE — " : "Cancels out — "}{c.why}</em>}
+                {pickChecked && <em>{c.biases ? "BIASES THE ESTIMATE - " : "Cancels out - "}{c.why}</em>}
               </button>
             ))}
           </div>
@@ -270,7 +270,7 @@ export default function CausalConfounderGame() {
       {/* ---------- Phase 3 ---------- */}
       {phase === "adjusted" && (
         <div className="stochastic-explain">
-          <p className="quiz-panel-title">Step 3 — the number you would defend</p>
+          <p className="quiz-panel-title">Step 3 - the number you would defend</p>
           <p className="mm-step-hint">
             Northgate&rsquo;s own logistics filings put the fire&rsquo;s impact at{" "}
             <strong>{Math.abs(TRUE_SHOCK)}k units</strong> over the post period. Strip it out of the
@@ -295,14 +295,14 @@ export default function CausalConfounderGame() {
             <>
               <p className={Math.abs(Number(adjInput) - adjustedTruth) <= DID_TOLERANCE ? "quiz-q-explain is-correct" : "quiz-q-explain is-wrong"}>
                 {naiveTruth} − ({TRUE_SHOCK}) = <strong>{adjustedTruth}</strong>. The defensible
-                damages figure is {Math.abs(adjustedTruth)}k units, not {Math.abs(naiveTruth)}k —
+                damages figure is {Math.abs(adjustedTruth)}k units, not {Math.abs(naiveTruth)}k -
                 the naive estimate overstated the claim by{" "}
                 {Math.round((Math.abs(naiveTruth) / Math.abs(adjustedTruth) - 1) * 100)}%.
               </p>
               <p className="quiz-q-explain">
                 Worth stating plainly in a viva: DiD already removes anything common to both markets
                 and any permanent level gap between them. The only thing it cannot absorb is a shock
-                that lands on the treated group alone inside the post window — which is precisely
+                that lands on the treated group alone inside the post window - which is precisely
                 what you were hired to find.
               </p>
               <AccessStartButton

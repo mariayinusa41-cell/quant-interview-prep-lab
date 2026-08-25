@@ -80,7 +80,7 @@ export default function ArcadePanel() {
 
     const min = Math.min(...prices);
     const max = Math.max(...prices);
-    const base = max === 0 ? "Free" : min === max ? `${min}` : `${min}–${max}`;
+    const base = max === 0 ? "Free" : min === max ? `${min}` : `${min}-${max}`;
     return {
       text: passOnly.length > 0 ? `${base} / Pass` : base,
       free: max === 0 && passOnly.length === 0,
@@ -147,7 +147,7 @@ export default function ArcadePanel() {
                   <span className="arc-cab-foot">
                     <span>
                       COST{" "}
-                      <strong className={cost?.free ? "is-free" : "is-cost"}>{cost ? cost.text : "—"}</strong>
+                      <strong className={cost?.free ? "is-free" : "is-cost"}>{cost ? cost.text : "-"}</strong>
                     </span>
                     <span>
                       PAYS <strong className="is-pays">1 / correct</strong>

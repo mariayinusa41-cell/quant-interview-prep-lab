@@ -190,7 +190,7 @@ function genRollUntilTarget(): DiceEVQuestion {
     diceSides: sides,
     diceCount: 1,
     visualDice: [target],
-    derivation: `Non-target rolls are geometric with mean ${sides - 1} rolls; each non-target roll averages [${(sides * (sides + 1)) / 2} − ${target}] / ${sides - 1}. The count and the per-roll average multiply back to exactly Total(d${sides}) − ${target} = ${ev} — the (S−1) cancels.`,
+    derivation: `Non-target rolls are geometric with mean ${sides - 1} rolls; each non-target roll averages [${(sides * (sides + 1)) / 2} − ${target}] / ${sides - 1}. The count and the per-roll average multiply back to exactly Total(d${sides}) − ${target} = ${ev} - the (S−1) cancels.`,
     interviewShortcut: `Sum of all faces minus the stopping face: S(S+1)/2 − target.`,
   };
 }
@@ -242,7 +242,7 @@ function genAlgebraic(): DiceEVQuestion {
       diceCount: 2,
       visualDice: [randDie(sides), randDie(sides)],
       derivation: `Independence ⇒ E[XY] = E[X]·E[Y] = ${mean.toFixed(2)} × ${mean.toFixed(2)} = ${ev.toFixed(2)}.`,
-      interviewShortcut: `E[X]² — the mean of a d${sides} squared.`,
+      interviewShortcut: `E[X]² - the mean of a d${sides} squared.`,
     };
   }
   const ev = (sides * sides - 1) / (3 * sides);
@@ -301,7 +301,7 @@ function genBustAccumulator(): DiceEVQuestion {
     mechanic: "bust-accumulator",
     title: "Stop-on-1 Accumulator (d6)",
     question:
-      "You roll a fair 6-sided die repeatedly. Each roll of 2–6 adds its value to your pot; rolling a 1 busts you back to $0 immediately. You may stop after any roll and bank whatever is in the pot. Under the optimal stopping strategy, what is this game's expected value?",
+      "You roll a fair 6-sided die repeatedly. Each roll of 2-6 adds its value to your pot; rolling a 1 busts you back to $0 immediately. You may stop after any roll and bank whatever is in the pot. Under the optimal stopping strategy, what is this game's expected value?",
     expectedValue: ev,
     formattedEV: fmtUSD(ev),
     unit: "USD",
@@ -311,8 +311,8 @@ function genBustAccumulator(): DiceEVQuestion {
     diceSides: 6,
     diceCount: 1,
     visualDice: [randDie(6)],
-    derivation: `Optimal policy is a threshold τ: keep rolling below τ, stop at or above it. Solving backward for every candidate τ and taking the best gives τ=${tau}, EV=${fmtUSD(ev)} — confirmed by a 1M-trial simulation at $8.15.`,
-    interviewShortcut: `Continue while (5/6)(pot+4) > pot ⇔ pot < 20 — "hold at 20" is the standard answer for this exact game.`,
+    derivation: `Optimal policy is a threshold τ: keep rolling below τ, stop at or above it. Solving backward for every candidate τ and taking the best gives τ=${tau}, EV=${fmtUSD(ev)} - confirmed by a 1M-trial simulation at $8.15.`,
+    interviewShortcut: `Continue while (5/6)(pot+4) > pot ⇔ pot < 20 - "hold at 20" is the standard answer for this exact game.`,
   };
 }
 
@@ -337,7 +337,7 @@ function genBackgammonFlavor(): DiceEVQuestion {
       diceSides: 6,
       diceCount: 2,
       visualDice: [randDie(6), randDie(6)],
-      derivation: `EV(accept) = p×2 − (1−p)×2 = ${winProb}×2 − ${(1 - winProb).toFixed(2)}×2 = ${evAccept.toFixed(2)}. Compare to EV(decline) = −1. The breakeven "take point" is p = 25% — accepting is ${shouldAccept ? "correct" : "a mistake"} here.`,
+      derivation: `EV(accept) = p×2 − (1−p)×2 = ${winProb}×2 − ${(1 - winProb).toFixed(2)}×2 = ${evAccept.toFixed(2)}. Compare to EV(decline) = −1. The breakeven "take point" is p = 25% - accepting is ${shouldAccept ? "correct" : "a mistake"} here.`,
       interviewShortcut: `Take point for a plain double is 25%: below it, pass; above it, take.`,
     };
   }
@@ -382,7 +382,7 @@ function genBackgammonFlavor(): DiceEVQuestion {
     diceCount: 2,
     visualDice: [randDie(6), randDie(6)],
     derivation: `Average pips used per turn, averaged over all 36 rolls (doubles worth 4× face): ${avgRoll.toFixed(4)}. Turns ≈ ${pips} / ${avgRoll.toFixed(3)} = ${turns.toFixed(2)}.`,
-    interviewShortcut: `8.167 pips/turn is worth memorizing — it comes up constantly in backgammon race analysis.`,
+    interviewShortcut: `8.167 pips/turn is worth memorizing - it comes up constantly in backgammon race analysis.`,
   };
 }
 

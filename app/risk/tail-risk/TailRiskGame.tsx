@@ -44,7 +44,7 @@ const HEDGES = [
     id: "puts",
     label: "Buy deep out-of-the-money index puts",
     correct: true,
-    why: "The only option that pays off specifically in the tail. It converts an unbounded left tail into a known premium — you are buying the part of the distribution that is hurting you.",
+    why: "The only option that pays off specifically in the tail. It converts an unbounded left tail into a known premium - you are buying the part of the distribution that is hurting you.",
   },
   {
     id: "diversify",
@@ -60,7 +60,7 @@ const HEDGES = [
   },
   {
     id: "double",
-    label: "Add to the position — the selloff is an opportunity",
+    label: "Add to the position - the selloff is an opportunity",
     correct: false,
     why: "Averaging into a liquidity vacuum with a margin call pending is how a drawdown becomes a liquidation.",
   },
@@ -150,7 +150,7 @@ export default function TailRiskGame() {
           </div>
           <p className="mm-step-hint">
             Interview lens: &ldquo;what is wrong with VaR?&rdquo; is asked in every risk interview.
-            The answer is not that it is inaccurate — it is that it is silent past its own threshold.
+            The answer is not that it is inaccurate - it is that it is silent past its own threshold.
           </p>
           <AccessStartButton
             gameId="risk-tail-stress"
@@ -179,7 +179,7 @@ export default function TailRiskGame() {
       </div>
 
       <div className="risk-book">
-        <p className="did-trends-title">Portfolio — ${NAV}M</p>
+        <p className="did-trends-title">Portfolio - ${NAV}M</p>
         {ASSETS.map((a) => (
           <div className="risk-asset" key={a.id}>
             <span>{a.name}</span>
@@ -190,7 +190,7 @@ export default function TailRiskGame() {
       </div>
 
       <div className="risk-corr">
-        <p className="did-trends-title">Correlation matrix {inCrisis && <span className="risk-flash">— BREAKING DOWN</span>}</p>
+        <p className="did-trends-title">Correlation matrix {inCrisis && <span className="risk-flash">- BREAKING DOWN</span>}</p>
         <table className="tri-table">
           <thead>
             <tr><th /><th>Eq</th><th>HY</th><th>Deriv</th></tr>
@@ -216,7 +216,7 @@ export default function TailRiskGame() {
       {/* Phase 1 */}
       {phase === "calm" && (
         <div className="stochastic-explain">
-          <p className="quiz-panel-title">Step 1 — portfolio volatility, calm regime</p>
+          <p className="quiz-panel-title">Step 1 - portfolio volatility, calm regime</p>
           <TeX block>{String.raw`\sigma_{p} = \sqrt{\sum_{i}\sum_{j} w_{i} w_{j} \sigma_{i} \sigma_{j} \rho_{ij}}`}</TeX>
           <div className="calc-input-row">
             <input type="text" className="calc-input" inputMode="decimal" value={calmInput}
@@ -228,7 +228,7 @@ export default function TailRiskGame() {
             <>
               <p className={Math.abs(Number(calmInput) / 100 - calmVol) <= VOL_TOL ? "quiz-q-explain is-correct" : "quiz-q-explain is-wrong"}>
                 σ<sub>p</sub> = <strong>{pct(calmVol)}%</strong> daily. That is comfortably below the
-                weighted sum of the individual vols ({pct(weightedSum)}%) — the gap is your
+                weighted sum of the individual vols ({pct(weightedSum)}%) - the gap is your
                 diversification benefit.
               </p>
               <p className="quiz-q-explain">
@@ -247,11 +247,11 @@ export default function TailRiskGame() {
       {/* Phase 2 */}
       {phase === "crisis" && (
         <div className="stochastic-explain">
-          <p className="quiz-panel-title">Step 2 — the correlations converge</p>
+          <p className="quiz-panel-title">Step 2 - the correlations converge</p>
           <p className="mm-step-hint">
             A liquidity vacuum. Everyone is selling everything at once, and every pairwise
             correlation goes to <strong>1.00</strong>. The individual volatilities have not changed
-            at all — only the relationships between them.
+            at all - only the relationships between them.
           </p>
           <div className="calc-input-row">
             <input type="text" className="calc-input" inputMode="decimal" value={crisisInput}
@@ -262,14 +262,14 @@ export default function TailRiskGame() {
           {crisisChecked && (
             <>
               <p className={Math.abs(Number(crisisInput) / 100 - crisisVol) <= VOL_TOL ? "quiz-q-explain is-correct" : "quiz-q-explain is-wrong"}>
-                σ<sub>p</sub> = <strong>{pct(crisisVol)}%</strong> — a{" "}
+                σ<sub>p</sub> = <strong>{pct(crisisVol)}%</strong> - a{" "}
                 {((crisisVol / calmVol - 1) * 100).toFixed(0)}% jump with no change in any asset&rsquo;s
                 own volatility.
               </p>
               <p className="quiz-q-explain">
                 Worth knowing cold: at ρ = 1 the cross terms are maximal and σ<sub>p</sub> collapses
                 to the plain weighted sum, Σ wᵢσᵢ = {pct(weightedSum)}%. Diversification has stopped
-                existing. VaR is now <strong>${usd(crisisVaR)}M</strong> — through the $3.00M limit.
+                existing. VaR is now <strong>${usd(crisisVaR)}M</strong> - through the $3.00M limit.
               </p>
               <button type="button" className="continue-btn" onClick={() => setPhase("shortfall")}>
                 But how bad is the breach? →
@@ -282,7 +282,7 @@ export default function TailRiskGame() {
       {/* Phase 3 */}
       {phase === "shortfall" && (
         <div className="stochastic-explain">
-          <p className="quiz-panel-title">Step 3 — the number VaR refuses to tell you</p>
+          <p className="quiz-panel-title">Step 3 - the number VaR refuses to tell you</p>
           <p className="mm-step-hint">
             VaR says a 1-in-100 day loses at least ${usd(crisisVaR)}M. It says nothing about how much
             worse than that it gets. Expected Shortfall answers exactly that: the average loss{" "}
@@ -299,7 +299,7 @@ export default function TailRiskGame() {
             <>
               <p className={Math.abs(Number(esInput) - crisisES * NAV) <= MONEY_TOL ? "quiz-q-explain is-correct" : "quiz-q-explain is-wrong"}>
                 ES = {pct(crisisVol)}% × 0.02665 ÷ 0.01 = <strong>{pct(crisisES)}%</strong> ={" "}
-                <strong>${usd(crisisES)}M</strong> — {(((crisisES / crisisVaR) - 1) * 100).toFixed(0)}%
+                <strong>${usd(crisisES)}M</strong> - {(((crisisES / crisisVaR) - 1) * 100).toFixed(0)}%
                 worse than the VaR figure you were reporting.
               </p>
               <p className="quiz-q-explain">
@@ -319,10 +319,10 @@ export default function TailRiskGame() {
       {/* Phase 4 */}
       {phase === "hedge" && (
         <div className="stochastic-explain">
-          <p className="quiz-panel-title">Step 4 — the normal assumption is the last problem</p>
+          <p className="quiz-panel-title">Step 4 - the normal assumption is the last problem</p>
           <p className="mm-step-hint">
             Everything so far assumed normal returns. Refit the same variance to a Student-t with 4
-            degrees of freedom — identical σ, fatter tails — and 99% ES rises from{" "}
+            degrees of freedom - identical σ, fatter tails - and 99% ES rises from{" "}
             <strong>${usd(crisisES)}M</strong> to about <strong>${usd(fatES)}M</strong>. Same
             volatility, ~40% more loss in the tail, purely from the shape of the distribution.
           </p>
@@ -360,7 +360,7 @@ export default function TailRiskGame() {
             <>
               <p className="quiz-q-explain">
                 The through-line: your loss got worse three separate times without a single asset
-                becoming more volatile — once from correlations converging, once from measuring the
+                becoming more volatile - once from correlations converging, once from measuring the
                 tail instead of its edge, and once from admitting returns are not normal. All three
                 are model risk, not market risk.
               </p>

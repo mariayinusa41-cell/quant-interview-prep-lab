@@ -288,7 +288,7 @@ export default function ProbabilityRankingGame() {
         <div className="fermi-menu">
           <h1 className="fermi-title">Likelihood Ranking</h1>
           <p className="fermi-subtitle">
-            Given a table, a set of distributions, or a handful of dice/card/urn events — order them from
+            Given a table, a set of distributions, or a handful of dice/card/urn events - order them from
             most likely to least likely. The "which is most likely" screen question, in drill form.
           </p>
 
@@ -376,7 +376,7 @@ export default function ProbabilityRankingGame() {
                       const gotItRight = userIdx === rankIdx;
                       return (
                         <li key={id} className={gotItRight ? "correct" : "wrong"}>
-                          {opt.label} — <strong>{opt.formattedProb}</strong>
+                          {opt.label} - <strong>{opt.formattedProb}</strong>
                         </li>
                       );
                     })}
@@ -500,7 +500,7 @@ export default function ProbabilityRankingGame() {
                 const opt = lastResult.q.options.find((o) => o.id === id)!;
                 return (
                   <li key={id}>
-                    {opt.label} — <strong>{opt.formattedProb}</strong>
+                    {opt.label} - <strong>{opt.formattedProb}</strong>
                     <div className="prob-rationale">{opt.rationale}</div>
                   </li>
                 );

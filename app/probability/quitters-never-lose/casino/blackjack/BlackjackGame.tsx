@@ -237,15 +237,15 @@ function HiLoHud() {
         <div className="hilo-hud-body">
           <p className="hilo-hud-section-title">POINT VALUES</p>
           <div className="hilo-hud-ref-row">
-            <span className="hilo-hud-ref-cards">2 – 6</span>
+            <span className="hilo-hud-ref-cards">2 - 6</span>
             <span className="hilo-hud-ref-value is-low">+1</span>
           </div>
           <div className="hilo-hud-ref-row">
-            <span className="hilo-hud-ref-cards">7 – 9</span>
+            <span className="hilo-hud-ref-cards">7 - 9</span>
             <span className="hilo-hud-ref-value is-mid">0</span>
           </div>
           <div className="hilo-hud-ref-row">
-            <span className="hilo-hud-ref-cards">10 – A</span>
+            <span className="hilo-hud-ref-cards">10 - A</span>
             <span className="hilo-hud-ref-value is-high">−1</span>
           </div>
         </div>
@@ -390,7 +390,7 @@ export default function BlackjackGame() {
 
   const doubleDown = () => {
     if (!round) return;
-    setBankroll((b) => b - round.wager); // the additional stake — original was already deducted at deal time
+    setBankroll((b) => b - round.wager); // the additional stake - original was already deducted at deal time
     const next = playerDoubleDown(round);
     const newCard = next.playerHand[next.playerHand.length - 1];
     setCount((c) => updateCount(c, newCard));
@@ -730,7 +730,7 @@ export default function BlackjackGame() {
             </>
           )}
 
-          {/* Betting lives ON the felt — before the first hand and again the
+          {/* Betting lives ON the felt - before the first hand and again the
               moment one settles. The table never leaves the screen, so a new
               bet reads as the next hand at the same table, not a restart.
               The last wager stays selected for one-click re-bets. */}
@@ -757,7 +757,7 @@ export default function BlackjackGame() {
           )}
 
           {/* Out of money with no hand live: the one ending that genuinely
-              is over. No "play again" euphemism — the table takes your seat. */}
+              is over. No "play again" euphemism - the table takes your seat. */}
           {isBroke && (
             <div className="bj-rebet-row">
               <p className="dgc-caught-title">Bankroll&rsquo;s gone. The table takes your seat.</p>

@@ -89,10 +89,10 @@ export default function SkillMap() {
       </div>
 
       <div className="skill-weakest">
-        {/* Deliberately not "worth 3x XP this week" — the design copy
+        {/* Deliberately not "worth 3x XP this week" - the design copy
             promised a multiplier that does not exist, and the handoff's own
             rule is never to advertise a mechanic that isn't real. */}
-        <p className="skill-weakest-label">Weakest three — start here</p>
+        <p className="skill-weakest-label">Weakest three - start here</p>
         <div className="skill-weakest-grid">
           {weakest.map((w) => (
             <a

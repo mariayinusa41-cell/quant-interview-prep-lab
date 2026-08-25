@@ -50,7 +50,7 @@ export default function StatisticsPage() {
           <p className="pirate-kicker">Outcry</p>
           <h1 className="pirate-story-line teasers-title">Statistics</h1>
           <p className="pirate-story-line teasers-subtitle">
-            Probability asks what a known model produces. Statistics asks what model produced the data — and whether
+            Probability asks what a known model produces. Statistics asks what model produced the data - and whether
             you&apos;re fooling yourself.
           </p>
 

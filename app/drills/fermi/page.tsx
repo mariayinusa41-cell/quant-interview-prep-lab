@@ -4,7 +4,7 @@ import FermiGame from "./FermiGame";
 
 export const metadata: Metadata = {
   title: "Fermi Estimation - Drill Lab",
-  description: "Estimate real-world quantities to the right order of magnitude — a core quant interview skill.",
+  description: "Estimate real-world quantities to the right order of magnitude - a core quant interview skill.",
 };
 
 export default function FermiPage() {

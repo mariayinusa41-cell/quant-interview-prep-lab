@@ -50,7 +50,7 @@ export type RoundTruth = {
   informed: boolean;
   side: "buy" | "sell"; // the direction flow would trade this round, if it trades at all
   move: number; // signed tick change to fair value this round, regardless of whether you got filled
-  signal: "buy" | "sell" | null; // what you're shown before quoting — null means no tell this round
+  signal: "buy" | "sell" | null; // what you're shown before quoting - null means no tell this round
 };
 
 // Decided once, before the player quotes, so the signal can genuinely

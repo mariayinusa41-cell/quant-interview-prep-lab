@@ -86,7 +86,7 @@ function inferenceSet(n: number): Item[] {
       `s-${i}`,
       "A universe is built from firms currently in the index. What does this omit?",
       "Firms that were delisted or went bankrupt",
-      ["Firms that outperformed", "Firms with high volatility", "Nothing — the index is complete"],
+      ["Firms that outperformed", "Firms with high volatility", "Nothing - the index is complete"],
       "selection-bias",
       "Survivorship bias: the losers left the index and dropped out of the sample, inflating measured returns.",
     ),
@@ -107,7 +107,7 @@ function inferenceSet(n: number): Item[] {
       "The relationship is reliably non-zero but explains almost none of the variation",
       ["The model is misspecified and t is invalid", "R² of 0.004 means the t-statistic must be wrong", "The signal explains 40% of returns"],
       "regression",
-      "Statistical significance and explanatory power are different questions. With enough observations a tiny effect is measurable — and in trading a tiny reliable edge can still be valuable.",
+      "Statistical significance and explanatory power are different questions. With enough observations a tiny effect is measurable - and in trading a tiny reliable edge can still be valuable.",
     ),
   ];
   return Array.from({ length: n }, (_, i) => rnd.pick(builders)(i));
@@ -122,7 +122,7 @@ export const RESEARCH_ASSESSMENT: Assessment = {
     "Modelled on the long-form research online assessments: distribution theory, stochastic processes, and the inference traps that kill a live strategy.",
   rules: [
     "Two sections, 40 minutes total.",
-    "No negative marking — answer everything.",
+    "No negative marking - answer everything.",
     "Long-form pace: these reward care, not speed.",
   ],
   sections: [

@@ -35,7 +35,7 @@ function causalSet(n: number): Item[] {
     (i: number) => choiceItem(
       `d-${i}`,
       "A regression of wages on education omits ability, which raises both. What happens to the education coefficient?",
-      "It is biased upward — it absorbs part of ability's effect",
+      "It is biased upward - it absorbs part of ability's effect",
       ["It is biased downward", "It is unbiased but inefficient", "Only the intercept is affected"],
       "regression",
       "Omitted variable bias takes the sign of (effect of omitted on outcome) × (correlation with the included regressor). Both are positive here, so the estimate is inflated.",
@@ -73,7 +73,7 @@ function causalSet(n: number): Item[] {
       "The market is drawn too narrowly and must be widened",
       ["The merger should be blocked", "The market is drawn too broadly", "Cross-price elasticities are irrelevant"],
       "game-theory",
-      "If a hypothetical monopolist could not profitably raise price 5–10%, too many customers escape to substitutes outside the candidate market — so those substitutes belong inside it.",
+      "If a hypothetical monopolist could not profitably raise price 5-10%, too many customers escape to substitutes outside the candidate market - so those substitutes belong inside it.",
     ),
   ];
   return Array.from({ length: n }, (_, i) => rnd.pick(builders)(i));
@@ -85,7 +85,7 @@ export const ECON_ASSESSMENT: Assessment = {
   title: "Economic Consulting Analyst Screen",
   track: "econ-consulting",
   blurb:
-    "There is no standard screen for this field yet — this is built from what analyst work actually requires: causal identification, regression diagnostics, and competition analysis defensible under cross-examination.",
+    "There is no standard screen for this field yet - this is built from what analyst work actually requires: causal identification, regression diagnostics, and competition analysis defensible under cross-examination.",
   rules: [
     "22 items, 35 minutes.",
     "No negative marking.",

@@ -254,11 +254,11 @@ const HOLD_AFTER: Record<Exclude<Phase, 13>, number> = {
 
 const CAPTIONS: Partial<Record<Phase, string>> = {
   7: "The most senior pirate proposes a split.",
-  8: "At least 50% must vote yes — with five pirates, that's three.",
-  9: "3 of 5 clears the 50% bar. Approved — no one walks the plank.",
+  8: "At least 50% must vote yes - with five pirates, that's three.",
+  9: "3 of 5 clears the 50% bar. Approved - no one walks the plank.",
   10: "If the 50% bar isn't cleared instead:",
   11: "Rejected. The senior pirate is fed to the sharks.",
-  12: "The process repeats with the next most senior pirate — recalculating 50% each time, until it's finally met.",
+  12: "The process repeats with the next most senior pirate - recalculating 50% each time, until it's finally met.",
 };
 
 const SHIFT_STEP_PX = 116; // pirate slot width (88px) + row gap (28px)

@@ -4,7 +4,7 @@ import type { Item } from "../engine/types";
    they are evaluated inside the worker alongside the candidate's code. Each
    reference has been checked against its own test cases, and each benchmark
    has been checked to actually separate the intended solution from the naive
-   one — a gate that cannot detect the mistake it exists for is worse than no
+   one - a gate that cannot detect the mistake it exists for is worse than no
    gate at all. */
 
 const LRU_REF = `
@@ -72,7 +72,7 @@ export function quantDevProblems(): Item[] {
       kind: "code",
       prompt: "LRU Cache",
       description:
-        "Implement a fixed-capacity least-recently-used cache. get(key) returns the value or -1 if absent; put(key, value) inserts or overwrites. Both count as a use. When the cache is full, the least recently used entry is evicted. The feed issues 25,000 operations against a 15,000-entry cache, so both operations must be O(1) — anything that scans will not finish inside the budget.",
+        "Implement a fixed-capacity least-recently-used cache. get(key) returns the value or -1 if absent; put(key, value) inserts or overwrites. Both count as a use. When the cache is full, the least recently used entry is evicted. The feed issues 25,000 operations against a 15,000-entry cache, so both operations must be O(1) - anything that scans will not finish inside the budget.",
       functionName: "createCache",
       starter: `function createCache(capacity) {
   // TODO: both get and put must be O(1).
@@ -156,7 +156,7 @@ export function quantDevProblems(): Item[] {
       },
       skill: "data-structures",
       explain:
-        "A Map preserves insertion order, so deleting and re-inserting on access moves an entry to the back and keys().next() gives the oldest — both O(1). An array needs a scan to find the key and a splice to move it, which is O(N) twice over.",
+        "A Map preserves insertion order, so deleting and re-inserting on access moves an entry to the back and keys().next() gives the oldest - both O(1). An array needs a scan to find the key and a splice to move it, which is O(N) twice over.",
     },
 
     {
@@ -164,7 +164,7 @@ export function quantDevProblems(): Item[] {
       kind: "code",
       prompt: "Streaming Median",
       description:
-        "Maintain the running median of a live price stream. add(x) ingests a value; median() returns the current median — the middle value for an odd count, the mean of the two middle values for an even count, and 0 when empty. The feed interleaves 12,000 inserts with 6,000 median queries, so re-sorting on each query will not finish.",
+        "Maintain the running median of a live price stream. add(x) ingests a value; median() returns the current median - the middle value for an odd count, the mean of the two middle values for an even count, and 0 when empty. The feed interleaves 12,000 inserts with 6,000 median queries, so re-sorting on each query will not finish.",
       functionName: "createMedian",
       starter: `function createMedian() {
   // TODO: sorting on every query is too slow. Two heaps give O(log n) add

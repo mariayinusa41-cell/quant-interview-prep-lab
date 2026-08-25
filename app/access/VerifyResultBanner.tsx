@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 
 // Mirrors the flags in app/api/auth/verify/route.ts.
 const MESSAGES: Record<string, { tone: "ok" | "bad"; text: string }> = {
-  ok: { tone: "ok", text: "Email verified — your welcome gift is waiting in your profile." },
+  ok: { tone: "ok", text: "Email verified - your welcome gift is waiting in your profile." },
   invalid: { tone: "bad", text: "That verification link has expired or was already used. Send a fresh one from your profile." },
   missing: { tone: "bad", text: "That link was missing its verification token." },
   error: { tone: "bad", text: "Something went wrong verifying that link. Try sending a fresh one from your profile." },

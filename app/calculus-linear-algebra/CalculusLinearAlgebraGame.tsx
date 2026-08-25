@@ -26,7 +26,7 @@ export default function CalculusLinearAlgebraGame() {
       <p className="pirate-kicker">Calculus / Linear Algebra // Procedural Lab</p>
       <h1 className="pirate-story-line answer-title">Gradient Lab</h1>
       <p className="quiz-q-prompt" style={{ marginTop: 6, marginBottom: 16 }}>
-        Five procedurally generated games — every matrix, function, and root is computed fresh each round, so there's
+        Five procedurally generated games - every matrix, function, and root is computed fresh each round, so there's
         no fixed answer key to memorize.
       </p>
 

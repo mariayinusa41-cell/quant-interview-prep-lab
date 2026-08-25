@@ -57,12 +57,12 @@ export default function TermsPage() {
 
           <h2>3. Paid plans, billing and renewal</h2>
           <p>Two paid options exist, and they bill differently. Please read this section carefully.</p>
-          <h3>2-Week Pass &mdash; $19.99</h3>
+          <h3>2-Week Pass - $19.99</h3>
           <p>
             A <strong>one-time charge</strong>. It grants access for fourteen days from purchase and then expires.
             It does <strong>not</strong> auto-renew and you will not be charged again.
           </p>
-          <h3>Monthly &mdash; $29.99 per month</h3>
+          <h3>Monthly - $29.99 per month</h3>
           <p>
             A <strong>recurring subscription</strong>. It renews automatically every month and your payment method
             is charged each period until you cancel. You may cancel at any time; cancellation stops future charges

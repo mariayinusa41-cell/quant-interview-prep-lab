@@ -233,7 +233,7 @@ function zapQSet(n: number): Item[] {
         "Which symbol continues the pattern?",
         correctAnswer, distractors,
         "pattern-recognition",
-        `The cycle repeats every three: ${order.join(" ")} — so the next is ${correctAnswer}.`,
+        `The cycle repeats every three: ${order.join(" ")} - so the next is ${correctAnswer}.`,
         row.join("   ") + "   ?");
     }
 
@@ -282,11 +282,11 @@ export const OPTIVER_TRADING: Assessment = {
   title: "Optiver-Style Trading Assessment",
   track: "quant-trading",
   blurb:
-    "A full-length sitting modelled on Optiver's published screening battery — 80 in 8, NumberLogic, Beat the Odds, Zap-N and Zap-Q. Roughly an hour, negative marking on the timed sections, and numbers chosen so a shortcut beats long multiplication.",
+    "A full-length sitting modelled on Optiver's published screening battery - 80 in 8, NumberLogic, Beat the Odds, Zap-N and Zap-Q. Roughly an hour, negative marking on the timed sections, and numbers chosen so a shortcut beats long multiplication.",
   rules: [
     "Five sections, about 60 minutes in total. The clock does not stop between them.",
     "80 in 8 is the headline: 80 arithmetic items in 8 minutes, roughly six seconds each.",
-    "Timed sections mark negatively — +1 correct, −1 wrong, 0 for a skip. Blind guessing is negative EV.",
+    "Timed sections mark negatively - +1 correct, −1 wrong, 0 for a skip. Blind guessing is negative EV.",
     "No going back within a section. Answer or skip, and the next item loads.",
     "A competitive score on the real 80-in-8 is around 65 of 80.",
   ],

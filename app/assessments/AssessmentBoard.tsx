@@ -44,7 +44,7 @@ export default function AssessmentBoard() {
             <p className="arc-eyebrow is-bad">Cabinet locked // three bolts</p>
             <h2 className="arc-hero-title">Assessments</h2>
             <p className="arc-intro" style={{ marginBottom: 8 }}>
-              Timed, graded, one sitting at a time — each modelled on a real firm&rsquo;s published screen.
+              Timed, graded, one sitting at a time - each modelled on a real firm&rsquo;s published screen.
               Every attempt generates fresh questions, so a score is earned rather than remembered.
             </p>
             <p className="arc-note" style={{ marginTop: 0 }}>
@@ -148,7 +148,7 @@ export default function AssessmentBoard() {
 
         <p className="arc-note">
           {offTrackCount > 0
-            ? `${offTrackCount} assessment${offTrackCount === 1 ? " sits" : "s sit"} on tracks you haven't selected — they're dimmed above. Add a track in your profile to bring them forward.`
+            ? `${offTrackCount} assessment${offTrackCount === 1 ? " sits" : "s sit"} on tracks you haven't selected - they're dimmed above. Add a track in your profile to bring them forward.`
             : "Showing every assessment for your selected tracks."}
         </p>
       </section>

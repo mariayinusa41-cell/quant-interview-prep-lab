@@ -47,7 +47,7 @@ export default function ResetForm() {
       }
       setDone(true);
     } catch {
-      setError("Network error — that never reached the server.");
+      setError("Network error - that never reached the server.");
     } finally {
       setSubmitting(false);
     }

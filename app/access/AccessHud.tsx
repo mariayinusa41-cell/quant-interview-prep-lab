@@ -40,13 +40,13 @@ export default function AccessHud() {
         <span className="access-hud-divider" aria-hidden="true" />
 
         {/* Tickets: lifetime correct answers. Never decreases. */}
-        <span className="access-hud-balance" title="Tickets — one per question answered correctly">
+        <span className="access-hud-balance" title="Tickets - one per question answered correctly">
           <TicketIcon />
           <strong>{tickets}</strong>
         </span>
 
         {/* Accuracy: share of graded questions answered correctly. */}
-        <span className="hud-accuracy" title="Accuracy — correct answers as a share of questions graded">
+        <span className="hud-accuracy" title="Accuracy - correct answers as a share of questions graded">
           <span className="hud-accuracy-label">ACC</span>
           <span className="hud-accuracy-bar" role="img" aria-label={accuracy === null ? "No accuracy yet" : `Accuracy ${accuracy} percent`}>
             <span

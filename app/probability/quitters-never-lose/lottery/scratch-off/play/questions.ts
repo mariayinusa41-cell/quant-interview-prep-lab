@@ -87,7 +87,7 @@ export const QUESTION_BANK: QuestionInstance[] = [
     variant: "B",
     usesNotation: false,
     topicLabel: "Expected value",
-    prompt: (_t, price) => `What's the expected profit of this ticket — expected payout minus the ${fmt(price)} price?`,
+    prompt: (_t, price) => `What's the expected profit of this ticket - expected payout minus the ${fmt(price)} price?`,
     answer: (t, price) => {
       const profit = t.evDecimal * price - price;
       return { decimal: profit, tolerance: price * 0.03 + 0.1, display: profit >= 0 ? `+${fmt(profit)}` : `-${fmt(Math.abs(profit))}` };
@@ -172,7 +172,7 @@ export const QUESTION_BANK: QuestionInstance[] = [
     prompt: (t) => `Same batch of ${t.batchSize}. After that non-winning ticket is removed, how many winners remain in the batch?`,
     answer: (t) => ({ decimal: t.batchWinners, tolerance: 0, display: `${t.batchWinners}` }),
     explanation: (t) =>
-      `Removing a non-winner doesn't remove a winner — ${t.batchWinners} winners still remain, just among ${t.batchSize - 1} tickets now instead of ${t.batchSize}.`,
+      `Removing a non-winner doesn't remove a winner - ${t.batchWinners} winners still remain, just among ${t.batchSize - 1} tickets now instead of ${t.batchSize}.`,
   },
   {
     id: "conditional-C",
@@ -193,7 +193,7 @@ export const QUESTION_BANK: QuestionInstance[] = [
     variant: "A",
     usesNotation: false,
     topicLabel: "Combinatorics",
-    prompt: (t) => `This ticket has you pick ${t.pickSize} numbers from 1–${t.poolSize} (order doesn't matter). How many different number combinations are possible?`,
+    prompt: (t) => `This ticket has you pick ${t.pickSize} numbers from 1-${t.poolSize} (order doesn't matter). How many different number combinations are possible?`,
     answer: (t) => ({ decimal: t.combinatoricsDecimal, tolerance: 0, display: t.combinatoricsFraction }),
     explanation: (t) => `C(${t.poolSize}, ${t.pickSize}) = ${t.combinatoricsFraction}.`,
   },
@@ -284,10 +284,10 @@ export const QUESTION_BANK: QuestionInstance[] = [
     prompt: (t, price) =>
       `This ticket has 3 hidden panels. Exactly one hides the jackpot (${t.outcomes[t.outcomes.length - 1].mult}x, or ${
         price ? fmt(t.outcomes[t.outcomes.length - 1].mult * price) : "the top prize"
-      }) — the other two are empty. You pick Panel 1. Before scratching it, the game reveals that Panel 3 is empty. If you switch your pick to Panel 2 instead of staying with Panel 1, what's the probability THAT panel holds the jackpot?`,
+      }) - the other two are empty. You pick Panel 1. Before scratching it, the game reveals that Panel 3 is empty. If you switch your pick to Panel 2 instead of staying with Panel 1, what's the probability THAT panel holds the jackpot?`,
     answer: () => ({ decimal: 2 / 3, tolerance: 0.01, display: "2/3" }),
     explanation: () =>
-      `Your original pick only had a 1/3 chance of being right, and revealing an empty panel doesn't change that — it just concentrates the other 2/3 of the probability onto the one remaining unopened panel. Switching wins 2/3 of the time; staying only wins 1/3.`,
+      `Your original pick only had a 1/3 chance of being right, and revealing an empty panel doesn't change that - it just concentrates the other 2/3 of the probability onto the one remaining unopened panel. Switching wins 2/3 of the time; staying only wins 1/3.`,
   },
   {
     id: "classic-B",
@@ -299,7 +299,7 @@ export const QUESTION_BANK: QuestionInstance[] = [
       `This scratch-off comes in 6 different ticket designs, evenly mixed into every roll. If 3 friends each grab one ticket at random, what's the probability at least two of them end up with the same design?`,
     answer: () => ({ decimal: 4 / 9, tolerance: 0.01, display: "4/9" }),
     explanation: () =>
-      `Easier to find P(all different) first: 6/6 × 5/6 × 4/6 = 120/216 = 5/9. So P(at least one match) = 1 − 5/9 = 4/9 — higher than most people's gut guess, same surprise as the classic birthday problem.`,
+      `Easier to find P(all different) first: 6/6 × 5/6 × 4/6 = 120/216 = 5/9. So P(at least one match) = 1 − 5/9 = 4/9 - higher than most people's gut guess, same surprise as the classic birthday problem.`,
   },
   {
     id: "classic-C",
@@ -311,7 +311,7 @@ export const QUESTION_BANK: QuestionInstance[] = [
       `There are 3 different ticket designs, each equally likely on every purchase. Let T = the number of tickets you'd need to buy to collect all 3 designs at least once. Using E[T] = n × H_n, where H_n = 1 + 1/2 + ... + 1/n, compute E[T] for n = 3.`,
     answer: () => ({ decimal: 5.5, tolerance: 0.1, display: "5.5" }),
     explanation: () =>
-      `H_3 = 1 + 1/2 + 1/3 = 11/6. E[T] = 3 × 11/6 = 5.5 — on average you'd need to buy 5.5 tickets before you'd seen all 3 designs at least once.`,
+      `H_3 = 1 + 1/2 + 1/3 = 11/6. E[T] = 3 × 11/6 = 5.5 - on average you'd need to buy 5.5 tickets before you'd seen all 3 designs at least once.`,
   },
 ];
 

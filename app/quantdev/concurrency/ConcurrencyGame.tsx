@@ -124,7 +124,7 @@ export default function ConcurrencyGame() {
           </div>
           <p className="mm-step-hint">
             Read-only, deliberately: this page cannot compile or run C++, so nothing here pretends to
-            be a sanitizer verdict. It tests what the interview tests — reading concurrent code and
+            be a sanitizer verdict. It tests what the interview tests - reading concurrent code and
             saying precisely what is wrong with it.
           </p>
           <AccessStartButton
@@ -152,10 +152,10 @@ export default function ConcurrencyGame() {
           <span>TOTAL <strong>{got}/{total}</strong></span>
         </div>
         <div className="stochastic-explain">
-          <p className="quiz-panel-title">Review complete — all five levels cleared</p>
+          <p className="quiz-panel-title">Review complete - all five levels cleared</p>
           <p className="mm-step-hint">
             The pattern across all five: none of these are bugs in the logic. Each one is code that
-            is correct as a sequence of statements and wrong as a concurrent program — which is why
+            is correct as a sequence of statements and wrong as a concurrent program - which is why
             reading for races is a separate skill from reading for correctness. Run it again for a
             fresh set of cases at every level.
           </p>
@@ -221,12 +221,12 @@ export default function ConcurrencyGame() {
           <p className="quiz-panel-title">Which line carries the defect?</p>
           {!lineChecked ? (
             <button type="button" className="calc-submit-btn" disabled={linePick === null} onClick={checkLine}>
-              Flag line {linePick ?? "—"}
+              Flag line {linePick ?? "-"}
             </button>
           ) : (
             <>
               <p className={linePick === current.bugLine ? "quiz-q-explain is-correct" : "quiz-q-explain is-wrong"}>
-                <strong>Line {current.bugLine} — {current.bugName}.</strong> {current.bugExplain}
+                <strong>Line {current.bugLine} - {current.bugName}.</strong> {current.bugExplain}
               </p>
               <button type="button" className="continue-btn" onClick={() => setStage("pickFix")}>
                 Now fix it →
@@ -259,7 +259,7 @@ export default function ConcurrencyGame() {
                   onClick={() => setFixPick(fi)}
                 >
                   <strong><code className="cc-fix">{f.text}</code></strong>
-                  {fixChecked && <em>{f.correct ? "BEST FIX — " : ""}{f.why}</em>}
+                  {fixChecked && <em>{f.correct ? "BEST FIX - " : ""}{f.why}</em>}
                 </button>
               );
             })}

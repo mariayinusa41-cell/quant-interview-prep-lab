@@ -156,7 +156,7 @@ export default function StoryTeaser({ teaser }: { teaser: Teaser }) {
       {stage === "question" && (
         <div className="story-question-block pirate-enter">
           <p className="vote-caption final-question">{teaser.question}</p>
-          <p className="story-note">Commit to an answer before you open the solution — that's the whole point.</p>
+          <p className="story-note">Commit to an answer before you open the solution - that's the whole point.</p>
           <div className="quiz-q-input-row" style={{ justifyContent: "center" }}>
             <input
               type="text"
@@ -167,7 +167,7 @@ export default function StoryTeaser({ teaser }: { teaser: Teaser }) {
             />
           </div>
           <button type="button" className="continue-btn" onClick={() => setStage("answer")}>
-            {guess.trim() ? "Lock it in — show the answer" : "Show the answer"}
+            {guess.trim() ? "Lock it in - show the answer" : "Show the answer"}
           </button>
         </div>
       )}

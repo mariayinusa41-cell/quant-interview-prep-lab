@@ -173,11 +173,11 @@ export function AccessStartButton({ gameId, title = "this game", defaultLabel = 
                   <p className="mm-step-hint">
                     {lifetimeGroupLabel ? (
                       <>
-                        Heads up: as a Free user you get {lifetimeCap === 1 ? "one lifetime play across all of" : `${lifetimeCap} lifetime plays across`} {lifetimeGroupLabel} — starting {title} uses it, and every other {lifetimeGroupLabel} game becomes Infinity Pass only right after, whether you've tried it or not.
+                        Heads up: as a Free user you get {lifetimeCap === 1 ? "one lifetime play across all of" : `${lifetimeCap} lifetime plays across`} {lifetimeGroupLabel} - starting {title} uses it, and every other {lifetimeGroupLabel} game becomes Infinity Pass only right after, whether you've tried it or not.
                       </>
                     ) : (
                       <>
-                        Heads up: as a Free user this is a one-time unlock — {lifetimeCap === 1 ? "this is your only lifetime play" : `you get ${lifetimeCap} lifetime plays`} of {title}. After that it's Infinity Pass only.
+                        Heads up: as a Free user this is a one-time unlock - {lifetimeCap === 1 ? "this is your only lifetime play" : `you get ${lifetimeCap} lifetime plays`} of {title}. After that it's Infinity Pass only.
                       </>
                     )}
                   </p>

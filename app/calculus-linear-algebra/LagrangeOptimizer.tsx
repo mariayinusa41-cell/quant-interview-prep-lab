@@ -53,7 +53,7 @@ export default function LagrangeOptimizer() {
   return (
     <div className="calc-subgame">
       <p className="calc-subgame-intro">
-        Solve the actual Lagrange condition — ∇f = λ∇g — for x*. No live objective value to chase toward; work the
+        Solve the actual Lagrange condition - ∇f = λ∇g - for x*. No live objective value to chase toward; work the
         algebra, then type the number.
       </p>
       <div className="lab-hud">
@@ -68,7 +68,7 @@ export default function LagrangeOptimizer() {
           is x* at the optimum?
         </p>
         <p className="mm-step-hint" style={{ marginBottom: 10 }}>
-          ∇f = (y, x), ∇g = ({problem.a}, {problem.b}). Setting ∇f = λ∇g gives y = λ{problem.a}, x = λ{problem.b} —
+          ∇f = (y, x), ∇g = ({problem.a}, {problem.b}). Setting ∇f = λ∇g gives y = λ{problem.a}, x = λ{problem.b} -
           substitute both into the constraint to solve for λ, then x*.
         </p>
 
@@ -90,7 +90,7 @@ export default function LagrangeOptimizer() {
         ) : (
           <div className="calc-reveal">
             <p className={isCorrect ? "quiz-q-explain is-correct" : "quiz-q-explain is-wrong"}>
-              {isCorrect ? "✓ Correct. " : `✗ Not quite — x* = ${solution.xStar.toFixed(3)}. `}
+              {isCorrect ? "✓ Correct. " : `✗ Not quite - x* = ${solution.xStar.toFixed(3)}. `}
               λ = k / (2ab) = {problem.k} / (2·{problem.a}·{problem.b}) = {solution.lambda.toFixed(3)}, so x* = λ
               {problem.b} = {solution.xStar.toFixed(3)} and y* = λ{problem.a} = {solution.yStar.toFixed(3)}. Check:{" "}
               {problem.a}({solution.xStar.toFixed(2)}) + {problem.b}({solution.yStar.toFixed(2)}) ≈ {problem.k}, and

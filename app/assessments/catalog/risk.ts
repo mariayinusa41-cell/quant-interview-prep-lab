@@ -27,7 +27,7 @@ function riskSet(n: number): Item[] {
         `$${es}M`,
         [`$${Math.round(Z99 * (vol / 100) * nav * 100) / 100}M`, `$${Math.round((vol / 100) * nav * 100) / 100}M`, `$${Math.round(ES975 * (vol / 100) * nav * 100) / 100}M`],
         "expected-value",
-        `ES = σ·φ(z)/(1−α) = ${ES99} × ${vol}% × $${nav}M = $${es}M — always above VaR, because it averages the tail rather than marking its edge.`,
+        `ES = σ·φ(z)/(1−α) = ${ES99} × ${vol}% × $${nav}M = $${es}M - always above VaR, because it averages the tail rather than marking its edge.`,
       );
     },
     (i: number) => choiceItem(
@@ -45,7 +45,7 @@ function riskSet(n: number): Item[] {
         `r-${i}`,
         "In a crisis every pairwise correlation converges to 1. What does portfolio volatility become?",
         "The weighted sum of the individual volatilities",
-        ["The square root of the sum of squared weights", "Unchanged — correlation affects only covariance", "The largest single asset volatility"],
+        ["The square root of the sum of squared weights", "Unchanged - correlation affects only covariance", "The largest single asset volatility"],
         "distributions",
         `At ρ = 1 the cross terms are maximal and σₚ collapses to Σwᵢσᵢ (here ${weighted}%). Diversification stops existing exactly when it is needed.`,
       );
@@ -61,7 +61,7 @@ function riskSet(n: number): Item[] {
     (i: number) => choiceItem(
       `r-${i}`,
       "A portfolio is short gamma. Volatility spikes sharply. What happens?",
-      "Losses accelerate as the move grows — the hedge worsens with size",
+      "Losses accelerate as the move grows - the hedge worsens with size",
       ["Losses are linear in the move", "The position gains from higher volatility", "Delta stays constant"],
       "options-greeks",
       "Short gamma means delta moves against you as spot moves, so re-hedging locks in losses at an accelerating rate.",

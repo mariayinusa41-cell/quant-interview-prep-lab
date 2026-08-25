@@ -15,7 +15,7 @@ export const GAME = {
   X0: 100,
   MU: 8, // expected gain on a non-shock step
   SIGMA0: 4, // step stdev at n=1
-  VARIANCE_GROWTH: 0.04, // sigma_n = SIGMA0 * (1+g)^n — "exponentially increasing variance"
+  VARIANCE_GROWTH: 0.04, // sigma_n = SIGMA0 * (1+g)^n - "exponentially increasing variance"
   LAMBDA: 0.1, // Poisson shock rate per step
   SHOCK_MULTIPLIER: 0.5, // wealth is halved on a shock
   MAX_STEPS: 30,

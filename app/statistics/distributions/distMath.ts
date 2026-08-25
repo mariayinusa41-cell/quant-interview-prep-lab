@@ -74,7 +74,7 @@ export function buildSpec(id: DistId, rng: () => number): DistSpec {
         id,
         label: "Uniform",
         quantUse: "A price equally likely to land anywhere in a fixed band.",
-        tell: "Flat top, hard edges on both sides — nothing outside the range.",
+        tell: "Flat top, hard edges on both sides - nothing outside the range.",
         discrete: false,
         params: { a, b },
         mean: (a + b) / 2,

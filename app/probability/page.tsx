@@ -40,7 +40,7 @@ export default function ProbabilityPage() {
           <p className="pirate-kicker">Outcry</p>
           <h1 className="pirate-story-line teasers-title">Probability</h1>
           <p className="pirate-story-line teasers-subtitle">
-            Interactive simulations for the probability chapter — play them out, don't just read the theory.
+            Interactive simulations for the probability chapter - play them out, don't just read the theory.
           </p>
 
           <div className="lab-link-list">

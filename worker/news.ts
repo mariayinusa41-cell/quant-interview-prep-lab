@@ -104,10 +104,10 @@ async function collectJobs(): Promise<Row[]> {
       rows.push({
         externalId: `gh-${token}-${job.id}`,
         kind: "job",
-        title,
+        title: normaliseDashes(title),
         url: job.absolute_url,
         source: firm,
-        location: (job.location?.name ?? "").trim() || "Unspecified",
+        location: normaliseDashes((job.location?.name ?? "").trim()) || "Unspecified",
         category: categorise(title),
         summary: null,
         postedAt: job.updated_at ?? job.first_published ?? null,
@@ -115,6 +115,17 @@ async function collectJobs(): Promise<Row[]> {
     }
   }
   return rows;
+}
+
+/**
+ * Normalises dashes in third-party text.
+ *
+ * Firms write job titles like "Quantitative Developer – Equity Options".
+ * A hyphen carries the identical meaning, so this keeps the site free of
+ * em and en dashes without changing what a listing says.
+ */
+function normaliseDashes(s: string): string {
+  return s.replace(/\s*[—–]\s*/g, " - ");
 }
 
 function stripTags(s: string): string {
@@ -180,12 +191,12 @@ async function collectArticles(): Promise<Row[]> {
         rows.push({
           externalId: `arxiv-${item.link.split("/").pop()}`,
           kind: "article",
-          title,
+          title: normaliseDashes(title),
           url: item.link,
           source: "arXiv q-fin",
           location: null,
           category: "research",
-          summary: decodeEntities(cleanAbstract(item.description)).slice(0, 280),
+          summary: normaliseDashes(decodeEntities(cleanAbstract(item.description))).slice(0, 280),
           postedAt: item.pubDate || null,
         });
       }
@@ -210,7 +221,7 @@ async function collectArticles(): Promise<Row[]> {
       rows.push({
         externalId: `hn-${hit.objectID}`,
         kind: "article",
-        title: hit.title.trim(),
+        title: normaliseDashes(hit.title.trim()),
         url: hit.url,
         source: "Hacker News",
         location: null,

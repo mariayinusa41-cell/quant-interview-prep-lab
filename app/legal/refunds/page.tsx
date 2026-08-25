@@ -32,7 +32,7 @@ export default function RefundsPage() {
           <h2>7-day refund window</h2>
           <p>
             Both the 2-Week Pass and the first month of a Monthly subscription can be refunded in full within{" "}
-            <strong>7 days of the charge</strong>. Ask and we refund &mdash; no explanation required.
+            <strong>7 days of the charge</strong>. Ask and we refund - no explanation required.
           </p>
           <p>
             We may decline where there is clear evidence of abuse, such as repeatedly buying and refunding, or an
@@ -54,7 +54,7 @@ export default function RefundsPage() {
 
           <h2>Cancelling a subscription</h2>
           <p>
-            Cancelling stops the next charge. It does not remove access you have already paid for &mdash; that runs
+            Cancelling stops the next charge. It does not remove access you have already paid for - that runs
             to the end of the current period. To cancel, email us from your account address and we will action it
             and confirm.
           </p>
@@ -78,7 +78,7 @@ export default function RefundsPage() {
             date of the charge. We aim to reply within 2 business days.
           </p>
           <p>
-            Approved refunds go back to the original payment method through Stripe. Your bank typically takes 5&ndash;10
+            Approved refunds go back to the original payment method through Stripe. Your bank typically takes 5-10
             business days to post it, which is outside our control.
           </p>
 

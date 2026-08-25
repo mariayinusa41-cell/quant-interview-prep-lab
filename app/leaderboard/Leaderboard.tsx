@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useProgress } from "../progress/ProgressContext";
 import { useProfile } from "../profile/ProfileContext";
-import { AvatarSprite } from "../profile/avatars";
+import { AvatarSprite, displayAvatarId } from "../profile/avatars";
 import PixelDiamond from "./PixelDiamond";
 
 // Real accounts only — no sample/placeholder rows. A row exists here iff a
@@ -63,7 +63,11 @@ export default function Leaderboard() {
         ? above.accuracy - (sorted[youIndex].accuracy ?? 0)
         : null;
 
-  const avatarFor = (row: LeaderboardRow) => (row.isYou ? profile.avatar : "duck");
+  // displayAvatarId, not profile.avatar: a guest's stored value can still be
+  // a character left over from before the placeholder existed, and the "you"
+  // row would render it. Everyone else falls back to the duck, since the
+  // board API does not send other players' avatars.
+  const avatarFor = (row: LeaderboardRow) => (row.isYou ? displayAvatarId(profile) : "duck");
 
   return (
     <>
@@ -117,7 +121,7 @@ export default function Leaderboard() {
           </button>
           {youIndex > 0 && gap !== null && gap > 0 && (
             <span className="arc-lb-gap">
-              You are <strong>#{youIndex + 1}</strong> — {gap}
+              You are <strong>#{youIndex + 1}</strong> - {gap}
               {sort === "tickets" ? ` ticket${gap === 1 ? "" : "s"}` : ` point${gap === 1 ? "" : "s"}`} off #
               {youIndex}.
             </span>
@@ -126,7 +130,7 @@ export default function Leaderboard() {
 
         {loaded && rows.length === 0 && (
           <p className="arc-note" style={{ marginTop: 0, marginBottom: 12 }}>
-            No other synced accounts yet — be the first real row.
+            No other synced accounts yet - be the first real row.
           </p>
         )}
 
@@ -151,7 +155,7 @@ export default function Leaderboard() {
                 {row.isYou && <span className="arc-lb-youtag">YOU</span>}
               </span>
               <span className="arc-lb-tickets">{row.tickets}</span>
-              <span className="arc-lb-acc">{row.accuracy === null ? "—" : `${row.accuracy}%`}</span>
+              <span className="arc-lb-acc">{row.accuracy === null ? "-" : `${row.accuracy}%`}</span>
             </li>
           ))}
         </ol>

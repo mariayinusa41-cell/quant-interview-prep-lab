@@ -55,7 +55,7 @@ async function send(
 ): Promise<SendResult> {
   const apiKey = envVar("RESEND_API_KEY");
   if (!apiKey) {
-    console.error(`[email] RESEND_API_KEY is not set — no ${purpose} email was sent.`);
+    console.error(`[email] RESEND_API_KEY is not set - no ${purpose} email was sent.`);
     return { sent: false, reason: "not-configured" };
   }
 
@@ -108,12 +108,12 @@ export async function sendPasswordResetEmail(toEmail: string, resetUrl: string):
     `Someone asked to reset the password for this Outcry account.\n\n` +
       `Open this link to choose a new one:\n\n${resetUrl}\n\n` +
       `This link expires in 1 hour and can only be used once.\n\n` +
-      `If this wasn't you, ignore this email — your password has not changed.`,
+      `If this wasn't you, ignore this email - your password has not changed.`,
     `<p>Someone asked to reset the password for this Outcry account.</p>` +
       `<p><a href="${resetUrl}">Choose a new password</a></p>` +
       `<p style="word-break:break-all;font-size:12px;color:#666">${resetUrl}</p>` +
       `<p>This link expires in <strong>1 hour</strong> and can only be used once.</p>` +
-      `<p>If this wasn't you, you can ignore this email — your password has not changed.</p>`,
+      `<p>If this wasn't you, you can ignore this email - your password has not changed.</p>`,
     "password reset",
   );
 }

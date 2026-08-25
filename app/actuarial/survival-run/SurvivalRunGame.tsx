@@ -47,7 +47,7 @@ type Checkpoint = {
 const CHECKPOINTS: Checkpoint[] = [
   {
     atYear: 1,
-    prompt: "First hurdle — what is the chance this cohort clears age 65?",
+    prompt: "First hurdle - what is the chance this cohort clears age 65?",
     formula: "p₆₅ = 1 − q₆₅",
     hint: "q₆₅ = 0.012.",
     answer: survivalOneYear(TABLE.q[0]),
@@ -59,7 +59,7 @@ const CHECKPOINTS: Checkpoint[] = [
   },
   {
     atYear: 3,
-    prompt: "Three hurdles cleared — what is the chance of surviving all three?",
+    prompt: "Three hurdles cleared - what is the chance of surviving all three?",
     formula: "₃p₆₅ = p₆₅ × p₆₆ × p₆₇",
     hint: "q = 0.012, 0.013, 0.015 for ages 65, 66, 67.",
     answer: kSurvival(TABLE, 3),
@@ -67,11 +67,11 @@ const CHECKPOINTS: Checkpoint[] = [
     decimals: 6,
     skill: "distributions",
     explain: (v) =>
-      `₃p₆₅ = 0.988 × 0.987 × 0.985 = ${v}. Survival compounds multiplicatively — this is why a small annual improvement moves a long-dated liability so much more than it first appears.`,
+      `₃p₆₅ = 0.988 × 0.987 × 0.985 = ${v}. Survival compounds multiplicatively - this is why a small annual improvement moves a long-dated liability so much more than it first appears.`,
   },
   {
     atYear: 8,
-    prompt: "Year 8 — what is that year's payment worth to you today?",
+    prompt: "Year 8 - what is that year's payment worth to you today?",
     formula: "EPV₈ = v⁸ × ₈p₆₅ × payment",
     hint: `₈p₆₅ = ${kSurvival(TABLE, 8).toFixed(6)}, v⁸ = ${discount(RATE, 8).toFixed(6)}, payment = ${PAYMENT.toLocaleString()}.`,
     answer: expectedPayment(TABLE, RATE, 8, PAYMENT),
@@ -91,7 +91,7 @@ const CHECKPOINTS: Checkpoint[] = [
     decimals: 2,
     skill: "expected-value",
     explain: (v) =>
-      `The EPV is ${v} per policy. Note the k = 0 term is exactly 1 × payment — an annuity-due pays immediately, so the first payment carries no discount and no mortality.`,
+      `The EPV is ${v} per policy. Note the k = 0 term is exactly 1 × payment - an annuity-due pays immediately, so the first payment carries no discount and no mortality.`,
   },
 ];
 
@@ -192,7 +192,7 @@ export default function SurvivalRunGame() {
           <p>
             A cohort aged 65 collects {PAYMENT.toLocaleString()} a year for up to {YEARS} years. Each
             year is a hurdle, and the hurdles get taller as mortality rises. How far the runner gets
-            <em> is</em> the survival curve — and what you owe is that curve, discounted.
+            <em> is</em> the survival curve - and what you owe is that curve, discounted.
           </p>
           <div className="lab-topic-grid">
             {[
@@ -203,8 +203,8 @@ export default function SurvivalRunGame() {
             ].map(([t, s]) => <div key={t}><strong>{t}</strong><span>{s}</span></div>)}
           </div>
           <p className="mm-step-hint">
-            Interview lens: an annuity writer is short longevity. Every improvement in mortality —
-            every good news story about medicine — makes this liability bigger.
+            Interview lens: an annuity writer is short longevity. Every improvement in mortality -
+            every good news story about medicine - makes this liability bigger.
           </p>
           <AccessStartButton
             gameId="actuarial-survival-run"
@@ -271,7 +271,7 @@ export default function SurvivalRunGame() {
       {/* ---------- Checkpoint ---------- */}
       {phase === "checkpoint" && current && (
         <div className="stochastic-explain">
-          <p className="quiz-panel-title">Checkpoint — age {TABLE.startAge + current.atYear}</p>
+          <p className="quiz-panel-title">Checkpoint - age {TABLE.startAge + current.atYear}</p>
           <p className="mm-step-hint">{current.prompt}</p>
           <div className="mutiny-formula">{current.formula}</div>
           <p className="tri-note">{current.hint}</p>
@@ -338,7 +338,7 @@ export default function SurvivalRunGame() {
             <>
               <p className={Math.abs(Number(shockInput) - shortfall) <= 900 ? "quiz-q-explain is-correct" : "quiz-q-explain is-wrong"}>
                 EPV rises from ${baseEPV.toLocaleString(undefined, { maximumFractionDigits: 0 })} to $
-                {shockEPV.toLocaleString(undefined, { maximumFractionDigits: 0 })} — a shortfall of{" "}
+                {shockEPV.toLocaleString(undefined, { maximumFractionDigits: 0 })} - a shortfall of{" "}
                 <strong>${shortfall.toLocaleString(undefined, { maximumFractionDigits: 0 })}</strong>{" "}
                 per policy, or{" "}
                 <strong>${((shortfall * BOOK) / 1e6).toFixed(2)}M</strong> across a {BOOK.toLocaleString()}-policy
@@ -350,7 +350,7 @@ export default function SurvivalRunGame() {
                 {((shockEPV / baseEPV - 1) * 100).toFixed(2)}%. Discounting mutes distant payments,
                 so the damage concentrates in the years the cohort was always likely to reach. On a
                 whole-life annuity, with no {YEARS}-year cutoff, the same improvement bites far
-                harder — the payments it adds are exactly the ones you never reserved for.
+                harder - the payments it adds are exactly the ones you never reserved for.
               </p>
               <AccessStartButton
                 gameId="actuarial-survival-run"

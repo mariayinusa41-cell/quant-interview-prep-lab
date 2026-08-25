@@ -25,7 +25,7 @@ const casinoGames = [
   },
   {
     title: "Dice EV Lab",
-    description: "Reroll games, roll-until-target, max/min of N, bust accumulators, and backgammon-flavored EV — endless dice questions.",
+    description: "Reroll games, roll-until-target, max/min of N, bust accumulators, and backgammon-flavored EV - endless dice questions.",
     href: "/probability/quitters-never-lose/casino/dice-lab",
     icon: "dice" as const,
   },

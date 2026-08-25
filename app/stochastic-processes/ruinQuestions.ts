@@ -114,7 +114,7 @@ export function makeRuinQuestion(
           { label: "μ", value: String(MU) },
         ],
         answer: R, tolerance: 0.005, isProbability: false,
-        explanation: `R = θ/((1+θ)μ) = ${theta}/(${(1 + theta).toFixed(2)}·${MU}) = ${f4(R)}. R is the decay rate of ruin risk per unit of surplus — bigger R means surplus buys safety faster.`,
+        explanation: `R = θ/((1+θ)μ) = ${theta}/(${(1 + theta).toFixed(2)}·${MU}) = ${f4(R)}. R is the decay rate of ruin risk per unit of surplus - bigger R means surplus buys safety faster.`,
       };
     }
     case "premium-c": {
@@ -160,7 +160,7 @@ export function makeRuinQuestion(
           { label: "R", value: f4(R) },
         ],
         answer, tolerance: Math.max(1, answer * 0.05), isProbability: false,
-        explanation: `Set (1/(1+θ))·e^(−Ru) = ${target} and solve: u = ln[(1/(1+θ)) / ${target}] / R = ${f2(answer)} ticks. This is the inverse of the ruin formula — the surplus you must hold to buy a given safety level.`,
+        explanation: `Set (1/(1+θ))·e^(−Ru) = ${target} and solve: u = ln[(1/(1+θ)) / ${target}] / R = ${f2(answer)} ticks. This is the inverse of the ruin formula - the surplus you must hold to buy a given safety level.`,
       };
     }
     case "expected-claims": {

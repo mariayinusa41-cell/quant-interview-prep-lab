@@ -131,7 +131,7 @@ export default function TigerAnswerBuilder() {
 
           {showResults && (
             <p className={isCorrect ? "answer-total is-complete" : "answer-total"} style={{ textAlign: "left" }}>
-              {isCorrect ? "✓ Correct." : `✗ Not quite — with ${count} tigers, the sheep is ${correct}.`}
+              {isCorrect ? "✓ Correct." : `✗ Not quite - with ${count} tigers, the sheep is ${correct}.`}
             </p>
           )}
 
@@ -160,7 +160,7 @@ export default function TigerAnswerBuilder() {
             <div className="answer-results">
               <div className="answer-checklist">
                 <p className="answer-checklist-title">
-                  Explanation — {conceptsFound.length} / {CONCEPT_CHECKS.length} key ideas found
+                  Explanation - {conceptsFound.length} / {CONCEPT_CHECKS.length} key ideas found
                 </p>
                 <ul>
                   {CONCEPT_CHECKS.map((c) => (

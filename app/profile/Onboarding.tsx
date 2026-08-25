@@ -158,7 +158,7 @@ export default function Onboarding() {
       if (data.user?.displayName && !displayName) setDisplayName(data.user.displayName);
       setStep("avatar");
     } catch {
-      setAuthError("Network error — the request never reached the server.");
+      setAuthError("Network error - the request never reached the server.");
     } finally {
       setAuthSubmitting(false);
     }
@@ -300,7 +300,7 @@ export default function Onboarding() {
           <>
             <p className="onboarding-kicker">Step 3</p>
             <h2 className="onboarding-title">What are you interviewing for?</h2>
-            <p className="onboarding-copy">Pick as many as apply. This weights what counts toward your readiness — it never hides games.</p>
+            <p className="onboarding-copy">Pick as many as apply. This weights what counts toward your readiness - it never hides games.</p>
 
             <div className="onboarding-choice-grid">
               {TRACKS.map((track) => (
@@ -336,7 +336,7 @@ export default function Onboarding() {
           <>
             <p className="onboarding-kicker">Step 4</p>
             <h2 className="onboarding-title">A bit about you</h2>
-            <p className="onboarding-copy">All optional — it only shapes which games get recommended first.</p>
+            <p className="onboarding-copy">All optional - it only shapes which games get recommended first.</p>
 
             <label className="onboarding-field">
               <span>Field of study</span>
@@ -374,7 +374,7 @@ export default function Onboarding() {
             <p className="onboarding-kicker">How this works</p>
             <h2 className="onboarding-title">Three numbers to know</h2>
             <p className="onboarding-copy">
-              You learn by playing. Every game asks real questions and grades them — that is where
+              You learn by playing. Every game asks real questions and grades them - that is where
               all three numbers come from.
             </p>
 
@@ -391,7 +391,7 @@ export default function Onboarding() {
                 <span className="onboarding-legend-icon"><TicketIcon /></span>
                 <span>
                   <strong>Tickets</strong>
-                  One for every question you answer correctly. Never goes down — a wrong answer
+                  One for every question you answer correctly. Never goes down - a wrong answer
                   costs you nothing here.
                 </span>
               </li>
@@ -406,7 +406,7 @@ export default function Onboarding() {
             </ul>
 
             <p className="onboarding-copy">
-              Losing a hand of blackjack or getting shipwrecked never touches tickets or accuracy —
+              Losing a hand of blackjack or getting shipwrecked never touches tickets or accuracy -
               that is variance, not a mistake. Only questions are graded.
             </p>
 

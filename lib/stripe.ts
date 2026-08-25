@@ -34,7 +34,7 @@ export type CheckoutResult = { url: string } | { error: string };
 // leaderboard's gold-name treatment would have nothing real to check.
 export async function createCheckoutSession(plan: PlanId, origin: string, userId: number): Promise<CheckoutResult> {
   const apiKey = getStripeSecretKey();
-  if (!apiKey) return { error: "Stripe isn't connected yet — no STRIPE_SECRET_KEY configured." };
+  if (!apiKey) return { error: "Stripe isn't connected yet - no STRIPE_SECRET_KEY configured." };
 
   const config = PLAN_CONFIG[plan];
   if (!config) return { error: "Unknown plan." };
@@ -103,7 +103,7 @@ export type VerifyResult =
 // asks Stripe "was this really paid," not the client.
 export async function retrieveCheckoutSession(sessionId: string): Promise<VerifyResult> {
   const apiKey = getStripeSecretKey();
-  if (!apiKey) return { error: "Stripe isn't connected yet — no STRIPE_SECRET_KEY configured." };
+  if (!apiKey) return { error: "Stripe isn't connected yet - no STRIPE_SECRET_KEY configured." };
 
   const res = await fetch(`https://api.stripe.com/v1/checkout/sessions/${encodeURIComponent(sessionId)}`, {
     headers: { Authorization: `Basic ${btoa(`${apiKey}:`)}` },

@@ -62,7 +62,7 @@ export default function VerifyEmailNotice() {
       );
     } catch {
       setResend("failed");
-      setDetail("Network error — the request never reached the server.");
+      setDetail("Network error - the request never reached the server.");
     }
   };
 
@@ -76,7 +76,7 @@ export default function VerifyEmailNotice() {
         Verify <strong>{me.email}</strong> to unlock your welcome gift.
       </p>
       {resend === "sent" ? (
-        <p className="verify-note-sub">Sent — check your inbox (and spam).</p>
+        <p className="verify-note-sub">Sent - check your inbox (and spam).</p>
       ) : (
         <button type="button" className="verify-note-btn" onClick={requestResend} disabled={resend === "sending"}>
           {resend === "sending" ? "Sending..." : "Resend email"}
@@ -85,7 +85,7 @@ export default function VerifyEmailNotice() {
       {resend === "failed" && detail && <p className="verify-note-sub is-bad">{detail}</p>}
       {devUrl && (
         <p className="verify-note-sub">
-          Local dev only —{" "}
+          Local dev only -{" "}
           <a href={devUrl} className="verify-note-link">
             open the verification link
           </a>

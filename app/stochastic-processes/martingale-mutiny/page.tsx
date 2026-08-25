@@ -4,7 +4,7 @@ import MartingaleMutinyGame from "./MartingaleMutinyGame";
 
 export const metadata: Metadata = {
   title: "Martingale Mutiny - Stochastic Processes",
-  description: "A flat edge against a proportional shock — step for expected value or stop and bank it, and see how the optional-stopping recursion scores your call.",
+  description: "A flat edge against a proportional shock - step for expected value or stop and bank it, and see how the optional-stopping recursion scores your call.",
 };
 
 export default function MartingaleMutinyPage() {

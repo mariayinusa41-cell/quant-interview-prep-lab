@@ -4,7 +4,7 @@ import ConcurrencyGame from "./ConcurrencyGame";
 
 export const metadata: Metadata = {
   title: "Concurrency Clash - Quant Developer",
-  description: "Data races, condition variables, memory ordering, and deadlock — read the code and find the defect.",
+  description: "Data races, condition variables, memory ordering, and deadlock - read the code and find the defect.",
 };
 
 export default function ConcurrencyPage() {

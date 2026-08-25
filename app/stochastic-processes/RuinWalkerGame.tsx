@@ -156,19 +156,19 @@ export default function RuinWalkerGame() {
         <div className="pixel-stage stochastic-briefing">
           <p className="quiz-panel-title">You run the book. Don't go negative.</p>
           <p>
-            This is the actual Cramér–Lundberg ruin model, not a coin-flip walk. Your surplus starts at {START_SURPLUS}{" "}
-            ticks and earns premium every period — but claims arrive at random (Poisson rate λ = {LAMBDA}/period) with
-            random sizes (mean μ = {MU} ticks). Ruin is surplus dropping below zero, permanently — there's no
+            This is the actual Cramér-Lundberg ruin model, not a coin-flip walk. Your surplus starts at {START_SURPLUS}{" "}
+            ticks and earns premium every period - but claims arrive at random (Poisson rate λ = {LAMBDA}/period) with
+            random sizes (mean μ = {MU} ticks). Ruin is surplus dropping below zero, permanently - there's no
             recovering once it happens.
           </p>
           <div className="stochastic-rule-grid">
             <div><strong>LOADING (θ)</strong><span>you choose</span><small>higher θ = fatter premium, safer, but you're charging more</small></div>
             <div><strong>CLAIMS</strong><span>random count &amp; size</span><small>Poisson arrivals, exponential severity</small></div>
-            <div><strong>RUIN</strong><span>surplus &lt; 0</span><small>absorbing — game over</small></div>
+            <div><strong>RUIN</strong><span>surplus &lt; 0</span><small>absorbing - game over</small></div>
           </div>
           <p className="mm-step-hint">
             Interview lens: the adjustment coefficient R and the ruin probability ψ(u) = (1/(1+θ))·e^(−Ru) are closed-form
-            for exponential claims — you'll compute ψ(u) live each period as your surplus changes.
+            for exponential claims - you'll compute ψ(u) live each period as your surplus changes.
           </p>
           <AccessStartButton gameId="stochastic-ruin-walker" title="Ruin Walker" defaultLabel="Set up the book" className="continue-btn" onStart={start}>
             Set up the book
@@ -188,7 +188,7 @@ export default function RuinWalkerGame() {
             Bankroll: {fmt(STARTING_BANKROLL)}
           </p>
           <p className="pick-ticket-col-label" style={{ marginBottom: 6 }}>
-            SAFETY LOADING (θ) — premium = (1+θ)·λ·μ per period
+            SAFETY LOADING (θ) - premium = (1+θ)·λ·μ per period
           </p>
           <div className="answer-crew-picker" style={{ marginBottom: 18 }}>
             {THETA_OPTIONS.map((t) => (
@@ -233,8 +233,8 @@ export default function RuinWalkerGame() {
           title={outcome ? "SURPLUS WENT NEGATIVE" : pnlDollars >= 0 ? "SESSION PROFIT" : "SESSION LOSS"}
           sub={
             outcome
-              ? `Ruin hit after ${round} period${round === 1 ? "" : "s"} at θ = ${Math.round((theta ?? 0) * 100)}%. Once surplus goes negative, the process is absorbed — there's no continuing.`
-              : `${fmt(pnlDollars)} over ${round} periods — ended at ${fmt(bankroll)}, surplus ${fmt2(Math.max(surplus, 0))}.`
+              ? `Ruin hit after ${round} period${round === 1 ? "" : "s"} at θ = ${Math.round((theta ?? 0) * 100)}%. Once surplus goes negative, the process is absorbed - there's no continuing.`
+              : `${fmt(pnlDollars)} over ${round} periods - ended at ${fmt(bankroll)}, surplus ${fmt2(Math.max(surplus, 0))}.`
           }
         />
 
@@ -265,7 +265,7 @@ export default function RuinWalkerGame() {
           <TeX block>{String.raw`\psi(u) = \frac{1}{1+\theta} \cdot e^{-Ru}`}</TeX>
           <p>
             At u = 0 that formula gives exactly <TeX>{String.raw`\frac{1}{1+\theta}`}</TeX> ={" "}
-            <strong>{pct(1 / (1 + (theta ?? 0)))}</strong> — however much you&rsquo;ve saved up, there&rsquo;s always
+            <strong>{pct(1 / (1 + (theta ?? 0)))}</strong> - however much you&rsquo;ve saved up, there&rsquo;s always
             some ruin risk unless θ is charged high enough and u grows large.
           </p>
         </div>
@@ -279,7 +279,7 @@ export default function RuinWalkerGame() {
 
   return (
     <div className="answer-content">
-      <p className="pirate-kicker">Stochastic Processes // Cramér–Lundberg live</p>
+      <p className="pirate-kicker">Stochastic Processes // Cramér-Lundberg live</p>
       <h1 className="pirate-story-line answer-title">Ruin Walker</h1>
       <p className="quiz-q-prompt" style={{ marginTop: 6, marginBottom: 16 }}>
         {ROUNDS} periods. Premium accrues, claims land at random, and you watch the surplus. Surplus below zero ends
@@ -311,8 +311,8 @@ export default function RuinWalkerGame() {
           </div>
         </div>
 
-        {/* The walk. There IS a finish line — survive all ROUNDS periods and
-            the book closes solvent — but the only sign of it was a row of
+        {/* The walk. There IS a finish line - survive all ROUNDS periods and
+            the book closes solvent - but the only sign of it was a row of
             dots, so there was nothing to walk toward. The walker now
             advances period by period along a track with the ruin edge
             behind it and the finish ahead, and its height tracks surplus so
@@ -355,7 +355,7 @@ export default function RuinWalkerGame() {
           <div className="quiz-panel" style={{ marginTop: 10 }}>
             <p className="quiz-panel-title">{question?.topic ?? "Compute the ruin probability"}</p>
             <div className={psiChecked ? (psiCorrect ? "quiz-q is-correct" : "quiz-q is-wrong") : "quiz-q"}>
-              <p className="quiz-q-topic">Cramér–Lundberg</p>
+              <p className="quiz-q-topic">Cramér-Lundberg</p>
               <p className="quiz-q-prompt">{question?.prompt}</p>
 
               {question && <RuinFormula kind={question.formula} />}
@@ -390,7 +390,7 @@ export default function RuinWalkerGame() {
                 <p className={psiCorrect ? "quiz-q-explain is-correct" : "quiz-q-explain is-wrong"}>
                   {psiCorrect
                     ? "✓ Correct. "
-                    : `✗ Not quite — it's ${
+                    : `✗ Not quite - it's ${
                         question?.isProbability ? pct(activeAnswer) : activeAnswer.toFixed(2)
                       }. `}
                   {question?.explanation}

@@ -54,7 +54,7 @@ export default function PSDClassifier() {
   return (
     <div className="calc-subgame">
       <p className="calc-subgame-intro">
-        Classify the symmetric matrix Σ = [[a, b], [b, c]] by whether xᵀΣx is always nonnegative — the test that
+        Classify the symmetric matrix Σ = [[a, b], [b, c]] by whether xᵀΣx is always nonnegative - the test that
         decides whether something can be a real covariance matrix.
       </p>
       <div className="lab-hud">
@@ -103,11 +103,11 @@ export default function PSDClassifier() {
             {picked === truth ? "Correct. " : "Not quite. "}
             trace = a + c = {trace}, det = ac − b² = {det}.{" "}
             {det < 0
-              ? "A negative determinant means the eigenvalues have opposite signs — indefinite."
+              ? "A negative determinant means the eigenvalues have opposite signs - indefinite."
               : trace > 0
                 ? det === 0
-                  ? "Positive trace with a zero determinant means one eigenvalue is exactly 0 — semidefinite, not strictly definite."
-                  : "Positive trace and positive determinant means both eigenvalues are positive — definite."
+                  ? "Positive trace with a zero determinant means one eigenvalue is exactly 0 - semidefinite, not strictly definite."
+                  : "Positive trace and positive determinant means both eigenvalues are positive - definite."
                 : trace < 0
                   ? "Negative trace with nonnegative determinant means both eigenvalues are negative."
                   : "Zero trace with zero determinant only stays PSD if b is also 0."}

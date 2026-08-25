@@ -121,7 +121,7 @@ function diceQuestion(
     question: `The board shows ${n} fair six-sided dice scattered face-up. How many show ${faceLabel}?`,
     answer: count,
     unit: "dice",
-    explanation: `Expected count ≈ ${n} × (${targetFaces.length}/6) = ${(n * (targetFaces.length / 6)).toFixed(1)}. This particular board actually has ${count}. Scan in clusters of 8–10 rather than one at a time — you don't have time to count every die individually.`,
+    explanation: `Expected count ≈ ${n} × (${targetFaces.length}/6) = ${(n * (targetFaces.length / 6)).toFixed(1)}. This particular board actually has ${count}. Scan in clusters of 8-10 rather than one at a time - you don't have time to count every die individually.`,
     category: "visual-counting",
     difficulty,
     timeLimitSec,
@@ -160,7 +160,7 @@ export const curatedTechnicalQuestions: TechnicalQuestion[] = [
     question: "A trajectory connects A(0,0) → B(7,4) → C(12,9) → D(18,1). Estimate the total straight-line length.",
     answer: Number((Math.hypot(7, 4) + Math.hypot(5, 5) + Math.hypot(6, 8)).toFixed(1)),
     unit: "units",
-    explanation: `Segment 1: √(7²+4²)≈${Math.hypot(7, 4).toFixed(2)}. Segment 2: √(5²+5²)≈${Math.hypot(5, 5).toFixed(2)}. Segment 3: √(6²+8²)=10. No exact triples here — round each leg to the nearest whole number before summing.`,
+    explanation: `Segment 1: √(7²+4²)≈${Math.hypot(7, 4).toFixed(2)}. Segment 2: √(5²+5²)≈${Math.hypot(5, 5).toFixed(2)}. Segment 3: √(6²+8²)=10. No exact triples here - round each leg to the nearest whole number before summing.`,
     category: "grid-path",
     difficulty: 2,
     timeLimitSec: 45,
@@ -178,7 +178,7 @@ export const curatedTechnicalQuestions: TechnicalQuestion[] = [
 
   {
     id: "tech-5",
-    question: "What is the theoretical minimum one-way latency of a light signal in glass fiber traveling the ~1,200 km Chicago–New York route?",
+    question: "What is the theoretical minimum one-way latency of a light signal in glass fiber traveling the ~1,200 km Chicago-New York route?",
     answer: 5.9,
     unit: "ms",
     explanation: "Refractive index of fiber core n ≈ 1.468, so signal speed = c/n ≈ 204,200 km/s ≈ 4.9 µs/km. 1,200 km × 4.9 µs/km ≈ 5.9 ms (microwave line-of-sight relay towers do it in ~4.0 ms, which is why HFT firms pay for microwave links on this exact route).",

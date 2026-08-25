@@ -121,7 +121,7 @@ const QUESTION_BANK: HotSlotQuestionInstance[] = [
       return (
         `E[return] = P(safe) x 100 x multiplier = ${(o.safeProb.decimal * 100).toFixed(1)}% x $100 x ${o.offeredMultiplier} ` +
         `= $${(o.safeProb.decimal * 100 * o.offeredMultiplier).toFixed(2)}. Net profit subtracts the $100 stake: $${ev.toFixed(2)}. ` +
-        `It is negative because the wheel pays ${fmtX(o.offeredMultiplier)} where a fair price would be ${fmtX(o.fairMultiplier)} — that gap is the house edge.`
+        `It is negative because the wheel pays ${fmtX(o.offeredMultiplier)} where a fair price would be ${fmtX(o.fairMultiplier)} - that gap is the house edge.`
       );
     },
   },
@@ -166,7 +166,7 @@ const QUESTION_BANK: HotSlotQuestionInstance[] = [
     explanation: (o) =>
       `By symmetry every marked number is equally likely to be reached first, so it is simply 1/${o.markedCount} = ` +
       `${o.markedCount === 0 ? "n/a" : ((1 / o.markedCount) * 100).toFixed(1)}%. ` +
-      `Note it does not depend on the ${o.activeCount} active numbers at all — the safe numbers are removed as you go, ` +
+      `Note it does not depend on the ${o.activeCount} active numbers at all - the safe numbers are removed as you go, ` +
       `but they never break the tie between your marked numbers.`,
   },
   {
@@ -190,7 +190,7 @@ const QUESTION_BANK: HotSlotQuestionInstance[] = [
       const n = o.activeCount;
       return (
         `Both the safe count and the total shrink by one after each survival, while your ${o.markedCount} marked numbers stay put: ` +
-        `(${s}/${n}) x (${s - 1}/${n - 1}) x (${s - 2}/${n - 2}). The denominator has to shrink too — that is the step most people miss.`
+        `(${s}/${n}) x (${s - 1}/${n - 1}) x (${s - 2}/${n - 2}). The denominator has to shrink too - that is the step most people miss.`
       );
     },
   },

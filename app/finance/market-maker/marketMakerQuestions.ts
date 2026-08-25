@@ -76,7 +76,7 @@ const QUESTION_BANK: MMQuestionInstance[] = [
       `Your flow signal this round is ${ctx.signal ? ctx.signal.toUpperCase() + " LEAN" : "quiet"}. A BUY lean means informed flow is likely about to lift your ask. Which way should you skew to protect yourself?`,
     answer: () => ({ decimal: 0, tolerance: 0, display: "Skew up" }),
     explanation: () =>
-      `Skew up. Raising both sides raises your ask, so if an informed buyer lifts it anyway, you're compensated closer to where the price is actually headed — and it also makes your bid less attractive, so you're less likely to also buy into a rising market. (Mirror logic applies to a SELL lean: skew down.)`,
+      `Skew up. Raising both sides raises your ask, so if an informed buyer lifts it anyway, you're compensated closer to where the price is actually headed - and it also makes your bid less attractive, so you're less likely to also buy into a rising market. (Mirror logic applies to a SELL lean: skew down.)`,
   },
   {
     id: "inventory-skew",
@@ -90,7 +90,7 @@ const QUESTION_BANK: MMQuestionInstance[] = [
         ? "You're long, so you want to sell more and buy less: skew down. That lowers your ask (more attractive to buyers, who reduce your position) and lowers your bid (less attractive for you to buy even more)."
         : ctx.inventory < 0
           ? "You're short, so you want to buy more and sell less: skew up. That raises your bid (more attractive to sellers, who reduce your position) and raises your ask (less attractive for you to sell even more)."
-          : "You're already flat — no inventory risk to work off, so there's no skew case to make on inventory grounds alone.",
+          : "You're already flat - no inventory risk to work off, so there's no skew case to make on inventory grounds alone.",
   },
   {
     id: "flatten-cost",
@@ -103,7 +103,7 @@ const QUESTION_BANK: MMQuestionInstance[] = [
       display: fmtTicks(Math.abs(ctx.inventory) * FLATTEN_COST_PER_UNIT),
     }),
     explanation: (ctx) =>
-      `Flatten cost = |inventory| × cost per unit = ${Math.abs(ctx.inventory)} × ${FLATTEN_COST_PER_UNIT} = ${fmtTicks(Math.abs(ctx.inventory) * FLATTEN_COST_PER_UNIT)} ticks. Carrying a position into the close isn't free — it's a real reason to trade back toward flat before time runs out.`,
+      `Flatten cost = |inventory| × cost per unit = ${Math.abs(ctx.inventory)} × ${FLATTEN_COST_PER_UNIT} = ${fmtTicks(Math.abs(ctx.inventory) * FLATTEN_COST_PER_UNIT)} ticks. Carrying a position into the close isn't free - it's a real reason to trade back toward flat before time runs out.`,
   },
   {
     id: "parity-bid",
@@ -144,7 +144,7 @@ const QUESTION_BANK: MMQuestionInstance[] = [
     },
     explanation: (ctx) => {
       const grossEdge = (ctx.half / 100) * 100;
-      return `Gross edge = ${ctx.half} cents × 100 shares = ${fmtUsd(grossEdge)}. Hedging 50 deltas costs 50 × $0.01 = $0.50. Net edge = ${fmtUsd(grossEdge - 0.5)} — hedging isn't free, it eats into the edge you just captured.`;
+      return `Gross edge = ${ctx.half} cents × 100 shares = ${fmtUsd(grossEdge)}. Hedging 50 deltas costs 50 × $0.01 = $0.50. Net edge = ${fmtUsd(grossEdge - 0.5)} - hedging isn't free, it eats into the edge you just captured.`;
     },
   },
 ];

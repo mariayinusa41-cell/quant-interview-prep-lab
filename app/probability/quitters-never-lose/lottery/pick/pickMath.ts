@@ -10,7 +10,7 @@ export type PickTemplate = {
   digits: number[]; // the player's chosen digits, length n, each 0-9
 
   ways: number; // n! / product(repeat-group factorials)
-  wayLabel: string; // "120-way", "60-way", etc. — for display
+  wayLabel: string; // "120-way", "60-way", etc. - for display
 
   straightPayout: number; // 10^n / 2
   straightProbFraction: string;

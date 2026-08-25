@@ -13,9 +13,9 @@ const STEP_DELAY = 1100;
 
 const TUTORIAL_STEPS = [
   "Pick a number on the wheel. Before every spin, you'll answer a probability question about your current odds.",
-  "Land on one of your marked numbers and you're out. Land on anything else and that number is removed from the wheel for good — the pool shrinks and your payout multiplier grows.",
+  "Land on one of your marked numbers and you're out. Land on anything else and that number is removed from the wheel for good - the pool shrinks and your payout multiplier grows.",
   "Get a question wrong and you have to mark an ADDITIONAL number before you're allowed to spin. A wrong answer makes your actual odds worse, not just your score.",
-  "You can cash out any time after your first safe spin — or keep pushing your luck on a shrinking wheel.",
+  "You can cash out any time after your first safe spin - or keep pushing your luck on a shrinking wheel.",
 ];
 
 function fmt(n: number) {
@@ -356,7 +356,7 @@ export default function HotSlotGame() {
 
                 {checked && (
                   <p className={isCorrect ? "quiz-q-explain is-correct" : "quiz-q-explain is-wrong"}>
-                    {isCorrect ? "✓ Correct. " : `✗ Not quite — it's ${answerCheck!.display}. `}
+                    {isCorrect ? "✓ Correct. " : `✗ Not quite - it's ${answerCheck!.display}. `}
                     {question.explanation(odds)}
                   </p>
                 )}
@@ -364,7 +364,7 @@ export default function HotSlotGame() {
 
               {checked && extraPickNeeded && (
                 <div style={{ marginTop: 12 }}>
-                  <p className="qty-hint">Wrong answer — mark one additional number before you can spin:</p>
+                  <p className="qty-hint">Wrong answer - mark one additional number before you can spin:</p>
                   <div className="hs-spot-grid">
                     {unmarkedActiveForExtraPick.map((s) => (
                       <button key={s.id} type="button" className="hs-spot-btn" onClick={() => markExtra(s.id)}>
@@ -382,7 +382,7 @@ export default function HotSlotGame() {
                   </button>
                   {pullCount > 0 && (
                     <button type="button" className="chip-btn" onClick={cashOut}>
-                      Cash out — {fmt((wager ?? 0) * cumulativeMultiplier)}
+                      Cash out - {fmt((wager ?? 0) * cumulativeMultiplier)}
                     </button>
                   )}
                 </div>

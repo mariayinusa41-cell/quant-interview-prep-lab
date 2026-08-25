@@ -174,7 +174,7 @@ export default function JobsPanel() {
             ))}
           </div>
         ) : (
-          <p className="arc-note">No applications yet — add your first one above.</p>
+          <p className="arc-note">No applications yet - add your first one above.</p>
         )}
       </section>
     </div>

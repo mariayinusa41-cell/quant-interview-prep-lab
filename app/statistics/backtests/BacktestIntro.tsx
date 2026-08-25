@@ -7,16 +7,16 @@ const STEPS = [
   {
     term: "The job",
     body: "You allocate capital. Twenty analysts each bring you a strategy and a backtest. One curve looks beautiful. Do you fund it?",
-    note: "You can also fund none — and sometimes that's the only right answer.",
+    note: "You can also fund none - and sometimes that's the only right answer.",
   },
   {
     term: "A backtest is an estimate",
-    body: "A Sharpe ratio computed from history is a noisy guess at the real one. With one year of daily data its standard error is about 1.0 — so a backtested Sharpe of 1.0 over a year is statistically indistinguishable from zero skill.",
+    body: "A Sharpe ratio computed from history is a noisy guess at the real one. With one year of daily data its standard error is about 1.0 - so a backtested Sharpe of 1.0 over a year is statistically indistinguishable from zero skill.",
     note: "Standard error of an annualised Sharpe ≈ √(252 / days).",
   },
   {
     term: "Now take the best of twenty",
-    body: "Run twenty strategies with genuinely zero edge and the luckiest one is expected to post a Sharpe around 1.9 on a one-year backtest. Not because it works — because you picked the maximum of twenty noisy numbers.",
+    body: "Run twenty strategies with genuinely zero edge and the luckiest one is expected to post a Sharpe around 1.9 on a one-year backtest. Not because it works - because you picked the maximum of twenty noisy numbers.",
     note: "This is selection bias, and it is the single most common way a real desk loses money.",
   },
   {

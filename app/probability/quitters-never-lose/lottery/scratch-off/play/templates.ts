@@ -66,7 +66,7 @@ export function reduceFraction(numerator: number, denominator: number): { fracti
 
 // --- Outcome table (EV) -----------------------------------------------
 
-const DENOMS = [8, 16]; // fraction denominators — keeps everything a clean power-of-2 fraction
+const DENOMS = [8, 16]; // fraction denominators - keeps everything a clean power-of-2 fraction
 
 function generateOutcomes(hot: boolean): {
   outcomes: Outcome[];

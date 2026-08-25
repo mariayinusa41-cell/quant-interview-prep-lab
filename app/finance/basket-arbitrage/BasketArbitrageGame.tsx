@@ -20,8 +20,8 @@ const SESSION_TIME_SEC = 8 * 60;
 
 const TUTORIAL_STEPS = [
   "Each card is a tradeable basket of commodities with a bid (what you're paid to sell one) and an ask (what you pay to buy one).",
-  "Buy and sell across the cards until every commodity's net inventory reads exactly zero — no directional risk, just the price gap.",
-  `${ROUND_COUNT} rounds, one shared ${SESSION_TIME_SEC / 60}-minute clock for the whole set — it keeps running between rounds, so don't linger on the review screen. Execute once your position is fully hedged and cash-positive.`,
+  "Buy and sell across the cards until every commodity's net inventory reads exactly zero - no directional risk, just the price gap.",
+  `${ROUND_COUNT} rounds, one shared ${SESSION_TIME_SEC / 60}-minute clock for the whole set - it keeps running between rounds, so don't linger on the review screen. Execute once your position is fully hedged and cash-positive.`,
 ];
 
 export default function BasketArbitrageGame() {
@@ -108,15 +108,15 @@ export default function BasketArbitrageGame() {
   function handleExecute(timedOut = false) {
     if (!currentLevel) return;
     if (timedOut) {
-      setRoundResult({ success: false, pnl: 0, message: "Time expired — order book closed without execution." });
+      setRoundResult({ success: false, pnl: 0, message: "Time expired - order book closed without execution." });
       return;
     }
     if (!isBalanced) {
-      setRoundResult({ success: false, pnl: livePnL, message: "Unhedged inventory — that's directional risk, not arbitrage." });
+      setRoundResult({ success: false, pnl: livePnL, message: "Unhedged inventory - that's directional risk, not arbitrage." });
       return;
     }
     if (livePnL <= 0) {
-      setRoundResult({ success: false, pnl: livePnL, message: "Zero or negative PnL — you crossed the spread at a loss." });
+      setRoundResult({ success: false, pnl: livePnL, message: "Zero or negative PnL - you crossed the spread at a loss." });
       return;
     }
     const points = Math.round(livePnL * 10 * (levelIndex + 1));
@@ -162,7 +162,7 @@ export default function BasketArbitrageGame() {
         <div className="fermi-menu">
           <h1 className="fermi-title">Basket Arbitrage</h1>
           <p className="fermi-subtitle">
-            {ROUND_COUNT} puzzles, {SESSION_TIME_SEC / 60} minutes on one shared clock — rising from 2 cards / 1
+            {ROUND_COUNT} puzzles, {SESSION_TIME_SEC / 60} minutes on one shared clock - rising from 2 cards / 1
             commodity up to 9+ cards / 5 commodities. Find the hedge, balance the book, lock in the spread.
           </p>
           {bestScore !== null && <p className="fermi-best">Personal best: {bestScore} pts</p>}

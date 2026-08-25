@@ -148,7 +148,7 @@ export default function LoginForm() {
       // ?login=1 skips the attract screen so the steps show immediately.
       window.location.href = personalized ? "/" : "/?login=1";
     } catch {
-      setError("Network error — the request never reached the server.");
+      setError("Network error - the request never reached the server.");
     } finally {
       setSubmitting(false);
     }
@@ -239,7 +239,7 @@ export default function LoginForm() {
       window.setTimeout(() => setSaveState("idle"), 2000);
     } catch {
       setSaveState("failed");
-      setSaveError("Network error — nothing was saved.");
+      setSaveError("Network error - nothing was saved.");
     }
   };
 
@@ -267,7 +267,7 @@ export default function LoginForm() {
       }
       window.location.href = "/";
     } catch {
-      setDeleteError("Network error — the account was not deleted.");
+      setDeleteError("Network error - the account was not deleted.");
     } finally {
       setDeleting(false);
     }
@@ -282,7 +282,7 @@ export default function LoginForm() {
         <div className="pixel-stage" style={{ maxWidth: 560 }}>
           <p className="quiz-panel-title" style={{ marginBottom: 4 }}>Profile</p>
           <p className="mm-step-hint" style={{ marginBottom: 16 }}>
-            Saved to your account — it follows you to any device you sign in on.
+            Saved to your account - it follows you to any device you sign in on.
           </p>
 
           <label className="onboarding-field">
@@ -384,7 +384,7 @@ export default function LoginForm() {
           {!deleteOpen ? (
             <>
               <p className="mm-step-hint" style={{ marginBottom: 12 }}>
-                Deleting your account removes it permanently — scores, tickets, and sign-in included.
+                Deleting your account removes it permanently - scores, tickets, and sign-in included.
                 There is no undo.
               </p>
               <button type="button" className="chip-btn" onClick={() => setDeleteOpen(true)}>

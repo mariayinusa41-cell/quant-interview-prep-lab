@@ -37,7 +37,7 @@ export default function TrackReadiness() {
     <section className="section">
       <h2>Track readiness</h2>
       <p className="section-intro">
-        Weighted by each track&rsquo;s core skills — the same weighting the labs already use.
+        Weighted by each track&rsquo;s core skills - the same weighting the labs already use.
       </p>
 
       <div className="track-grid">

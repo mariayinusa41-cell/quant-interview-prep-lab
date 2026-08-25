@@ -70,7 +70,7 @@ export default function NewtonStepper() {
     <div className="calc-subgame">
       <p className="calc-subgame-intro">
         Newton's method roots: x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>)/f&apos;(x<sub>n</sub>). Estimate how
-        many iterations from x₀ = {START_X} it takes to land within {TOLERANCE} of the true root — before you see a
+        many iterations from x₀ = {START_X} it takes to land within {TOLERANCE} of the true root - before you see a
         single step.
       </p>
       <div className="lab-hud">

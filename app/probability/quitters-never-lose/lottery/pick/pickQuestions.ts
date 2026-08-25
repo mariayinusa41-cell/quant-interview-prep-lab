@@ -29,7 +29,7 @@ export const PICK_QUESTION_BANK: PickQuestionInstance[] = [
     topicLabel: "Combinatorics",
     prompt: (t) => `You picked ${t.digits.join("")}. In how many different orders could these ${t.n} digits be arranged?`,
     answer: (t) => ({ decimal: t.ways, tolerance: 0, display: `${t.ways}` }),
-    explanation: (t) => `${t.n}! adjusted for repeats = ${t.ways} distinct orderings — this is why your Box bet is a "${t.wayLabel}."`,
+    explanation: (t) => `${t.n}! adjusted for repeats = ${t.ways} distinct orderings - this is why your Box bet is a "${t.wayLabel}."`,
   },
   {
     id: "pick-box-payout",
@@ -64,6 +64,6 @@ export const PICK_QUESTION_BANK: PickQuestionInstance[] = [
       `Straight pays ${money(t.straightPayout)} at odds of ${t.straightProbFraction}. Box pays ${money(t.boxPayout)} at odds of ${t.boxProbFraction}. As a decimal, what's the house edge (1 − EV per dollar) for EACH bet?`,
     answer: () => ({ decimal: 0.5, tolerance: 0.01, display: "0.5 (50%)" }),
     explanation: () =>
-      `Both come out to exactly 50% — every play type on this ticket has the identical house edge. The "way" number and payout just redistribute the same expected value across more or fewer winning combinations; they don't change how good or bad the bet is.`,
+      `Both come out to exactly 50% - every play type on this ticket has the identical house edge. The "way" number and payout just redistribute the same expected value across more or fewer winning combinations; they don't change how good or bad the bet is.`,
   },
 ];

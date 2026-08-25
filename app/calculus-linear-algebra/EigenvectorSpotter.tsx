@@ -71,7 +71,7 @@ export default function EigenvectorSpotter() {
   return (
     <div className="calc-subgame">
       <p className="calc-subgame-intro">
-        One of these four directions doesn't rotate when A is applied to it — it only gets stretched or flipped.
+        One of these four directions doesn't rotate when A is applied to it - it only gets stretched or flipped.
         Click the one that stays on its own line.
       </p>
       <div className="lab-hud">
@@ -134,8 +134,8 @@ export default function EigenvectorSpotter() {
             {pickedIsCorrect ? "Correct. " : "Not quite. "}
             A · ({picked.x}, {picked.y}) = ({Math.round(av.x * 100) / 100}, {Math.round(av.y * 100) / 100}).{" "}
             {isEigenvector(puzzle.matrix, picked)
-              ? "That result is a scalar multiple of the input — same line, so it's an eigenvector."
-              : "That result points in a different direction than the input — not an eigenvector."}
+              ? "That result is a scalar multiple of the input - same line, so it's an eigenvector."
+              : "That result points in a different direction than the input - not an eigenvector."}
           </p>
           <AccessStartButton gameId="calculus-eigenvector-spotter" title="Eigenvector Spotter" defaultLabel="Next matrix" className="continue-btn" onStart={next}>
             Next matrix →

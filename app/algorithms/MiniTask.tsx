@@ -171,7 +171,7 @@ export default function MiniTask() {
       <div className="calc-subgame">
         <p className="calc-subgame-intro">
           What's your coding level? You'll get a couple of warm-up questions, then a real problem to solve by
-          typing actual code — it runs for real, in a sandboxed worker in your browser — followed by a couple of
+          typing actual code - it runs for real, in a sandboxed worker in your browser - followed by a couple of
           questions about what you just built.
         </p>
         <div className="algo-level-grid">
@@ -230,7 +230,7 @@ export default function MiniTask() {
         </div>
         <div className="calc-reveal">
           <p className="quiz-q-explain is-correct">
-            {challenge.title} complete — {mcCorrectCount}/{challenge.preQuestions.length + challenge.postQuestions.length}{" "}
+            {challenge.title} complete - {mcCorrectCount}/{challenge.preQuestions.length + challenge.postQuestions.length}{" "}
             multiple-choice correct, and your code passed every test case.
           </p>
           <div className="algo-mini-actions">
@@ -255,7 +255,7 @@ export default function MiniTask() {
       {stage === "pre" && (
         <>
           <p className="calc-subgame-intro">
-            Warm-up {mcIndex + 1}/{challenge.preQuestions.length} — about the idea behind {challenge.title}, before
+            Warm-up {mcIndex + 1}/{challenge.preQuestions.length} - about the idea behind {challenge.title}, before
             you write any code.
           </p>
           <MCBlock
@@ -340,7 +340,7 @@ export default function MiniTask() {
       {stage === "post" && (
         <>
           <p className="calc-subgame-intro">
-            Wrap-up {mcIndex + 1}/{challenge.postQuestions.length} — now that {challenge.title} is solved, a couple
+            Wrap-up {mcIndex + 1}/{challenge.postQuestions.length} - now that {challenge.title} is solved, a couple
             of questions about the solution itself.
           </p>
           <MCBlock

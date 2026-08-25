@@ -100,7 +100,7 @@ export default function Hub() {
           <section className="section">
             <h2>Mock Interview</h2>
             <p className="section-intro">
-              An interviewer asks, you answer, and they push back on the reasoning — closer to the real thing than a
+              An interviewer asks, you answer, and they push back on the reasoning - closer to the real thing than a
               multiple-choice screen.
             </p>
             <div className="coming-soon-card">

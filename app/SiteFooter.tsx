@@ -23,7 +23,7 @@ export default function SiteFooter() {
 
       <p className="site-footer-support">
         Questions, refunds or account help: <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
-        <span className="site-footer-sla"> &mdash; we aim to reply within 2 business days.</span>
+        <span className="site-footer-sla"> - we aim to reply within 2 business days.</span>
       </p>
 
       <p className="site-footer-fine">

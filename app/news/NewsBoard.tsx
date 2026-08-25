@@ -137,7 +137,7 @@ export default function NewsBoard() {
       <section className="arc-hero" aria-label="Latest openings">
         <div className="arc-ticker-bar">
           {/* Only claim "live" when /api/news actually answered with fresh
-              data — the bundled snapshot says so instead. */}
+              data - the bundled snapshot says so instead. */}
           {isLive ? (
             <span className="arc-live-dot">&#9679; LIVE</span>
           ) : (

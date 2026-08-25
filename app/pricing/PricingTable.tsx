@@ -16,7 +16,7 @@ type Plan = {
   blurb: string;
   bullets: string[];
   cta: string;
-  href?: string; // real, working link — used for the two free tiers
+  href?: string; // real, working link - used for the two free tiers
   highlighted?: boolean;
 };
 
@@ -88,11 +88,11 @@ export default function PricingTable() {
       .then((data: { passHolder?: boolean; error?: string }) => {
         setVerifyBanner(
           data.passHolder
-            ? "Payment confirmed — your name will show gold on the leaderboard."
-            : data.error ?? "Couldn't confirm payment yet — if you were charged, refresh this page."
+            ? "Payment confirmed - your name will show gold on the leaderboard."
+            : data.error ?? "Couldn't confirm payment yet - if you were charged, refresh this page."
         );
       })
-      .catch(() => setVerifyBanner("Network error confirming payment — refresh this page to retry."));
+      .catch(() => setVerifyBanner("Network error confirming payment - refresh this page to retry."));
 
     window.history.replaceState({}, "", "/pricing");
   }, []);
@@ -115,7 +115,7 @@ export default function PricingTable() {
       window.location.href = data.url;
     } catch {
       setErrorId(planId);
-      setErrorMsg("Network error — the request never reached the server.");
+      setErrorMsg("Network error - the request never reached the server.");
     } finally {
       setPendingId(null);
     }
@@ -126,7 +126,7 @@ export default function PricingTable() {
       <p className="pirate-kicker">Outcry</p>
       <h1 className="pirate-story-line answer-title">Pricing</h1>
       <p className="quiz-q-prompt" style={{ marginTop: 6, marginBottom: 24, maxWidth: 640 }}>
-        Free to try, full access when you need it. The paid tiers match how interview prep actually works — a short,
+        Free to try, full access when you need it. The paid tiers match how interview prep actually works - a short,
         intense stretch before one interview, or an ongoing search across a season.
       </p>
 
@@ -177,7 +177,7 @@ export default function PricingTable() {
 
       <p className="assess-footnote" style={{ marginTop: 24 }}>
         Guest and Free-account access percentages are an approximate split of the current game catalog, not a hard
-        technical count — they&rsquo;ll drift slightly as new games ship.
+        technical count - they&rsquo;ll drift slightly as new games ship.
       </p>
 
       {/* Billing terms stated at the point of purchase, not only buried in

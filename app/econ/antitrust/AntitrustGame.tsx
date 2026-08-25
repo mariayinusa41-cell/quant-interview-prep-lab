@@ -17,9 +17,9 @@ import { useSound } from "../../audio/SoundProvider";
 type Phase = "brief" | "define" | "compute" | "verdict";
 
 const VERDICT_COPY = {
-  unlikely: "Unlikely to harm competition — cleared.",
-  scrutiny: "Raises significant concerns — full investigation.",
-  presumed: "Presumed to enhance market power — challenge it.",
+  unlikely: "Unlikely to harm competition - cleared.",
+  scrutiny: "Raises significant concerns - full investigation.",
+  presumed: "Presumed to enhance market power - challenge it.",
 };
 
 const CASE_KEYS = Object.keys(CASES);
@@ -172,7 +172,7 @@ export default function AntitrustGame() {
           </div>
           <p className="mm-step-hint">
             <strong>Interview lens:</strong> Market definition dictates the math. Establish
-            cross-elasticity before running HHI — the same merger clears or fails depending on
+            cross-elasticity before running HHI - the same merger clears or fails depending on
             where you draw the boundary.
           </p>
           <AccessStartButton
@@ -210,7 +210,7 @@ export default function AntitrustGame() {
 
           {/* Core market list */}
           <div className="hhi-firms">
-            <p className="did-trends-title">{currentCase.title} — Primary Market</p>
+            <p className="did-trends-title">{currentCase.title} - Primary Market</p>
             {currentCase.core.map((f, i) => (
               <div
                 className={f.merging ? "hhi-firm is-merging" : "hhi-firm"}
@@ -232,7 +232,7 @@ export default function AntitrustGame() {
           {/* Phase 1 */}
           {phase === "define" && (
             <div className="stochastic-explain">
-              <p className="quiz-panel-title">Step 1 — Define the Relevant Market</p>
+              <p className="quiz-panel-title">Step 1 - Define the Relevant Market</p>
               <p className="mm-step-hint">
                 Include a candidate segment only if customers switch when core prices rise
                 by 5%. Cross-price elasticity &gt;= <strong>{currentCase.substituteThreshold.toFixed(1)}</strong> counts.
@@ -259,7 +259,7 @@ export default function AntitrustGame() {
                       onClick={() => toggle(c.id)}
                     >
                       <strong>
-                        {on ? "▣ IN MARKET" : "☐ EXCLUDED"} — {c.name}
+                        {on ? "▣ IN MARKET" : "☐ EXCLUDED"} - {c.name}
                       </strong>
                       <span>{c.detail}</span>
                       <span className="hhi-elast">
@@ -277,7 +277,7 @@ export default function AntitrustGame() {
                       </span>
                       {defineChecked && (
                         <em>
-                          {c.belongs ? "BELONGS — " : "DOES NOT BELONG — "}
+                          {c.belongs ? "BELONGS - " : "DOES NOT BELONG - "}
                           {c.why}
                         </em>
                       )}
@@ -338,7 +338,7 @@ export default function AntitrustGame() {
           {/* Phase 2 */}
           {phase === "compute" && (
             <div className="stochastic-explain">
-              <p className="quiz-panel-title">Step 2 — Concentration Increase (ΔHHI)</p>
+              <p className="quiz-panel-title">Step 2 - Concentration Increase (ΔHHI)</p>
               <p className="mm-step-hint">
                 Under the verified market, {currentCase.core[0].name} holds{" "}
                 <strong>{shares(trueRevenues)[0].toFixed(2)}%</strong> and {currentCase.core[1].name} holds{" "}
@@ -397,10 +397,10 @@ export default function AntitrustGame() {
           {/* Phase 3 */}
           {phase === "verdict" && (
             <div className="stochastic-explain">
-              <p className="quiz-panel-title">Step 3 — Regulatory Recommendation</p>
+              <p className="quiz-panel-title">Step 3 - Regulatory Recommendation</p>
               <div className="hhi-thresholds">
                 <span>Unconcentrated: &lt; 1500</span>
-                <span>Moderately Concentrated: 1500–2500</span>
+                <span>Moderately Concentrated: 1500-2500</span>
                 <span>Highly Concentrated: &gt; 2500</span>
                 <span>Δ &gt; 200 in a highly concentrated market is presumed anticompetitive</span>
               </div>

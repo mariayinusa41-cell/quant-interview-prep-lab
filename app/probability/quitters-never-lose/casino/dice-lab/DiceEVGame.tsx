@@ -273,7 +273,7 @@ export default function DiceEVGame() {
                 <div className="fermi-review-body">
                   <p className="fermi-review-q">{a.q.title}</p>
                   <p className="fermi-review-vals">
-                    You: <strong>{Number.isFinite(a.guess) ? a.guess : "—"}</strong> &nbsp;|&nbsp; EV:{" "}
+                    You: <strong>{Number.isFinite(a.guess) ? a.guess : "-"}</strong> &nbsp;|&nbsp; EV:{" "}
                     <strong>{a.q.formattedEV}</strong>
                   </p>
                   <p className="fermi-review-explain">{a.q.derivation}</p>
@@ -341,7 +341,7 @@ export default function DiceEVGame() {
             <div className="fermi-comparison">
               <div className="fermi-comp-col">
                 <span className="fermi-comp-label">Your answer</span>
-                <span className="fermi-comp-val">{Number.isFinite(lastResult.guess) ? lastResult.guess : "—"}</span>
+                <span className="fermi-comp-val">{Number.isFinite(lastResult.guess) ? lastResult.guess : "-"}</span>
               </div>
               <div className="fermi-comp-arrow">→</div>
               <div className="fermi-comp-col">

@@ -177,26 +177,26 @@ export const EIGEN_DEMO: DemoStep[] = [
   {
     term: "This is the board",
     body:
-      "A matrix at the top, the same four directions drawn as arrows and listed as buttons. Exactly one of them is an eigenvector of A — applying A leaves it on its own line, just longer, shorter, or flipped. The other three get rotated off their line. Your job is one click.",
+      "A matrix at the top, the same four directions drawn as arrows and listed as buttons. Exactly one of them is an eigenvector of A - applying A leaves it on its own line, just longer, shorter, or flipped. The other three get rotated off their line. Your job is one click.",
     board: <Board ruledOut={[]} />,
     note: "Watch me work all four, then you'll get a fresh matrix to do yourself.",
   },
   {
     term: "Test A = (1, 1)",
     body:
-      "Multiply A by the vector, then ask whether the result sits on the same line. I use the cross-product test — p·y − q·x — because it never divides, so a zero component can't break it. The dashed green arrow is where A sent it.",
+      "Multiply A by the vector, then ask whether the result sits on the same line. I use the cross-product test - p·y − q·x - because it never divides, so a zero component can't break it. The dashed green arrow is where A sent it.",
     board: <Board testing="A" ruledOut={[]} />,
     math: [
       "A·(1,1)  =  (3·1 + 1·1,  0·1 + 2·1)",
       "         =  (4, 2)",
       "cross    =  4·1 − 2·1  =  2   ≠ 0",
     ],
-    note: "Nonzero, and you can see it on the plot: the dashed arrow swung off A's line. Rotated — rule it out.",
+    note: "Nonzero, and you can see it on the plot: the dashed arrow swung off A's line. Rotated - rule it out.",
   },
   {
     term: "Test B = (2, −1)",
     body:
-      "Same two lines of work. Careful with the signs here — this is where people drop a minus and talk themselves into a wrong answer.",
+      "Same two lines of work. Careful with the signs here - this is where people drop a minus and talk themselves into a wrong answer.",
     board: <Board testing="B" ruledOut={["A"]} />,
     math: [
       "A·(2,−1) =  (3·2 + 1·(−1),  0·2 + 2·(−1))",
@@ -208,17 +208,17 @@ export const EIGEN_DEMO: DemoStep[] = [
   {
     term: "Test C = (1, 0)",
     body:
-      "Now watch the plot rather than the algebra. The dashed arrow lands straight along C, just longer — it never left the line. The arithmetic confirms it.",
+      "Now watch the plot rather than the algebra. The dashed arrow lands straight along C, just longer - it never left the line. The arithmetic confirms it.",
     board: <Board testing="C" ruledOut={["A", "B"]} />,
     math: [
       "A·(1,0)  =  (3·1 + 1·0,  0·1 + 2·0)",
       "         =  (3, 0)",
       "cross    =  3·0 − 0·1  =  0   ✓",
     ],
-    note: "Zero. And (3, 0) is exactly 3·(1, 0) — same direction, stretched by 3. That's the eigenvector, with λ = 3.",
+    note: "Zero. And (3, 0) is exactly 3·(1, 0) - same direction, stretched by 3. That's the eigenvector, with λ = 3.",
   },
   {
-    term: "Click C — here's what the game shows you",
+    term: "Click C - here's what the game shows you",
     body:
       "This is the reveal you get after clicking. It restates A·v and tells you whether it was a scalar multiple. Since I tested before clicking, there's no guesswork in it.",
     board: <Board ruledOut={["A", "B", "D"]} solved />,
@@ -228,8 +228,8 @@ export const EIGEN_DEMO: DemoStep[] = [
   {
     term: "How to do it fast",
     body:
-      "You don't have to test all four. Read the plot first — any arrow whose dashed image obviously swings into a different quadrant is out on sight. Rank the four by eye, then run the cross-product test on your best candidate only. In a real round that's usually one computation, not four.",
+      "You don't have to test all four. Read the plot first - any arrow whose dashed image obviously swings into a different quadrant is out on sight. Rank the four by eye, then run the cross-product test on your best candidate only. In a real round that's usually one computation, not four.",
     board: <Board ruledOut={[]} />,
-    note: "The interview follow-up is always \"and the eigenvalue?\" — read it off the stretch factor, 3 here.",
+    note: "The interview follow-up is always \"and the eigenvalue?\" - read it off the stretch factor, 3 here.",
   },
 ];

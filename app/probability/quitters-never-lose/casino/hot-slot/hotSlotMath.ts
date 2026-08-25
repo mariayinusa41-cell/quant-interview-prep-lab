@@ -41,9 +41,9 @@ export type WheelOdds = {
   markedCount: number; // how many numbers currently eliminate you
   hitProb: { fraction: string; decimal: number }; // P(land on one of your marked numbers)
   safeProb: { fraction: string; decimal: number };
-  fairMultiplier: number; // 1 / safeProb — zero house edge
+  fairMultiplier: number; // 1 / safeProb - zero house edge
   offeredMultiplier: number; // what the game actually pays on a safe spin
-  arrangements: number; // C(activeCount, markedCount) — ways the marked numbers could sit among the active ones
+  arrangements: number; // C(activeCount, markedCount) - ways the marked numbers could sit among the active ones
 };
 
 const HOUSE_EDGE = 0.03; // pays 97% of the fair multiplier on a safe spin

@@ -128,21 +128,21 @@ export default function BacktestGame() {
       if (!hasEdge) {
         pts = 200;
         msg = timedOut
-          ? "The clock ran out — but declining was correct. Every strategy here was pure noise."
+          ? "The clock ran out - but declining was correct. Every strategy here was pure noise."
           : "Correct. Every strategy in that book had zero real edge. The winner only looked good because you took the best of many.";
       } else {
         pts = 40;
-        msg = `Too cautious — ${book[edged].name} genuinely had an edge (true Sharpe ${spec.trueEdge}). Declining costs less than funding noise, but you left a real strategy on the table.`;
+        msg = `Too cautious - ${book[edged].name} genuinely had an edge (true Sharpe ${spec.trueEdge}). Declining costs less than funding noise, but you left a real strategy on the table.`;
       }
     } else if (pick === edged) {
       pts = 250;
-      msg = `Correct — ${book[edged].name} was the real one (true Sharpe ${spec.trueEdge}). Its out-of-sample Sharpe held at ${book[edged].oosSharpe.toFixed(2)}.`;
+      msg = `Correct - ${book[edged].name} was the real one (true Sharpe ${spec.trueEdge}). Its out-of-sample Sharpe held at ${book[edged].oosSharpe.toFixed(2)}.`;
     } else {
       pts = 0;
       const s = book[pick as number];
       msg = hasEdge
-        ? `${s.name} had no real edge — its in-sample ${s.sharpe.toFixed(2)} was luck, and it did ${s.oosSharpe.toFixed(2)} out-of-sample. The genuine one was ${book[edged].name}.`
-        : `${s.name} had no real edge. Its in-sample ${s.sharpe.toFixed(2)} collapsed to ${s.oosSharpe.toFixed(2)} out-of-sample. Nothing in that book was real — the correct call was to fund none.`;
+        ? `${s.name} had no real edge - its in-sample ${s.sharpe.toFixed(2)} was luck, and it did ${s.oosSharpe.toFixed(2)} out-of-sample. The genuine one was ${book[edged].name}.`
+        : `${s.name} had no real edge. Its in-sample ${s.sharpe.toFixed(2)} collapsed to ${s.oosSharpe.toFixed(2)} out-of-sample. Nothing in that book was real - the correct call was to fund none.`;
     }
 
     setLevelPoints(pts);
@@ -160,7 +160,7 @@ export default function BacktestGame() {
   const gapSe = best && se > 0 ? (best.sharpe - nullMax) / se : 0;
   const verdict =
     gapSe > 0.75
-      ? { tone: "bt-verdict is-good", text: "Clearly beyond what selection alone produces — this one is worth a look." }
+      ? { tone: "bt-verdict is-good", text: "Clearly beyond what selection alone produces - this one is worth a look." }
       : gapSe > 0.25
         ? {
             tone: "bt-verdict is-warn",
@@ -202,12 +202,12 @@ export default function BacktestGame() {
                 Expected best-of-{spec.count} under pure noise: <strong>{nullMax.toFixed(2)}</strong>
               </p>
               <p>
-                Best actually observed: <strong>{best ? best.sharpe.toFixed(2) : "—"}</strong>
+                Best actually observed: <strong>{best ? best.sharpe.toFixed(2) : "-"}</strong>
               </p>
               <p>
                 Gap above the no-edge benchmark:{" "}
                 <strong>
-                  {best ? `${(best.sharpe - nullMax).toFixed(2)} (${((best.sharpe - nullMax) / se).toFixed(2)} SE)` : "—"}
+                  {best ? `${(best.sharpe - nullMax).toFixed(2)} (${((best.sharpe - nullMax) / se).toFixed(2)} SE)` : "-"}
                 </strong>
               </p>
               <p className={verdict.tone}>{verdict.text}</p>
@@ -251,7 +251,7 @@ export default function BacktestGame() {
 
           {typeof choice === "number" && book[choice] && (
             <div className="bt-oos">
-              <p className="bt-benchmark-title">{book[choice].name} — OUT OF SAMPLE</p>
+              <p className="bt-benchmark-title">{book[choice].name} - OUT OF SAMPLE</p>
               <Spark returns={book[choice].outOfSample} />
               <p className="bt-metrics">
                 in-sample SR {book[choice].sharpe.toFixed(2)} → out-of-sample SR {book[choice].oosSharpe.toFixed(2)}

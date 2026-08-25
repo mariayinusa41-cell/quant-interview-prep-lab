@@ -17,7 +17,7 @@ export default function OrderBookPage() {
           <p className="pirate-kicker">Quant Developer // Game 01</p>
           <h1 className="pirate-story-line teasers-title">The Order Book Engine</h1>
           <p className="pirate-story-line teasers-subtitle">
-            Most orders never trade. They get cancelled — and that is the hot path.
+            Most orders never trade. They get cancelled - and that is the hot path.
           </p>
           <OrderBookGame />
         </div>

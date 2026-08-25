@@ -115,7 +115,7 @@ export default function DistributionsGame() {
     if (!spec) return;
     setGuess(id);
     if (id !== spec.id) {
-      finishCase(false, `Wrong — that was ${spec.label}. ${spec.tell}`);
+      finishCase(false, `Wrong - that was ${spec.label}. ${spec.tell}`);
       return;
     }
     setPhase("moments");
@@ -136,7 +136,7 @@ export default function DistributionsGame() {
     setCaseNote(
       ok
         ? `Identified ${spec.label} and got the ${momentAsk} right (${truth.toFixed(2)}). ${spec.tell}`
-        : `Identified ${spec.label}, but the ${momentAsk} is ${truth.toFixed(2)}, not ${momentAnswer || "—"}. ${spec.tell}`
+        : `Identified ${spec.label}, but the ${momentAsk} is ${truth.toFixed(2)}, not ${momentAnswer || "-"}. ${spec.tell}`
     );
     setPhase("caseResult");
   };
@@ -238,7 +238,7 @@ export default function DistributionsGame() {
           {phase === "moments" && (
             <>
               <p className="quiz-panel-title" style={{ marginTop: 14, marginBottom: 2 }}>
-                Correct — {spec.label}. Now the formula.
+                Correct - {spec.label}. Now the formula.
               </p>
               <p className="mm-step-hint">
                 Parameters:{" "}
@@ -289,7 +289,7 @@ export default function DistributionsGame() {
       {phase === "clt" && cltSpec && (
         <div className="pixel-stage">
           <p className="quiz-panel-title" style={{ marginBottom: 2 }}>
-            Final round — the Central Limit Theorem
+            Final round - the Central Limit Theorem
           </p>
           <p className="mm-step-hint">
             The source is exponential: strictly positive, heavily right-skewed, nothing like a bell. Now average{" "}
@@ -322,7 +322,7 @@ export default function DistributionsGame() {
           </div>
 
           <p className="mm-teach-note" style={{ marginTop: 12 }}>
-            Skew started near 2.0 and collapses toward 0 as n grows — the averages go normal even though the source never
+            Skew started near 2.0 and collapses toward 0 as n grows - the averages go normal even though the source never
             does. That&apos;s the CLT, and it&apos;s why portfolio returns look tamer than the trades inside them.
           </p>
 
@@ -355,8 +355,8 @@ export default function DistributionsGame() {
                 setTotalScore((s) => s + (ok ? 150 : 0));
                 setCaseNote(
                   ok
-                    ? `Correct — Var(X̄) = σ²/n = ${cltSpec.variance.toFixed(2)}/${n} = ${truth.toFixed(3)}.`
-                    : `Not quite — Var(X̄) = σ²/n = ${cltSpec.variance.toFixed(2)}/${n} = ${truth.toFixed(3)}. Averaging n draws divides the variance by n, so the standard error shrinks like 1/√n.`
+                    ? `Correct - Var(X̄) = σ²/n = ${cltSpec.variance.toFixed(2)}/${n} = ${truth.toFixed(3)}.`
+                    : `Not quite - Var(X̄) = σ²/n = ${cltSpec.variance.toFixed(2)}/${n} = ${truth.toFixed(3)}. Averaging n draws divides the variance by n, so the standard error shrinks like 1/√n.`
                 );
               }}
             >

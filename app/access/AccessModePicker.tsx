@@ -95,7 +95,7 @@ export default function AccessModePicker() {
       </div>
 
       <p className="access-account-note">
-        Guest can only play the always-free games — no tokens, no daily challenge. Opening the
+        Guest can only play the always-free games - no tokens, no daily challenge. Opening the
         sign-in screen replays onboarding without erasing your tickets or tokens.
       </p>
     </section>

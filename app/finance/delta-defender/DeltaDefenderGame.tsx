@@ -118,7 +118,7 @@ export default function DeltaDefenderGame() {
           <p>
             You're short one call. Instead of dragging a slider, you write a <code>hedgeRatio(S, K, T, r, sigma, tick)</code>{" "}
             function. Every run, we pick a fresh strike, expiry, and volatility, generate a real GBM price path, and call
-            your function at every one of {GAME.TOTAL_TICKS} ticks — then the needle plays back exactly how well your
+            your function at every one of {GAME.TOTAL_TICKS} ticks - then the needle plays back exactly how well your
             formula tracked true Delta the whole way through.
           </p>
           <div className="delta-rule-grid">
@@ -127,7 +127,7 @@ export default function DeltaDefenderGame() {
             <div><strong>YOU SEE</strong><span>the fit</span><small>needle plays back your net delta over time</small></div>
           </div>
           <p className="mm-step-hint">
-            Interview lens: this is the actual question — "write me a delta-hedging rule" — not a guessing game about
+            Interview lens: this is the actual question - "write me a delta-hedging rule" - not a guessing game about
             one. A formula that only works for one strike or one expiry will get caught out on the next run.
           </p>
           <button type="button" className="continue-btn" onClick={startBriefing}>Open the editor</button>
@@ -216,12 +216,12 @@ export default function DeltaDefenderGame() {
             <div className="delta-seesaw-needle" style={{ left: `${50 + Math.max(-1, Math.min(1, netDelta)) * 45}%` }} />
           </div>
           <p className="delta-seesaw-label">
-            Net Δ = {netDelta >= 0 ? "+" : ""}{netDelta.toFixed(3)} {isHedged ? "— flat" : isPanicking ? "— PANIC" : "— drifting"}
+            Net Δ = {netDelta >= 0 ? "+" : ""}{netDelta.toFixed(3)} {isHedged ? "- flat" : isPanicking ? "- PANIC" : "- drifting"}
           </p>
         </div>
 
         <div className="delta-greeks-row">
-          <div><span className="calc-comp-label">Your hedge</span><span className="calc-comp-val">{current.hedgeRatio?.toFixed(3) ?? "—"}</span></div>
+          <div><span className="calc-comp-label">Your hedge</span><span className="calc-comp-val">{current.hedgeRatio?.toFixed(3) ?? "-"}</span></div>
           <div><span className="calc-comp-label">True Δ</span><span className="calc-comp-val is-good">{current.trueDelta.toFixed(3)}</span></div>
         </div>
 
@@ -248,7 +248,7 @@ export default function DeltaDefenderGame() {
           title={won ? "DELTA DEFENDED" : "GAMMA GOT YOU"}
           sub={
             won
-              ? `Your function stayed within tolerance on ${pctHedged}% of ticks — that's a real working hedging rule.`
+              ? `Your function stayed within tolerance on ${pctHedged}% of ticks - that's a real working hedging rule.`
               : `Your function only stayed within tolerance on ${pctHedged}% of ticks. Compare its shape to true Delta above and adjust.`
           }
         />
@@ -259,7 +259,7 @@ export default function DeltaDefenderGame() {
         </div>
         <p className="delta-progress-label">
           A trader who never adjusted from a flat 0.5 hedge would have stayed neutral on this exact path{" "}
-          {Math.round(naiveHedged * 100)}% of the time — that's the bar a real rule needs to clear.
+          {Math.round(naiveHedged * 100)}% of the time - that's the bar a real rule needs to clear.
         </p>
         <div className="algo-mini-actions">
           <button type="button" className="continue-btn" onClick={tryAgain}>Rewrite &amp; run again</button>

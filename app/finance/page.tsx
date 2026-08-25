@@ -12,7 +12,7 @@ const subsections = [
     href: "/finance/market-maker",
     title: "Market Maker",
     tag: "Adverse selection",
-    description: "Quote a bid/ask spread each round and see who trades against you — noise flow or informed flow.",
+    description: "Quote a bid/ask spread each round and see who trades against you - noise flow or informed flow.",
     tone: "blue" as const,
     icon: "candles" as const,
   },
@@ -28,7 +28,7 @@ const subsections = [
     href: "/finance/basket-arbitrage",
     title: "Basket Arbitrage",
     tag: "Multi-leg hedging",
-    description: "Two cards, same commodity, different bundle size. Buy and sell across them until every exposure nets to zero — then it gets harder.",
+    description: "Two cards, same commodity, different bundle size. Buy and sell across them until every exposure nets to zero - then it gets harder.",
     tone: "violet" as const,
     icon: "bars" as const,
   },
@@ -47,7 +47,7 @@ export default function FinancePage() {
           <p className="pirate-kicker">Outcry</p>
           <h1 className="pirate-story-line teasers-title">Finance</h1>
           <p className="pirate-story-line teasers-subtitle">
-            Interactive simulations for the finance chapter — trade it out, don't just read the theory.
+            Interactive simulations for the finance chapter - trade it out, don't just read the theory.
           </p>
 
           <div className="lab-link-list">

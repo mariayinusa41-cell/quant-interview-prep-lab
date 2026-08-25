@@ -412,7 +412,7 @@ export default function FermiGame() {
           <p className="fermi-subtitle">
             {mode === "technical"
               ? "The screen-style drill: count a dice board in 40 seconds, sum a plotted path, or apply a rule of thumb under a clock. Tight numeric answers, not magnitude guessing."
-              : "How close can you get? Estimate real-world quantities to the right order of magnitude — a core quant interview skill."}
+              : "How close can you get? Estimate real-world quantities to the right order of magnitude - a core quant interview skill."}
           </p>
 
           <div className="fermi-mode-toggle">
@@ -560,15 +560,15 @@ export default function FermiGame() {
             ...a.q,
             given:
               Number.isNaN(a.low) || Number.isNaN(a.high)
-                ? "—"
-                : `${formatNumber(a.low)} – ${formatNumber(a.high)}`,
+                ? "-"
+                : `${formatNumber(a.low)} - ${formatNumber(a.high)}`,
             points: a.points,
           }))
         : answered.map((a) => ({
             ...a.q,
             given:
               Number.isNaN(a.low) || Number.isNaN(a.high)
-                ? "—"
+                ? "-"
                 : `${formatNumber(a.low)} to ${formatNumber(a.high)}`,
             points: a.points,
           }));
@@ -717,8 +717,8 @@ export default function FermiGame() {
                   <span className="fermi-comp-label">Your range</span>
                   <span className="fermi-comp-val">
                     {Number.isFinite(lastTechResult.low) && Number.isFinite(lastTechResult.high)
-                      ? `${formatNumber(lastTechResult.low)} – ${formatNumber(lastTechResult.high)}`
-                      : "—"}
+                      ? `${formatNumber(lastTechResult.low)} - ${formatNumber(lastTechResult.high)}`
+                      : "-"}
                   </span>
                 </div>
                 <div className="fermi-comp-arrow">→</div>
@@ -842,8 +842,8 @@ export default function FermiGame() {
               <div className="fermi-comp-col">
                 <span className="fermi-comp-label">Your range</span>
                 <span className="fermi-comp-val">
-                  {Number.isNaN(lastResult.low) ? "—" : formatNumber(lastResult.low)} to{" "}
-                  {Number.isNaN(lastResult.high) ? "—" : formatNumber(lastResult.high)}
+                  {Number.isNaN(lastResult.low) ? "-" : formatNumber(lastResult.low)} to{" "}
+                  {Number.isNaN(lastResult.high) ? "-" : formatNumber(lastResult.high)}
                 </span>
               </div>
               <div className="fermi-comp-arrow">→</div>

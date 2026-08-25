@@ -83,7 +83,7 @@ export default function TaylorSlider() {
   return (
     <div className="calc-subgame">
       <p className="calc-subgame-intro">
-        Build the Taylor polynomial by hand — sum the terms up to the given order and type the number. No live
+        Build the Taylor polynomial by hand - sum the terms up to the given order and type the number. No live
         readout to chase; you have to actually compute it before you find out if you're right.
       </p>
       <div className="lab-hud">
@@ -98,7 +98,7 @@ export default function TaylorSlider() {
           at x = {round.x}
         </p>
         <p className="mm-step-hint" style={{ marginBottom: 10 }}>
-          Σ (term k, k = 0…{round.order}) — for {round.fn.label}, term k is the k-th derivative's contribution at x
+          Σ (term k, k = 0…{round.order}) - for {round.fn.label}, term k is the k-th derivative's contribution at x
           = {round.x}.
         </p>
 
@@ -120,7 +120,7 @@ export default function TaylorSlider() {
         ) : (
           <div className="calc-reveal">
             <p className={isCorrect ? "quiz-q-explain is-correct" : "quiz-q-explain is-wrong"}>
-              {isCorrect ? "✓ Correct. " : `✗ Not quite — the order-${round.order} sum is ${trueApprox.toFixed(5)}. `}
+              {isCorrect ? "✓ Correct. " : `✗ Not quite - the order-${round.order} sum is ${trueApprox.toFixed(5)}. `}
               True value of {round.fn.label} at x = {round.x} is {trueValue.toFixed(5)}, so this order's error is{" "}
               {error.toExponential(2)}.{" "}
               {trueMin === null

@@ -41,7 +41,7 @@ export default function DevLogin() {
       // server rather than being told about it by this component.
       window.location.href = "/";
     } catch {
-      setError("Network error — that never reached the server.");
+      setError("Network error - that never reached the server.");
     } finally {
       setSubmitting(false);
     }

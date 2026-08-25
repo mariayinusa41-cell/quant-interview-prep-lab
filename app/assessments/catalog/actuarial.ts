@@ -27,7 +27,7 @@ function actuarialSet(n: number): Item[] {
     (i: number) => choiceItem(
       `a-${i}`,
       "For an annuity-due, what is the k = 0 term of the EPV sum?",
-      "Exactly the payment — no discount and no mortality",
+      "Exactly the payment - no discount and no mortality",
       ["The payment discounted one year", "The payment times p(x)", "Zero, since payments start at k = 1"],
       "expected-value",
       "An annuity-due pays immediately: v⁰ = 1 and ₀pₓ = 1, so the first payment is certain and undiscounted.",
@@ -35,7 +35,7 @@ function actuarialSet(n: number): Item[] {
     (i: number) => choiceItem(
       `a-${i}`,
       "Mortality improves across the whole table. What happens to a life annuity's EPV?",
-      "It rises — more payments are expected",
+      "It rises - more payments are expected",
       ["It falls, since fewer deaths means fewer claims", "It is unchanged if the discount rate is unchanged", "It rises only for deferred annuities"],
       "expected-value",
       "An annuity writer is short longevity. Every improvement in mortality lengthens the payment stream and raises the liability.",

@@ -36,7 +36,7 @@ export function GuestSignupBanner() {
       <p className="guest-gate-title">Sign up to unlock your profile</p>
       <p className="guest-gate-body">
         Tickets, accuracy, your skill map and achievements all start tracking the moment you have an
-        account — and verifying your email lands you a welcome gift of tokens.
+        account - and verifying your email lands you a welcome gift of tokens.
       </p>
       <a className="guest-gate-btn" href="/login">
         Sign up now

@@ -35,7 +35,7 @@ function genDiceQuestions(): TechnicalQuestion[] {
         question: `The board shows ${n} fair six-sided dice scattered face-up. How many show ${target.label}?`,
         answer: count,
         unit: "dice",
-        explanation: `Expected count ≈ ${n} × (${target.faces.length}/6) ≈ ${(n * p).toFixed(1)}; this board actually has ${count}. Scan in small clusters — don't try to track a running tally die by die.`,
+        explanation: `Expected count ≈ ${n} × (${target.faces.length}/6) ≈ ${(n * p).toFixed(1)}; this board actually has ${count}. Scan in small clusters - don't try to track a running tally die by die.`,
         category: "visual-counting",
         difficulty: n >= 72 ? 2 : 1,
         timeLimitSec: 40,
@@ -293,7 +293,7 @@ function genMarketQuestions(): TechnicalQuestion[] {
     const weekly = Number((v / Math.sqrt(52)).toFixed(2));
     out.push({
       id: nextId("vol-wk"),
-      question: `Same ${v}% annualized volatility — estimate the expected 1-week standard deviation, in percent.`,
+      question: `Same ${v}% annualized volatility - estimate the expected 1-week standard deviation, in percent.`,
       answer: weekly,
       unit: "%",
       explanation: `weekly vol ≈ annual vol / √52 ≈ annual vol / 7.21 = ${(v / 7.21).toFixed(2)}% (exact: ${weekly}%).`,
@@ -362,7 +362,7 @@ function genLatencyQuestions(): TechnicalQuestion[] {
       question: `Same ${km.toLocaleString()} km route relayed over line-of-sight microwave towers instead of fiber. Estimate the one-way latency.`,
       answer: microwaveMs,
       unit: "ms",
-      explanation: `Microwave travels through air at ≈ c (299,792 km/s ≈ 3.336 µs/km), versus ~4.9 µs/km in fiber — about 32% faster, which is the entire reason HFT firms pay for microwave links on short high-value routes.`,
+      explanation: `Microwave travels through air at ≈ c (299,792 km/s ≈ 3.336 µs/km), versus ~4.9 µs/km in fiber - about 32% faster, which is the entire reason HFT firms pay for microwave links on short high-value routes.`,
       category: "hardware-latency",
       difficulty: 2,
       timeLimitSec: 30,

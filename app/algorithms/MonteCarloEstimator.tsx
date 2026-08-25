@@ -107,7 +107,7 @@ export default function MonteCarloEstimator() {
                   Number(guessHalve) === trueMultiplierToHalve ? "quiz-q-explain is-correct" : "quiz-q-explain is-wrong"
                 }
               >
-                SE = s/√N, so halving SE means quadrupling N — the answer is always{" "}
+                SE = s/√N, so halving SE means quadrupling N - the answer is always{" "}
                 <strong>{trueMultiplierToHalve}×</strong>, regardless of the current N. Going from{" "}
                 {result.n.toLocaleString()} to {(result.n * trueMultiplierToHalve).toLocaleString()} samples would
                 roughly halve this run's error.

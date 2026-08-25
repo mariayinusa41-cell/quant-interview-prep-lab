@@ -109,7 +109,7 @@ export default function LossTriangleGame() {
           <p className="quiz-panel-title">Claims already happened. Most of the money has not been paid yet.</p>
           <p>
             This is a run-off triangle: cumulative claims paid, by origin year (rows) and development
-            year (columns). The upper-left is history. The lower-right is your problem — money you
+            year (columns). The upper-left is history. The lower-right is your problem - money you
             owe but have not paid, and must hold reserves against today.
           </p>
           <div className="lab-topic-grid">
@@ -163,7 +163,7 @@ export default function LossTriangleGame() {
                 <th scope="row">{ORIGIN_YEARS[i]}</th>
                 {Array.from({ length: maxDev }).map((_, j) => (
                   <td key={j} className={j < row.length ? "tri-known" : "tri-unknown"}>
-                    {j < row.length ? row[j].toLocaleString() : "—"}
+                    {j < row.length ? row[j].toLocaleString() : "-"}
                   </td>
                 ))}
               </tr>
@@ -176,7 +176,7 @@ export default function LossTriangleGame() {
       {/* ---------- Phase 1: link ratios ---------- */}
       {phase === "ldf" && (
         <div className="stochastic-explain">
-          <p className="quiz-panel-title">Step 1 — volume-weighted link ratios</p>
+          <p className="quiz-panel-title">Step 1 - volume-weighted link ratios</p>
           <p className="mm-step-hint">
             For each step, add up every origin year where <em>both</em> columns are known, then
             divide.
@@ -214,7 +214,7 @@ export default function LossTriangleGame() {
           ) : (
             <>
               <p className="quiz-q-explain is-correct">
-                Each ratio is a weighted average, not a simple mean — a large mature year should
+                Each ratio is a weighted average, not a simple mean - a large mature year should
                 carry more weight than a tiny immature one.
               </p>
               <button type="button" className="continue-btn" onClick={() => setPhase("reserve")}>
@@ -228,7 +228,7 @@ export default function LossTriangleGame() {
       {/* ---------- Phase 2: total reserve ---------- */}
       {phase === "reserve" && (
         <div className="stochastic-explain">
-          <p className="quiz-panel-title">Step 2 — total chain ladder reserve</p>
+          <p className="quiz-panel-title">Step 2 - total chain ladder reserve</p>
           <p className="mm-step-hint">
             Push each origin year out to ultimate with the ratios, then subtract what is already
             paid. The reserve is what you have <em>not</em> paid yet.
@@ -282,11 +282,11 @@ export default function LossTriangleGame() {
       {/* ---------- Phase 3: BF ---------- */}
       {phase === "bf" && (
         <div className="stochastic-explain">
-          <p className="quiz-panel-title">Step 3 — the year with almost no data</p>
+          <p className="quiz-panel-title">Step 3 - the year with almost no data</p>
           <p className="mm-step-hint">
             2025 has exactly one figure ({newestLatest.toLocaleString()}), and its CDF is{" "}
             <strong>{newestCdf.toFixed(4)}</strong>. Chain ladder multiplies that single number by
-            almost 1.9 — so any noise in it gets amplified straight into your reserve. Premium for
+            almost 1.9 - so any noise in it gets amplified straight into your reserve. Premium for
             2025 is {PREMIUM.toLocaleString()} and the a-priori loss ratio is{" "}
             {Math.round(EXPECTED_LOSS_RATIO * 100)}%.
           </p>
@@ -338,7 +338,7 @@ export default function LossTriangleGame() {
               </p>
               <p className="quiz-q-explain">
                 BF is exactly a credibility blend: Z × chain ladder + (1 − Z) × a-priori, with Z ={" "}
-                {(1 / newestCdf).toFixed(3)} — the share of losses you would expect to have paid by
+                {(1 / newestCdf).toFixed(3)} - the share of losses you would expect to have paid by
                 now. Because it applies the pattern to an independent expectation instead of scaling
                 up one noisy figure, it always sits between the two and leans on the a-priori
                 whenever the year is barely developed.

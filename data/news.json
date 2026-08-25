@@ -1,6 +1,78 @@
 {
-  "generatedAt": "2026-08-25T05:00:21.637518+00:00",
+  "generatedAt": "2026-08-25T21:36:11.636280+00:00",
   "jobs": [
+    {
+      "id": "gh-janestreet-8621450002",
+      "title": "Trading Desk Operations Engineer",
+      "firm": "Jane Street",
+      "location": "New York, New York, United States",
+      "url": "https://www.janestreet.com/join-jane-street/apply/8621450002?gh_jid=8621450002",
+      "postedAt": "2026-08-25T16:53:06-04:00",
+      "category": "engineering"
+    },
+    {
+      "id": "gh-imc-4953376101",
+      "title": "Macro News Analyst",
+      "firm": "IMC Trading",
+      "location": "Chicago, United States",
+      "url": "https://job-boards.eu.greenhouse.io/imc/jobs/4953376101",
+      "postedAt": "2026-08-25T16:50:46-04:00",
+      "category": "other"
+    },
+    {
+      "id": "gh-janestreet-8347286002",
+      "title": "Fundamental Research Analyst",
+      "firm": "Jane Street",
+      "location": "New York, New York, United States",
+      "url": "https://www.janestreet.com/join-jane-street/apply/8347286002?gh_jid=8347286002",
+      "postedAt": "2026-08-25T16:50:37-04:00",
+      "category": "research"
+    },
+    {
+      "id": "gh-janestreet-8347385002",
+      "title": "Sales and Trading",
+      "firm": "Jane Street",
+      "location": "New York, New York, United States",
+      "url": "https://www.janestreet.com/join-jane-street/apply/8347385002?gh_jid=8347385002",
+      "postedAt": "2026-08-25T16:09:45-04:00",
+      "category": "trading"
+    },
+    {
+      "id": "gh-flowtraders-6492219",
+      "title": "Junior Quantitative Researcher",
+      "firm": "Flow Traders",
+      "location": "Amsterdam",
+      "url": "https://job-boards.greenhouse.io/flowtraders/jobs/6492219",
+      "postedAt": "2026-08-25T09:06:31-04:00",
+      "category": "research"
+    },
+    {
+      "id": "gh-flowtraders-8059329",
+      "title": "Junior Market Risk Manager",
+      "firm": "Flow Traders",
+      "location": "Amsterdam",
+      "url": "https://job-boards.greenhouse.io/flowtraders/jobs/8059329",
+      "postedAt": "2026-08-25T06:54:19-04:00",
+      "category": "risk"
+    },
+    {
+      "id": "gh-jumptrading-8027898",
+      "title": "Campus Quantitative Research Intern (Off-Cycle - Winter/Spring 2027)",
+      "firm": "Jump Trading",
+      "location": "Hong Kong, Shanghai",
+      "url": "https://www.jumptrading.com/hr/job?gh_jid=8027898",
+      "postedAt": "2026-08-25T06:26:44-04:00",
+      "category": "internship"
+    },
+    {
+      "id": "gh-jumptrading-8105914",
+      "title": "Quantitative Developer | Trading Team",
+      "firm": "Jump Trading",
+      "location": "Singapore, Hong Kong",
+      "url": "https://www.jumptrading.com/hr/job?gh_jid=8105914",
+      "postedAt": "2026-08-25T03:30:03-04:00",
+      "category": "engineering"
+    },
     {
       "id": "gh-imc-4956547101",
       "title": "Machine Learning Research Intern - Summer 2027 - Sydney",
@@ -74,15 +146,6 @@
       "category": "internship"
     },
     {
-      "id": "gh-jumptrading-8105914",
-      "title": "Quantitative Developer | Trading Team",
-      "firm": "Jump Trading",
-      "location": "Singapore, Hong Kong",
-      "url": "https://www.jumptrading.com/hr/job?gh_jid=8105914",
-      "postedAt": "2026-08-24T03:09:43-04:00",
-      "category": "engineering"
-    },
-    {
       "id": "gh-imc-4942161101",
       "title": "IMC Trading Sim - Singapore",
       "firm": "IMC Trading",
@@ -117,15 +180,6 @@
       "url": "https://job-boards.greenhouse.io/worldquant/jobs/4686743006",
       "postedAt": "2026-08-21T13:21:52-04:00",
       "category": "engineering"
-    },
-    {
-      "id": "gh-imc-4953376101",
-      "title": "Macro News Analyst",
-      "firm": "IMC Trading",
-      "location": "Chicago, United States",
-      "url": "https://job-boards.eu.greenhouse.io/imc/jobs/4953376101",
-      "postedAt": "2026-08-21T11:06:29-04:00",
-      "category": "other"
     },
     {
       "id": "gh-flowtraders-8121218",
@@ -182,17 +236,8 @@
       "category": "internship"
     },
     {
-      "id": "gh-flowtraders-6492219",
-      "title": "Junior Quantitative Researcher",
-      "firm": "Flow Traders",
-      "location": "Amsterdam",
-      "url": "https://job-boards.greenhouse.io/flowtraders/jobs/6492219",
-      "postedAt": "2026-08-20T08:02:17-04:00",
-      "category": "research"
-    },
-    {
       "id": "gh-imc-4948205101",
-      "title": "Commodities Analyst \u2013 China",
+      "title": "Commodities Analyst - China",
       "firm": "IMC Trading",
       "location": "Sydney,  Australia",
       "url": "https://job-boards.eu.greenhouse.io/imc/jobs/4948205101",
@@ -353,15 +398,6 @@
       "category": "engineering"
     },
     {
-      "id": "gh-drweng-7720971",
-      "title": "Head of Trading Operations, Algorithmic Trading Group",
-      "firm": "DRW",
-      "location": "Chicago",
-      "url": "https://job-boards.greenhouse.io/drweng/jobs/7720971",
-      "postedAt": "2026-08-19T17:04:51-04:00",
-      "category": "trading"
-    },
-    {
       "id": "gh-drweng-7560394",
       "title": "Junior Strategy and Operations Analyst, Flow Macro (European Market Hours)",
       "firm": "DRW",
@@ -516,7 +552,7 @@
     },
     {
       "id": "gh-drweng-5100405",
-      "title": "Quantitative Developer \u2013 Equity Options",
+      "title": "Quantitative Developer - Equity Options",
       "firm": "DRW",
       "location": "Singapore",
       "url": "https://job-boards.greenhouse.io/drweng/jobs/5100405",
@@ -1119,7 +1155,7 @@
     },
     {
       "id": "gh-drweng-7283668",
-      "title": "Software Engineer, Research \u2013 Cumberland Systematic",
+      "title": "Software Engineer, Research - Cumberland Systematic",
       "firm": "DRW",
       "location": "Chicago",
       "url": "https://job-boards.greenhouse.io/drweng/jobs/7283668",
@@ -1128,7 +1164,7 @@
     },
     {
       "id": "gh-drweng-7375738",
-      "title": "Software Engineer, Research \u2013 Cumberland Systematic",
+      "title": "Software Engineer, Research - Cumberland Systematic",
       "firm": "DRW",
       "location": "London",
       "url": "https://job-boards.greenhouse.io/drweng/jobs/7375738",
@@ -1137,7 +1173,7 @@
     },
     {
       "id": "gh-drweng-7743648",
-      "title": "Software Engineer, Research \u2013 Cumberland Systematic",
+      "title": "Software Engineer, Research - Cumberland Systematic",
       "firm": "DRW",
       "location": "New York City",
       "url": "https://job-boards.greenhouse.io/drweng/jobs/7743648",
@@ -1146,7 +1182,7 @@
     },
     {
       "id": "gh-drweng-7283666",
-      "title": "Software Engineer, Trading \u2013 Cumberland Systematic",
+      "title": "Software Engineer, Trading - Cumberland Systematic",
       "firm": "DRW",
       "location": "London",
       "url": "https://job-boards.greenhouse.io/drweng/jobs/7283666",
@@ -1343,17 +1379,8 @@
       "category": "engineering"
     },
     {
-      "id": "gh-jumptrading-8052356",
-      "title": "Campus AI Research Engineer \u2013 Research Automation (Full-Time)",
-      "firm": "Jump Trading",
-      "location": "Chicago; New York",
-      "url": "https://www.jumptrading.com/hr/job?gh_jid=8052356",
-      "postedAt": "2026-08-18T18:48:22-04:00",
-      "category": "internship"
-    },
-    {
       "id": "gh-jumptrading-8052343",
-      "title": "Campus AI Research Engineer \u2013 Deep Learning (Full-Time)",
+      "title": "Campus AI Research Engineer - Deep Learning (Full-Time)",
       "firm": "Jump Trading",
       "location": "Chicago; New York",
       "url": "https://www.jumptrading.com/hr/job?gh_jid=8052343",
@@ -1515,7 +1542,7 @@
     },
     {
       "id": "gh-jumptrading-8052351",
-      "title": "Campus AI Research Engineer \u2013 Research Automation (Intern)",
+      "title": "Campus AI Research Engineer - Research Automation (Intern)",
       "firm": "Jump Trading",
       "location": "Chicago; New York",
       "url": "https://www.jumptrading.com/hr/job?gh_jid=8052351",
@@ -1640,15 +1667,6 @@
       "category": "engineering"
     },
     {
-      "id": "gh-janestreet-8613910002",
-      "title": "Cybersecurity Analyst",
-      "firm": "Jane Street",
-      "location": "New York, New York, United States",
-      "url": "https://www.janestreet.com/join-jane-street/apply/8613910002?gh_jid=8613910002",
-      "postedAt": "2026-08-17T13:23:30-04:00",
-      "category": "other"
-    },
-    {
       "id": "gh-worldquant-4694990006",
       "title": "Senior Python Software Engineer",
       "firm": "WorldQuant",
@@ -1728,15 +1746,6 @@
       "url": "https://www.jumptrading.com/hr/job?gh_jid=7977686",
       "postedAt": "2026-08-14T15:09:25-04:00",
       "category": "engineering"
-    },
-    {
-      "id": "gh-janestreet-8347286002",
-      "title": "Fundamental Research Analyst",
-      "firm": "Jane Street",
-      "location": "New York, New York, United States",
-      "url": "https://www.janestreet.com/join-jane-street/apply/8347286002?gh_jid=8347286002",
-      "postedAt": "2026-08-14T13:11:14-04:00",
-      "category": "research"
     },
     {
       "id": "gh-imc-4907400101",
@@ -1857,7 +1866,7 @@
     },
     {
       "id": "gh-imc-4918138101",
-      "title": "Software Engineer \u2013 Application Platform",
+      "title": "Software Engineer - Application Platform",
       "firm": "IMC Trading",
       "location": "Sydney,  Australia",
       "url": "https://job-boards.eu.greenhouse.io/imc/jobs/4918138101",
@@ -2604,7 +2613,7 @@
     },
     {
       "id": "gh-imc-4382558101",
-      "title": "Quantitative Researcher \u2013 Equities",
+      "title": "Quantitative Researcher - Equities",
       "firm": "IMC Trading",
       "location": "New York, United States",
       "url": "https://job-boards.eu.greenhouse.io/imc/jobs/4382558101",
@@ -2622,7 +2631,7 @@
     },
     {
       "id": "gh-imc-4740859101",
-      "title": "Quantitative Researcher \u2013 Futures",
+      "title": "Quantitative Researcher - Futures",
       "firm": "IMC Trading",
       "location": "Chicago, United States; New York, United States",
       "url": "https://job-boards.eu.greenhouse.io/imc/jobs/4740859101",
@@ -2667,7 +2676,7 @@
     },
     {
       "id": "gh-imc-4787640101",
-      "title": "Quantitative Trader \u2013 Equities (Live Trading)",
+      "title": "Quantitative Trader - Equities (Live Trading)",
       "firm": "IMC Trading",
       "location": "Hong Kong, Hong Kong",
       "url": "https://job-boards.eu.greenhouse.io/imc/jobs/4787640101",
@@ -2676,7 +2685,7 @@
     },
     {
       "id": "gh-imc-4787639101",
-      "title": "Quantitative Trader \u2013 Equities (Strategy Monetization)",
+      "title": "Quantitative Trader - Equities (Strategy Monetization)",
       "firm": "IMC Trading",
       "location": "Hong Kong, Hong Kong; Sydney,  Australia",
       "url": "https://job-boards.eu.greenhouse.io/imc/jobs/4787639101",
@@ -2739,7 +2748,7 @@
     },
     {
       "id": "gh-imc-4682071101",
-      "title": "Software Engineer \u2013 AI Powered Engineering",
+      "title": "Software Engineer - AI Powered Engineering",
       "firm": "IMC Trading",
       "location": "Chicago, United States",
       "url": "https://job-boards.eu.greenhouse.io/imc/jobs/4682071101",
@@ -2784,7 +2793,7 @@
     },
     {
       "id": "gh-imc-4885477101",
-      "title": "Talent Sourcer \u2013 Machine Learning & Quantitative Research",
+      "title": "Talent Sourcer - Machine Learning & Quantitative Research",
       "firm": "IMC Trading",
       "location": "Chicago, United States",
       "url": "https://job-boards.eu.greenhouse.io/imc/jobs/4885477101",
@@ -3449,33 +3458,6 @@
       "category": "trading"
     },
     {
-      "id": "gh-janestreet-8632723002",
-      "title": "Cybersecurity Analyst",
-      "firm": "Jane Street",
-      "location": "New York, New York, United States",
-      "url": "https://www.janestreet.com/join-jane-street/apply/8632723002?gh_jid=8632723002",
-      "postedAt": "2026-07-30T11:44:38-04:00",
-      "category": "other"
-    },
-    {
-      "id": "gh-janestreet-7642974002",
-      "title": "Cybersecurity Detection and Response Analyst",
-      "firm": "Jane Street",
-      "location": "Singapore",
-      "url": "https://www.janestreet.com/join-jane-street/apply/7642974002?gh_jid=7642974002",
-      "postedAt": "2026-07-30T11:44:38-04:00",
-      "category": "other"
-    },
-    {
-      "id": "gh-janestreet-7642886002",
-      "title": "Cybersecurity Detection and Response Analyst",
-      "firm": "Jane Street",
-      "location": "Hong Kong, Hong Kong",
-      "url": "https://www.janestreet.com/join-jane-street/apply/7642886002?gh_jid=7642886002",
-      "postedAt": "2026-07-30T11:44:38-04:00",
-      "category": "other"
-    },
-    {
       "id": "gh-janestreet-8120713002",
       "title": "European Natural Gas & LNG Analyst/Trader",
       "firm": "Jane Street",
@@ -3485,20 +3467,20 @@
       "category": "trading"
     },
     {
-      "id": "gh-janestreet-8433793002",
-      "title": "Exotic Options Trader",
-      "firm": "Jane Street",
-      "location": "Hong Kong, Hong Kong",
-      "url": "https://www.janestreet.com/join-jane-street/apply/8433793002?gh_jid=8433793002",
-      "postedAt": "2026-07-30T11:44:38-04:00",
-      "category": "trading"
-    },
-    {
       "id": "gh-janestreet-8443094002",
       "title": "Exotic Options Trader",
       "firm": "Jane Street",
       "location": "New York, New York, United States",
       "url": "https://www.janestreet.com/join-jane-street/apply/8443094002?gh_jid=8443094002",
+      "postedAt": "2026-07-30T11:44:38-04:00",
+      "category": "trading"
+    },
+    {
+      "id": "gh-janestreet-8433793002",
+      "title": "Exotic Options Trader",
+      "firm": "Jane Street",
+      "location": "Hong Kong, Hong Kong",
+      "url": "https://www.janestreet.com/join-jane-street/apply/8433793002?gh_jid=8433793002",
       "postedAt": "2026-07-30T11:44:38-04:00",
       "category": "trading"
     },
@@ -3845,15 +3827,6 @@
       "category": "trading"
     },
     {
-      "id": "gh-janestreet-8347385002",
-      "title": "Sales and Trading",
-      "firm": "Jane Street",
-      "location": "New York, New York, United States",
-      "url": "https://www.janestreet.com/join-jane-street/apply/8347385002?gh_jid=8347385002",
-      "postedAt": "2026-07-30T11:44:38-04:00",
-      "category": "trading"
-    },
-    {
       "id": "gh-janestreet-8630687002",
       "title": "Sales and Trading",
       "firm": "Jane Street",
@@ -3998,15 +3971,6 @@
       "category": "engineering"
     },
     {
-      "id": "gh-janestreet-8621450002",
-      "title": "Trading Desk Operations Engineer",
-      "firm": "Jane Street",
-      "location": "New York, New York, United States",
-      "url": "https://www.janestreet.com/join-jane-street/apply/8621450002?gh_jid=8621450002",
-      "postedAt": "2026-07-30T11:44:38-04:00",
-      "category": "engineering"
-    },
-    {
       "id": "gh-janestreet-8075380002",
       "title": "Trading Desk Operations Engineer",
       "firm": "Jane Street",
@@ -4044,7 +4008,7 @@
     },
     {
       "id": "gh-virtu-5513756002",
-      "title": "2027 Internship \u2013 Software Engineer",
+      "title": "2027 Internship - Software Engineer",
       "firm": "Virtu Financial",
       "location": "Singapore",
       "url": "https://job-boards.greenhouse.io/virtu/jobs/5513756002",
@@ -4071,7 +4035,7 @@
     },
     {
       "id": "gh-virtu-6329460002",
-      "title": "2027 Internship \u2013 Core Operations Engineer",
+      "title": "2027 Internship - Core Operations Engineer",
       "firm": "Virtu Financial",
       "location": "Singapore",
       "url": "https://job-boards.greenhouse.io/virtu/jobs/6329460002",
@@ -4158,15 +4122,6 @@
       "url": "https://job-boards.greenhouse.io/flowtraders/jobs/8025635",
       "postedAt": "2026-07-29T06:01:08-04:00",
       "category": "trading"
-    },
-    {
-      "id": "gh-flowtraders-7931072",
-      "title": "Middle Office Operations Analyst",
-      "firm": "Flow Traders",
-      "location": "New York",
-      "url": "https://job-boards.greenhouse.io/flowtraders/jobs/7931072",
-      "postedAt": "2026-07-29T06:01:08-04:00",
-      "category": "other"
     },
     {
       "id": "gh-flowtraders-8047166",
@@ -4593,7 +4548,7 @@
     },
     {
       "id": "gh-oldmissioncapital-7796180003",
-      "title": "Software Engineer \u2013 2027 Internship Program (June Start)",
+      "title": "Software Engineer - 2027 Internship Program (June Start)",
       "firm": "Old Mission Capital",
       "location": "Chicago, IL, United States",
       "url": "https://www.oldmissioncapital.com/careers/?gh_jid=7796180003",
@@ -4701,7 +4656,7 @@
     },
     {
       "id": "gh-oldmissioncapital-7796058003",
-      "title": "Quantitative Trader \u2013 2027 Graduate Program (August Start)",
+      "title": "Quantitative Trader - 2027 Graduate Program (August Start)",
       "firm": "Old Mission Capital",
       "location": "London",
       "url": "https://www.oldmissioncapital.com/careers/?gh_jid=7796058003",
@@ -4710,7 +4665,7 @@
     },
     {
       "id": "gh-oldmissioncapital-7796048003",
-      "title": "Software Engineer \u2013 2027 Graduate Program (August Start)",
+      "title": "Software Engineer - 2027 Graduate Program (August Start)",
       "firm": "Old Mission Capital",
       "location": "Chicago, IL, United States",
       "url": "https://www.oldmissioncapital.com/careers/?gh_jid=7796048003",
@@ -4719,7 +4674,7 @@
     },
     {
       "id": "gh-oldmissioncapital-7796031003",
-      "title": "Quantitative Trader \u2013 2027 Graduate Program (February Start)",
+      "title": "Quantitative Trader - 2027 Graduate Program (February Start)",
       "firm": "Old Mission Capital",
       "location": "Chicago, IL or New York, NY",
       "url": "https://www.oldmissioncapital.com/careers/?gh_jid=7796031003",
@@ -4728,7 +4683,7 @@
     },
     {
       "id": "gh-oldmissioncapital-7796044003",
-      "title": "Quantitative Trader \u2013 2027 Graduate Program (August Start)",
+      "title": "Quantitative Trader - 2027 Graduate Program (August Start)",
       "firm": "Old Mission Capital",
       "location": "Chicago, IL or New York, NY",
       "url": "https://www.oldmissioncapital.com/careers/?gh_jid=7796044003",
@@ -5330,15 +5285,6 @@
       "category": "research"
     },
     {
-      "id": "gh-worldquant-4252939006",
-      "title": "Experienced Quantitative Strategist",
-      "firm": "WorldQuant",
-      "location": "Geneva OR London OR Paris OR Zug",
-      "url": "https://job-boards.greenhouse.io/worldquant/jobs/4252939006",
-      "postedAt": "2026-05-04T13:20:10-04:00",
-      "category": "research"
-    },
-    {
       "id": "gh-worldquant-4252938006",
       "title": "Experienced Quantitative Strategist",
       "firm": "WorldQuant",
@@ -5353,6 +5299,15 @@
       "firm": "WorldQuant",
       "location": "Singapore OR Sydney",
       "url": "https://job-boards.greenhouse.io/worldquant/jobs/4252944006",
+      "postedAt": "2026-05-04T13:20:10-04:00",
+      "category": "research"
+    },
+    {
+      "id": "gh-worldquant-4252939006",
+      "title": "Experienced Quantitative Strategist",
+      "firm": "WorldQuant",
+      "location": "Geneva OR London OR Paris OR Zug",
+      "url": "https://job-boards.greenhouse.io/worldquant/jobs/4252939006",
       "postedAt": "2026-05-04T13:20:10-04:00",
       "category": "research"
     },
@@ -5557,8 +5512,58 @@
       "topic": "research"
     },
     {
+      "id": "hn-49436225",
+      "title": "Developer Hiring and the Market for Lemons",
+      "url": "https://danluu.com/hiring-lemons/",
+      "source": "Hacker News",
+      "summary": "",
+      "publishedAt": "2026-08-25T15:55:12Z",
+      "topic": "industry",
+      "points": 2
+    },
+    {
+      "id": "hn-49435147",
+      "title": "AI is hitting entry-level jobs hardest, Stanford study finds",
+      "url": "https://arstechnica.com/ai/2026/08/ai-is-hitting-entry-level-jobs-hardest-stanford-study-finds/",
+      "source": "Hacker News",
+      "summary": "",
+      "publishedAt": "2026-08-25T14:48:58Z",
+      "topic": "industry",
+      "points": 130
+    },
+    {
+      "id": "hn-49435106",
+      "title": "Show HN: A daily cartoon contest between AI models, judged blind",
+      "url": "https://comic-cron.com/",
+      "source": "Hacker News",
+      "summary": "",
+      "publishedAt": "2026-08-25T14:46:36Z",
+      "topic": "industry",
+      "points": 1
+    },
+    {
+      "id": "hn-49434181",
+      "title": "What 219 AI evals job postings that publish a salary pay",
+      "url": "https://aievalsjobs.com/ai-evals-salary-report/",
+      "source": "Hacker News",
+      "summary": "",
+      "publishedAt": "2026-08-25T13:54:21Z",
+      "topic": "industry",
+      "points": 1
+    },
+    {
+      "id": "hn-49432568",
+      "title": "Show HN: I built a search engine for 800 niche job boards",
+      "url": "https://jobboardsearch.com",
+      "source": "Hacker News",
+      "summary": "",
+      "publishedAt": "2026-08-25T12:10:33Z",
+      "topic": "industry",
+      "points": 4
+    },
+    {
       "id": "hn-49425634",
-      "title": "Senior Full-Stack Platform Engineer \u2013 AI-Assisted Engineering",
+      "title": "Senior Full-Stack Platform Engineer - AI-Assisted Engineering",
       "url": "https://dordar.zohorecruit.com/jobs/Careers/871895000000585001/Senior-Full-Stack-Platform-Engineer-AI-Assisted-Engineering?source=CareerSite",
       "source": "Hacker News",
       "summary": "",
@@ -5577,26 +5582,6 @@
       "points": 6
     },
     {
-      "id": "hn-49410480",
-      "title": "Erik Brynjolfsson says an AI \"job apocalypse\" is unlikely",
-      "url": "https://wpintelligence.washingtonpost.com/topics/ai-tech/2026/08/19/wpi-conversation-why-an-ai-job-apocalypse-is-unlikely/",
-      "source": "Hacker News",
-      "summary": "",
-      "publishedAt": "2026-08-23T17:07:04Z",
-      "topic": "industry",
-      "points": 38
-    },
-    {
-      "id": "hn-49407785",
-      "title": "'AI refuser' quit her dream job, and hopes others follow",
-      "url": "https://www.smh.com.au/technology/this-ai-refuser-quit-her-dream-job-and-hopes-others-follow-20260818-p60pdu.html",
-      "source": "Hacker News",
-      "summary": "",
-      "publishedAt": "2026-08-23T10:54:35Z",
-      "topic": "industry",
-      "points": 49
-    },
-    {
       "id": "hn-49404610",
       "title": "Stock Market Bargains Are Hiding in This Overlooked Place",
       "url": "https://www.wsj.com/finance/stocks/stock-market-bargains-are-hiding-in-this-overlooked-place-6239c1ef",
@@ -5607,28 +5592,8 @@
       "points": 5
     },
     {
-      "id": "hn-49399941",
-      "title": "Digging the grave of my skills: Hollywood creatives training AI to do their jobs",
-      "url": "https://www.theguardian.com/technology/2026/aug/22/the-hollywood-creatives-training-ai-to-do-their-jobs",
-      "source": "Hacker News",
-      "summary": "",
-      "publishedAt": "2026-08-22T14:13:05Z",
-      "topic": "industry",
-      "points": 57
-    },
-    {
-      "id": "hn-49395936",
-      "title": "Show HN: Anjadhe \u2013 privacy first AI assistant, no account, no server DB",
-      "url": "https://www.anjadhe.com/demo",
-      "source": "Hacker News",
-      "summary": "",
-      "publishedAt": "2026-08-22T02:12:01Z",
-      "topic": "industry",
-      "points": 1
-    },
-    {
       "id": "hn-49369678",
-      "title": "Show HN: AI Resume Screening \u2013 Looking for feedback from recruiters",
+      "title": "Show HN: AI Resume Screening - Looking for feedback from recruiters",
       "url": "https://aiomniu.top/services/resume-screening",
       "source": "Hacker News",
       "summary": "",
@@ -5638,7 +5603,7 @@
     },
     {
       "id": "hn-49257486",
-      "title": "Show HN: Amber \u2013 An open-source C99 Q/K array engine for quant finance",
+      "title": "Show HN: Amber - An open-source C99 Q/K array engine for quant finance",
       "url": "https://github.com/BonucciAndrea/amber",
       "source": "Hacker News",
       "summary": "",
@@ -5648,7 +5613,7 @@
     },
     {
       "id": "hn-49212866",
-      "title": "Show HN: Hirenewtalent.ai \u2013 Hire offshore in minutes via API",
+      "title": "Show HN: Hirenewtalent.ai - Hire offshore in minutes via API",
       "url": "https://hirenewtalent.ai/",
       "source": "Hacker News",
       "summary": "",
@@ -5668,7 +5633,7 @@
     },
     {
       "id": "hn-49149342",
-      "title": "Show HN: Blanked \u2013 Compare tech hiring processes by role and company",
+      "title": "Show HN: Blanked - Compare tech hiring processes by role and company",
       "url": "https://www.blanked.work/",
       "source": "Hacker News",
       "summary": "",
@@ -5687,16 +5652,6 @@
       "points": 4
     },
     {
-      "id": "hn-49086179",
-      "title": "Show HN: Somebodyhire.me",
-      "url": "https://somebodyhire.me/",
-      "source": "Hacker News",
-      "summary": "",
-      "publishedAt": "2026-07-28T16:18:36Z",
-      "topic": "industry",
-      "points": 15
-    },
-    {
       "id": "hn-49022791",
       "title": "A Rust-based time-series DB for quant workloads (4.5x faster than DuckDB/Polars)",
       "url": "https://old.reddit.com/r/quantfinance/comments/1v4flv0/a_rustbased_timeseries_db_for_quant_workloads_45x/",
@@ -5708,7 +5663,7 @@
     },
     {
       "id": "hn-48978880",
-      "title": "Show HN: The0 \u2013 self-hosted runtime for trading bots, bring your own language",
+      "title": "Show HN: The0 - self-hosted runtime for trading bots, bring your own language",
       "url": "https://github.com/alexanderwanyoike/the0",
       "source": "Hacker News",
       "summary": "",
@@ -5718,7 +5673,7 @@
     },
     {
       "id": "hn-48927546",
-      "title": "Show HN: Pullboard \u2013 a work queue for agents, built to run a quant desk",
+      "title": "Show HN: Pullboard - a work queue for agents, built to run a quant desk",
       "url": "https://pullboard.dev/",
       "source": "Hacker News",
       "summary": "",
@@ -5738,7 +5693,7 @@
     },
     {
       "id": "hn-47859244",
-      "title": "Show HN: ModelX \u2013 Prediction Exchange for LLMs",
+      "title": "Show HN: ModelX - Prediction Exchange for LLMs",
       "url": "https://model-x.up.railway.app/",
       "source": "Hacker News",
       "summary": "",
@@ -5798,15 +5753,15 @@
     }
   ],
   "counts": {
-    "jobs": 607,
+    "jobs": 602,
     "articles": 34,
     "byCategory": {
-      "internship": 140,
       "engineering": 215,
-      "trading": 103,
-      "other": 44,
+      "other": 39,
       "research": 96,
-      "risk": 9
+      "trading": 102,
+      "risk": 10,
+      "internship": 140
     }
   }
 }

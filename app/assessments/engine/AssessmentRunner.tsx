@@ -337,7 +337,7 @@ export default function AssessmentRunner({ assessment }: { assessment: Assessmen
                           <div className={runs[item.id].perfPassed ? "exam-case is-pass" : "exam-case is-fail"}>
                             <span>{runs[item.id].perfPassed ? "PASS" : "FAIL"}</span>
                             <span>
-                              Performance — {runs[item.id].ratio!.toFixed(1)}× reference
+                              Performance - {runs[item.id].ratio!.toFixed(1)}× reference
                               {" "}({runs[item.id].candidateMs!.toFixed(1)}ms vs{" "}
                               {runs[item.id].referenceMs!.toFixed(1)}ms)
                             </span>

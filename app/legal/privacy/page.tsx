@@ -31,16 +31,16 @@ export default function PrivacyPage() {
           <h2>1. What we collect</h2>
           <h3>You give us</h3>
           <ul>
-            <li><strong>Email address</strong> &mdash; to identify your account, verify it, and contact you about it.</li>
-            <li><strong>Password</strong> &mdash; stored only as a PBKDF2-SHA256 hash with a per-user salt. We never store or see your actual password.</li>
-            <li><strong>Username and display name</strong> &mdash; optional, shown on leaderboards.</li>
+            <li><strong>Email address</strong> - to identify your account, verify it, and contact you about it.</li>
+            <li><strong>Password</strong> - stored only as a PBKDF2-SHA256 hash with a per-user salt. We never store or see your actual password.</li>
+            <li><strong>Username and display name</strong> - optional, shown on leaderboards.</li>
           </ul>
           <h3>Created as you use it</h3>
           <ul>
-            <li><strong>Progress</strong> &mdash; credits, questions answered, and how many were correct.</li>
-            <li><strong>Scores</strong> &mdash; per-game results, including score, accuracy and time taken, used for leaderboards.</li>
-            <li><strong>Session records</strong> &mdash; a random token in an httpOnly cookie, so you stay signed in.</li>
-            <li><strong>A normalised form of your email</strong> &mdash; with dots and +tags removed, used solely to stop one person opening many accounts for extra free credits. It is not used to contact you.</li>
+            <li><strong>Progress</strong> - credits, questions answered, and how many were correct.</li>
+            <li><strong>Scores</strong> - per-game results, including score, accuracy and time taken, used for leaderboards.</li>
+            <li><strong>Session records</strong> - a random token in an httpOnly cookie, so you stay signed in.</li>
+            <li><strong>A normalised form of your email</strong> - with dots and +tags removed, used solely to stop one person opening many accounts for extra free credits. It is not used to contact you.</li>
           </ul>
           <h3>We do not collect</h3>
           <ul>
@@ -51,25 +51,25 @@ export default function PrivacyPage() {
 
           <h2>2. Why we use it</h2>
           <ul>
-            <li>To run your account, keep you signed in, and show your progress &mdash; performance of our contract with you.</li>
-            <li>To take payment and grant paid access &mdash; performance of our contract.</li>
-            <li>To display leaderboards &mdash; our legitimate interest in a working competitive feature.</li>
-            <li>To prevent duplicate accounts and score manipulation &mdash; our legitimate interest in fair access.</li>
-            <li>To send verification and account emails &mdash; performance of our contract. We do not send marketing email.</li>
+            <li>To run your account, keep you signed in, and show your progress - performance of our contract with you.</li>
+            <li>To take payment and grant paid access - performance of our contract.</li>
+            <li>To display leaderboards - our legitimate interest in a working competitive feature.</li>
+            <li>To prevent duplicate accounts and score manipulation - our legitimate interest in fair access.</li>
+            <li>To send verification and account emails - performance of our contract. We do not send marketing email.</li>
           </ul>
 
           <h2>3. What is public</h2>
           <p>
             If you appear on a leaderboard, your <strong>username or display name</strong> and your{" "}
             <strong>scores</strong> are visible to anyone. Your email address never is. Choose a display name
-            accordingly &mdash; if you would rather not be identifiable, use a handle rather than your real name.
+            accordingly - if you would rather not be identifiable, use a handle rather than your real name.
           </p>
 
           <h2>4. Who else processes it</h2>
           <ul>
-            <li><strong>Cloudflare</strong> &mdash; hosting and database. All account and score data is stored here.</li>
-            <li><strong>Stripe</strong> &mdash; payment processing. They receive your payment details directly and give us only a result.</li>
-            <li><strong>Resend</strong> &mdash; sends verification and account email. They receive your email address.</li>
+            <li><strong>Cloudflare</strong> - hosting and database. All account and score data is stored here.</li>
+            <li><strong>Stripe</strong> - payment processing. They receive your payment details directly and give us only a result.</li>
+            <li><strong>Resend</strong> - sends verification and account email. They receive your email address.</li>
           </ul>
           <p>
             Job listings and articles are fetched by us from public sources. That is an outbound request from our
@@ -88,7 +88,7 @@ export default function PrivacyPage() {
 
           <h2>6. Your rights</h2>
           <p>
-            Depending on where you live &mdash; including under the UK/EU GDPR and California&rsquo;s CCPA/CPRA &mdash;
+            Depending on where you live - including under the UK/EU GDPR and California&rsquo;s CCPA/CPRA -
             you can ask us to give you a copy of your data, correct it, delete it, restrict or object to how we use
             it, or export it. You can also complain to your local data protection authority. We do not charge for
             these requests and we will not treat you differently for making one.

@@ -116,7 +116,7 @@ export default function SpeedRound() {
       <div className="answer-content" style={{ padding: 0 }}>
         <div className="pixel-stage lab-briefing">
           <p className="quiz-panel-title">20 seconds a question. Pick the right tool under pressure.</p>
-          <p>Ten questions drawn from a pool of {SPEED_QUESTIONS.length}, reshuffled every run — complexity, dynamic programming, Monte Carlo, and pandas.</p>
+          <p>Ten questions drawn from a pool of {SPEED_QUESTIONS.length}, reshuffled every run - complexity, dynamic programming, Monte Carlo, and pandas.</p>
           <div className="lab-topic-grid">
             {[
               ["COMPLEXITY", "count the work"],
@@ -158,7 +158,7 @@ export default function SpeedRound() {
       <div className="lab-hud">
         <span>ROUND <strong>{index + 1}/{deck.length}</strong></span>
         <span>SCORE <strong>{score}</strong></span>
-        <span className={timer <= 5 ? "algo-speed-timer is-danger" : "algo-speed-timer"}>{answered ? "—" : `${timer}s`}</span>
+        <span className={timer <= 5 ? "algo-speed-timer is-danger" : "algo-speed-timer"}>{answered ? "-" : `${timer}s`}</span>
       </div>
       <div className={answered ? (selected === current.answer ? "quiz-q is-correct" : "quiz-q is-wrong") : "quiz-q"}>
         <p className="quiz-q-topic">{current.topic}</p>

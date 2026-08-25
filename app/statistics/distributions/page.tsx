@@ -4,7 +4,7 @@ import DistributionsGame from "./DistributionsGame";
 
 export const metadata: Metadata = {
   title: "Read the Shape - Statistics",
-  description: "Identify the distribution from its shape, then prove it with the moments — ending on the CLT.",
+  description: "Identify the distribution from its shape, then prove it with the moments - ending on the CLT.",
 };
 
 export default function DistributionsPage() {

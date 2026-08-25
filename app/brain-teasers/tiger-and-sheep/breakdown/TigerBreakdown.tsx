@@ -163,9 +163,9 @@ function captionFor(step: Step): string {
   const remaining = n - 1;
   const remainingNoun = remaining === 1 ? "tiger" : "tigers";
   if (!eaten) {
-    return `With ${n} tigers, eating turns you into a sheep among ${remaining} ${remainingNoun} — an odd-numbered island, which every tiger here already knows gets eaten. Too risky. No one eats.`;
+    return `With ${n} tigers, eating turns you into a sheep among ${remaining} ${remainingNoun} - an odd-numbered island, which every tiger here already knows gets eaten. Too risky. No one eats.`;
   }
-  return `With ${n} tigers, eating turns you into a sheep among ${remaining} ${remainingNoun} — an even-numbered island, which every tiger here already knows is safe. So one tiger eats.`;
+  return `With ${n} tigers, eating turns you into a sheep among ${remaining} ${remainingNoun} - an even-numbered island, which every tiger here already knows is safe. So one tiger eats.`;
 }
 
 const STEP_HOLD_MS = 5200;
@@ -315,7 +315,7 @@ export default function TigerBreakdown() {
           <p className="pirate-story-line">The pattern holds for any tiger count n:</p>
           <code className="breakdown-code">eaten(n) = (n is odd)</code>
           <p className="pirate-story-line breakdown-caption" style={{ fontSize: "0.95rem" }}>
-            100 is even — so on the real island, the sheep is safe.
+            100 is even - so on the real island, the sheep is safe.
           </p>
           <button type="button" className="chip-btn" onClick={restart}>
             Watch it again from n = 1

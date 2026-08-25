@@ -55,7 +55,7 @@ export const DAILY_QUESTIONS: DailyQuestion[] = [
     prompt: "A symmetric 2x2 matrix has trace 4 and determinant 3. Is it positive definite?",
     choices: ["Yes", "No", "Only if it is diagonal", "Not enough information"],
     answer: 0,
-    explanation: "Eigenvalues sum to 4 and multiply to 3, giving 1 and 3 — both positive, so it is positive definite.",
+    explanation: "Eigenvalues sum to 4 and multiply to 3, giving 1 and 3 - both positive, so it is positive definite.",
     skill: "linear-algebra",
   },
   {

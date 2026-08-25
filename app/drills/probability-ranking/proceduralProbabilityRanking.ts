@@ -145,7 +145,7 @@ function genStudentQuestions(): ProbabilityRankingQuestion[] {
         },
         options,
         correctRankOrder: rankOrderFromOptions(options),
-        explanation: `1. ${nB}'s momentum puts round 6 well above ${nA}'s stable average.\n2. ${nC} reaches the high band roughly 40% of the time historically.\n3. ${nA} is tightly clustered — a +10 jump is a several-sigma outlier and the least likely of the three by a wide margin.`,
+        explanation: `1. ${nB}'s momentum puts round 6 well above ${nA}'s stable average.\n2. ${nC} reaches the high band roughly 40% of the time historically.\n3. ${nA} is tightly clustered - a +10 jump is a several-sigma outlier and the least likely of the three by a wide margin.`,
       });
     }
   }

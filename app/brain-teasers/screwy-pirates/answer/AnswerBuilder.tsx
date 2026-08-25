@@ -149,7 +149,7 @@ export default function AnswerBuilder() {
       <p className="pirate-kicker">Screwy Pirates</p>
       <h1 className="pirate-story-line answer-title">Work out the split</h1>
       <p className="pirate-story-line answer-subtitle">
-        Pick a crew size, then fill in what each pirate keeps. The most senior pirate — the highest number —
+        Pick a crew size, then fill in what each pirate keeps. The most senior pirate - the highest number -
         is the one proposing.
       </p>
 
@@ -181,7 +181,7 @@ export default function AnswerBuilder() {
                   <div className="answer-row-label">
                     <span className="answer-row-title">
                       Pirate {pirateNumber}
-                      {isSenior && <span className="answer-row-tag">Senior — proposes</span>}
+                      {isSenior && <span className="answer-row-tag">Senior - proposes</span>}
                     </span>
                     <span className="answer-row-hint">keeps</span>
                   </div>
@@ -246,7 +246,7 @@ export default function AnswerBuilder() {
 
               <div className="answer-checklist">
                 <p className="answer-checklist-title">
-                  Explanation — {conceptsFound.length} / {CONCEPT_CHECKS.length} key ideas found
+                  Explanation - {conceptsFound.length} / {CONCEPT_CHECKS.length} key ideas found
                 </p>
                 <ul>
                   {CONCEPT_CHECKS.map((c) => (
@@ -259,7 +259,7 @@ export default function AnswerBuilder() {
 
               <div className="answer-checklist">
                 <p className="answer-checklist-title">
-                  Equation — {equationFound.length} / {EQUATION_CHECKS.length} pieces found
+                  Equation - {equationFound.length} / {EQUATION_CHECKS.length} pieces found
                 </p>
                 <ul>
                   {EQUATION_CHECKS.map((c) => (

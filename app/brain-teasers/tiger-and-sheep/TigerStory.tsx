@@ -139,7 +139,7 @@ function GrassField() {
 
 const INTRO_LINES = [
   "A hundred tigers and one sheep share a magic island with nothing but grass.",
-  "Tigers would rather eat the sheep — but any tiger that does instantly becomes a sheep itself.",
+  "Tigers would rather eat the sheep - but any tiger that does instantly becomes a sheep itself.",
   "Every tiger is perfectly rational, and above all, wants to survive.",
 ];
 
@@ -205,7 +205,7 @@ export default function TigerStory() {
           </div>
 
           <p className="pirate-story-line pirate-enter final-question" style={{ animationDelay: "0s" }}>
-            So with 100 tigers on the island — will the sheep be eaten?
+            So with 100 tigers on the island - will the sheep be eaten?
           </p>
           {showContinue && (
             <a href="/brain-teasers/tiger-and-sheep/answer" className="continue-btn pirate-enter">

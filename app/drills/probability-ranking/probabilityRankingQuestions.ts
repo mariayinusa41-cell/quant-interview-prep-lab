@@ -110,8 +110,8 @@ export function scoreRanking(
     }
   }
   const pct = total > 0 ? concordant / total : 0;
-  if (pct === 1) return { points: 3, label: "Bullseye — perfect ranking", concordantPairs: concordant, totalPairs: total, pct };
-  if (pct >= 0.75) return { points: 2, label: "Tight — nearly right", concordantPairs: concordant, totalPairs: total, pct };
+  if (pct === 1) return { points: 3, label: "Bullseye - perfect ranking", concordantPairs: concordant, totalPairs: total, pct };
+  if (pct >= 0.75) return { points: 2, label: "Tight - nearly right", concordantPairs: concordant, totalPairs: total, pct };
   if (pct >= 0.5) return { points: 1, label: "Partial credit", concordantPairs: concordant, totalPairs: total, pct };
   return { points: 0, label: "Off the mark", concordantPairs: concordant, totalPairs: total, pct };
 }
@@ -209,14 +209,14 @@ export const curatedProbabilityQuestions: ProbabilityRankingQuestion[] = [
         label: "Truck Delta: Uniform[$30k, $50k]",
         probValue: 0.1,
         formattedProb: "10.0%",
-        rationale: "Window width ($2,000) / total range ($20,000) = 10.0% — uniform density doesn't care where the window sits.",
+        rationale: "Window width ($2,000) / total range ($20,000) = 10.0% - uniform density doesn't care where the window sits.",
       },
       {
         id: "coupe-gamma",
         label: "Coupe Gamma: Normal(μ = $35k, σ = $2k)",
         probValue: 0.0214,
         formattedProb: "2.1%",
-        rationale: "$39k–$41k is 2σ to 3σ above the mean ($35k): P(2σ < Z < 3σ) = Φ(3) − Φ(2) ≈ 99.87% − 97.72% ≈ 2.1%.",
+        rationale: "$39k-$41k is 2σ to 3σ above the mean ($35k): P(2σ < Z < 3σ) = Φ(3) − Φ(2) ≈ 99.87% − 97.72% ≈ 2.1%.",
       },
     ],
     correctRankOrder: ["sedan-alpha", "suv-beta", "truck-delta", "coupe-gamma"],
@@ -265,7 +265,7 @@ export const curatedProbabilityQuestions: ProbabilityRankingQuestion[] = [
     ],
     correctRankOrder: ["event-a", "event-b", "event-c", "event-d"],
     explanation:
-      "Event A (51.8%) > Event B (16.7%) > Event C, sum 10 with 3 dice (12.5%) > Event D, sum 9 with 3 dice (11.6%). Sum 10 has 27 ways out of 216 versus sum 9's 25 ways — the two are close, but 10 is strictly more likely (3d6 sums peak at 10 and 11, not 9).",
+      "Event A (51.8%) > Event B (16.7%) > Event C, sum 10 with 3 dice (12.5%) > Event D, sum 9 with 3 dice (11.6%). Sum 10 has 27 ways out of 216 versus sum 9's 25 ways - the two are close, but 10 is strictly more likely (3d6 sums peak at 10 and 11, not 9).",
   },
 
   // --- BAYESIAN / URN ---
@@ -305,12 +305,12 @@ export const curatedProbabilityQuestions: ProbabilityRankingQuestion[] = [
         label: "Population A: 1% base rate",
         probValue: 0.0876,
         formattedProb: "8.8%",
-        rationale: "PPV = (0.95×0.01) / (0.95×0.01 + 0.10×0.99) ≈ 8.8% — most positives are false positives when the disease is rare.",
+        rationale: "PPV = (0.95×0.01) / (0.95×0.01 + 0.10×0.99) ≈ 8.8% - most positives are false positives when the disease is rare.",
       },
     ],
     correctRankOrder: ["prior-30", "prior-10", "prior-05", "prior-01"],
     explanation:
-      "Bayes' theorem: P(disease | positive) = sensitivity·prior / [sensitivity·prior + (1−specificity)·(1−prior)]. The same test performs very differently across populations — a positive result means much less in a low-prevalence population, which is the classic base-rate trap.",
+      "Bayes' theorem: P(disease | positive) = sensitivity·prior / [sensitivity·prior + (1−specificity)·(1−prior)]. The same test performs very differently across populations - a positive result means much less in a low-prevalence population, which is the classic base-rate trap.",
   },
 
   // --- POISSON ARRIVALS ---
@@ -348,6 +348,6 @@ export const curatedProbabilityQuestions: ProbabilityRankingQuestion[] = [
     ],
     correctRankOrder: ["gap-01", "gap-05", "gap-10"],
     explanation:
-      "For a Poisson process, P(0 arrivals in time t) = e^(−λt) — it shrinks fast as the window widens. A busier feed makes long gaps rare.",
+      "For a Poisson process, P(0 arrivals in time t) = e^(−λt) - it shrinks fast as the window widens. A busier feed makes long gaps rare.",
   },
 ];

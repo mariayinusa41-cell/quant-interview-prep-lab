@@ -102,7 +102,7 @@ function captionFor(step: Step): string {
   const { k, bribed, votesNeeded } = step;
   if (k === 1) return "Alone, Pirate 1 needs no one's vote but his own. He keeps all 100 coins.";
   if (votesNeeded === 0) {
-    return `Pirate ${k} only needs 50% of the vote, and his own vote already clears that. He keeps all 100 — Pirate ${
+    return `Pirate ${k} only needs 50% of the vote, and his own vote already clears that. He keeps all 100 - Pirate ${
       k - 1
     } gets nothing.`;
   }
@@ -110,7 +110,7 @@ function captionFor(step: Step): string {
   const pluralPronoun = bribed.length > 1 ? "their" : "his";
   return `Pirate ${k} needs ${votesNeeded} more ${pluralVotes} besides his own. If this plan fails, ${listPirates(
     bribed
-  )} would get nothing next round — so 1 coin each is enough to buy ${pluralPronoun} yes.`;
+  )} would get nothing next round - so 1 coin each is enough to buy ${pluralPronoun} yes.`;
 }
 
 const STEP_HOLD_MS = 4600;

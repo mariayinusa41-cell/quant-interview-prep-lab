@@ -15,7 +15,7 @@ function complexitySet(n: number): Item[] {
     (i: number) => choiceItem(
       `c-${i}`,
       "You need the running median of a live price stream. Which approach is best?",
-      "Two heaps — a max-heap of the low half and a min-heap of the high half",
+      "Two heaps - a max-heap of the low half and a min-heap of the high half",
       ["Sort the buffer on every tick", "A single min-heap", "A hash map of counts"],
       "data-structures",
       "Balanced heaps give O(log n) insert and O(1) median. Re-sorting is O(n log n) per tick.",
@@ -37,12 +37,12 @@ function complexitySet(n: number): Item[] {
       "Most pushes are constant; occasional reallocation is spread across many operations",
       ["Every push is exactly constant time", "It is O(1) only if capacity is reserved first", "It means average-case over random inputs"],
       "complexity",
-      "Doubling makes reallocation rare enough that the total cost over n pushes is O(n) — amortised, not worst-case per call.",
+      "Doubling makes reallocation rare enough that the total cost over n pushes is O(n) - amortised, not worst-case per call.",
     ),
     (i: number) => choiceItem(
       `c-${i}`,
       "Two threads increment a shared non-atomic counter. What is the defect?",
-      "A data race — increment is read-modify-write and is not indivisible",
+      "A data race - increment is read-modify-write and is not indivisible",
       ["A deadlock", "Priority inversion", "Nothing, increments are atomic on x86"],
       "coding-implementation",
       "Load, add, store can interleave so an increment is lost. Unsynchronised concurrent access is undefined behaviour, not merely a wrong count.",
@@ -51,7 +51,7 @@ function complexitySet(n: number): Item[] {
       `c-${i}`,
       "A lock-free SPSC ring buffer publishes its head index with memory_order_relaxed. What can go wrong?",
       "The consumer may see the new index before the slot's data is visible",
-      ["The index can wrap incorrectly", "Nothing — SPSC needs no ordering", "The producer may block"],
+      ["The index can wrap incorrectly", "Nothing - SPSC needs no ordering", "The producer may block"],
       "coding-implementation",
       "The publishing store needs release semantics to pair with the consumer's acquire load, or the buffer write can be reordered after it.",
     ),
@@ -80,7 +80,7 @@ function traceSet(n: number): Item[] {
         prompt: "What is the final value of count?",
         answer: v, tolerance: 0,
         skill: "complexity" as const,
-        explain: `The inner loop runs ${k}, ${k - 1}, … 1 times — that is ${k}·${k + 1}/2 = ${v}.`,
+        explain: `The inner loop runs ${k}, ${k - 1}, … 1 times - that is ${k}·${k + 1}/2 = ${v}.`,
       };
     },
     (i: number) => {
@@ -108,7 +108,7 @@ export const QUANTDEV_ASSESSMENT: Assessment = {
   rules: [
     "Four coding problems in 100 minutes. Budget roughly 25 minutes each.",
     "Write JavaScript. Submissions run against hidden test cases you cannot see.",
-    "Two problems carry a performance gate — passing the tests is not sufficient if the approach does not scale.",
+    "Two problems carry a performance gate - passing the tests is not sufficient if the approach does not scale.",
     "You may run your code as often as you like. Only your last run counts.",
     "A short code-review section follows the coding problems.",
   ],

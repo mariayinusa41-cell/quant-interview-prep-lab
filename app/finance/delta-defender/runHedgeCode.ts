@@ -57,7 +57,7 @@ export function runHedgeAlgorithm(userCode: string, path: PathTick[], timeoutMs 
     };
 
     const timer = setTimeout(() => {
-      finish({ results: [], crashed: true, timedOut: true, crashMessage: "Timed out — check for an infinite loop." });
+      finish({ results: [], crashed: true, timedOut: true, crashMessage: "Timed out - check for an infinite loop." });
     }, timeoutMs);
 
     worker.onmessage = (e: MessageEvent<HedgeRunResult>) => finish(e.data);

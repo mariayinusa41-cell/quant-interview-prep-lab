@@ -73,7 +73,7 @@ export default function CrackTheBotGame() {
       setClock(left);
       if (left <= 0) {
         window.clearInterval(t);
-        finishCase(false, "Out of time — the case closed before you called it.");
+        finishCase(false, "Out of time - the case closed before you called it.");
       }
     }, 100);
     return () => window.clearInterval(t);
@@ -103,7 +103,7 @@ export default function CrackTheBotGame() {
   const pullTicks = (n: number) => {
     setVisible((v) => Math.min(session.length - PREDICTIONS - 1, v + n));
     deadline.current -= TICK_COST_MS * (n / 5);
-    setTested({}); // new data invalidates the old regressions — rerun them
+    setTested({}); // new data invalidates the old regressions - rerun them
     setConfoundX(null);
     setConfoundZ(null);
     setConfoundChoice(null);
@@ -121,8 +121,8 @@ export default function CrackTheBotGame() {
       // Nothing to predict if you claim there's no rule — the call itself is
       // the whole answer.
       finishCase(spec.rule === "random", spec.rule === "random"
-        ? "Correct — there was no rule. Refusing to trade a false signal is the win."
-        : `Wrong — it was following a rule: ${RULE_LABEL[spec.rule]}.`);
+        ? "Correct - there was no rule. Refusing to trade a false signal is the win."
+        : `Wrong - it was following a rule: ${RULE_LABEL[spec.rule]}.`);
       return;
     }
     setPredictions([]);
@@ -143,8 +143,8 @@ export default function CrackTheBotGame() {
       finishCase(
         ruleRight,
         ruleRight
-          ? `Correct rule — ${RULE_LABEL[spec.rule]}. You called ${hits}/${PREDICTIONS} of its next moves.`
-          : `Wrong — it was actually ${RULE_LABEL[spec.rule]}. You called ${hits}/${PREDICTIONS} moves.`,
+          ? `Correct rule - ${RULE_LABEL[spec.rule]}. You called ${hits}/${PREDICTIONS} of its next moves.`
+          : `Wrong - it was actually ${RULE_LABEL[spec.rule]}. You called ${hits}/${PREDICTIONS} moves.`,
         hits
       );
     }
@@ -296,13 +296,13 @@ export default function CrackTheBotGame() {
                 <div className="quiz-panel" style={{ marginTop: 16 }}>
                   <p className="quiz-panel-title">Confounder check</p>
                   <p className="mm-step-hint">
-                    A significant slope on one predictor can just be it riding along with the real driver — these
+                    A significant slope on one predictor can just be it riding along with the real driver - these
                     predictors overlap (ma5&apos;s window contains lag1 and lag3). Pick a suspect you&apos;ve tested,
                     pick something to control for, and see if the effect survives.
                   </p>
 
                   <p className="ctb-test-label" style={{ marginTop: 8 }}>
-                    X — your suspect
+                    X - your suspect
                   </p>
                   <div className="answer-crew-picker">
                     {PREDICTORS.filter((pr) => testedIds.includes(pr.id)).map((pr) => (
@@ -325,7 +325,7 @@ export default function CrackTheBotGame() {
                   {confoundX && (
                     <>
                       <p className="ctb-test-label" style={{ marginTop: 8 }}>
-                        Z — control for
+                        Z - control for
                       </p>
                       <div className="answer-crew-picker">
                         {confoundZOptions.map((pr) => (
@@ -384,11 +384,11 @@ export default function CrackTheBotGame() {
                           {confoundCorrect ? "✓ Correct. " : `✗ It actually ${confoundCorrectChoice!.toLowerCase()}. `}
                           Controlling for Z: partial β on X = {confoundMulti.betaX.toFixed(3)} (t=
                           {confoundMulti.tX.toFixed(2)}), partial β on Z = {confoundMulti.betaZ.toFixed(3)} (t=
-                          {confoundMulti.tZ.toFixed(2)}). Aux slope (Z on X) = {confoundAux.slope.toFixed(3)} — the bias
+                          {confoundMulti.tZ.toFixed(2)}). Aux slope (Z on X) = {confoundAux.slope.toFixed(3)} - the bias
                           in the naive estimate is β_Z(partial) × that aux slope ≈{" "}
                           {(confoundMulti.betaZ * confoundAux.slope).toFixed(3)}, which is close to naive − partial ={" "}
                           {(tested[confoundX].slope - confoundMulti.betaX).toFixed(3)}. Same number either way you get
-                          there — that's the identity, not a coincidence.
+                          there - that's the identity, not a coincidence.
                         </p>
                       )}
                     </div>
@@ -412,7 +412,7 @@ export default function CrackTheBotGame() {
           {phase === "predicting" && (
             <>
               <p className="quiz-panel-title" style={{ marginTop: 14, marginBottom: 2 }}>
-                Prove it — call its next {PREDICTIONS} moves
+                Prove it - call its next {PREDICTIONS} moves
               </p>
               <p className="mm-step-hint">
                 You said: {guess ? RULE_LABEL[guess] : ""}. Prediction {predictions.length + 1} of {PREDICTIONS}.

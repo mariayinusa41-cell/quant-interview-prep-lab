@@ -37,7 +37,7 @@ export const SPEED_QUESTIONS: SpeedQuestion[] = [
     code: "fib(n) = fib(n-1) + fib(n-2)",
     choices: ["O(n)", "O(n²)", "O(2ⁿ)", "O(n!)"],
     answer: 2,
-    explanation: "Each call spawns two more, and the recursion tree has depth n — roughly 2ⁿ total calls.",
+    explanation: "Each call spawns two more, and the recursion tree has depth n - roughly 2ⁿ total calls.",
   },
   {
     topic: "Complexity",
@@ -106,7 +106,7 @@ export const SPEED_QUESTIONS: SpeedQuestion[] = [
     prompt: "A DP recurrence only ever looks at the previous 2 states (like Fibonacci). What's the best space complexity achievable?",
     choices: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
     answer: 0,
-    explanation: "You only need to keep the last two values around, not the whole table — a classic DP space optimization.",
+    explanation: "You only need to keep the last two values around, not the whole table - a classic DP space optimization.",
   },
   {
     topic: "Dynamic programming",
@@ -118,7 +118,7 @@ export const SPEED_QUESTIONS: SpeedQuestion[] = [
       "Greedy requires floating point",
     ],
     answer: 1,
-    explanation: "Greedy is locally optimal but not globally optimal for arbitrary coin systems — that's exactly why coin change needs DP instead.",
+    explanation: "Greedy is locally optimal but not globally optimal for arbitrary coin systems - that's exactly why coin change needs DP instead.",
   },
   // --- Monte Carlo ---
   {
@@ -206,11 +206,11 @@ export const SPEED_QUESTIONS: SpeedQuestion[] = [
       "There is no difference",
     ],
     answer: 1,
-    explanation: "Vectorization is the entire reason pandas/numpy are fast — falling back to per-row Python function calls gives that up.",
+    explanation: "Vectorization is the entire reason pandas/numpy are fast - falling back to per-row Python function calls gives that up.",
   },
   {
     topic: "Python / pandas",
-    prompt: "merge(how='left') vs merge(how='inner') — what's the difference?",
+    prompt: "merge(how='left') vs merge(how='inner') - what's the difference?",
     choices: [
       "left keeps every row from the left frame even without a match; inner keeps only matching rows from both",
       "They're identical",

@@ -21,9 +21,9 @@
 // higher γ ⇒ wider spread and steeper skew, spread → floor not zero as
 // t→T) was checked against the formula in Node before this shipped.
 
-export const GAMMA = 1; // risk aversion — higher means more averse to holding inventory
+export const GAMMA = 1; // risk aversion - higher means more averse to holding inventory
 export const SIGMA = 1.5; // per-round volatility of the fair-value random walk, in ticks
-export const KAPPA = 1; // order-flow intensity / liquidity — lower means thinner book, wider floor spread
+export const KAPPA = 1; // order-flow intensity / liquidity - lower means thinner book, wider floor spread
 export const T = 1; // normalized session length
 
 export function reservationPrice(s: number, q: number, t: number, gamma = GAMMA, sigma = SIGMA): number {

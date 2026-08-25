@@ -122,9 +122,9 @@ def collect_jobs() -> list[dict[str, Any]]:
                 continue
             jobs.append({
                 "id": f"gh-{token}-{job.get('id')}",
-                "title": title,
+                "title": normalise_dashes(title),
                 "firm": firm,
-                "location": ((job.get("location") or {}).get("name") or "").strip() or "Unspecified",
+                "location": normalise_dashes(((job.get("location") or {}).get("name") or "").strip()) or "Unspecified",
                 "url": job.get("absolute_url"),
                 # Greenhouse gives an ISO timestamp; kept as-is so the UI can
                 # sort and show "how new is this" without re-parsing formats.
@@ -138,6 +138,13 @@ def collect_jobs() -> list[dict[str, Any]]:
     # Newest first, with undated rows last rather than sorted as epoch zero.
     jobs.sort(key=lambda j: j["postedAt"] or "", reverse=True)
     return jobs
+
+
+def normalise_dashes(s: str) -> str:
+    """Firms write titles like "Quant Developer - Equity Options" with an en
+    dash. A hyphen means the same thing and keeps the site dash-free without
+    altering what the listing says."""
+    return re.sub(r"\s*[\u2014\u2013]\s*", " - ", s or "")
 
 
 def strip_tags(s: str) -> str:
@@ -184,10 +191,10 @@ def collect_arxiv(limit: int = 12) -> list[dict[str, Any]]:
         summary = clean_abstract(item.findtext("description") or "")
         out.append({
             "id": f"arxiv-{link.rsplit('/', 1)[-1]}",
-            "title": title,
+            "title": normalise_dashes(title),
             "url": link,
             "source": "arXiv q-fin",
-            "summary": summary[:280],
+            "summary": normalise_dashes(summary)[:280],
             "publishedAt": (item.findtext("pubDate") or "").strip(),
             "topic": "research",
         })
@@ -221,7 +228,7 @@ def collect_hn(queries: list[str], per_query: int = 6) -> list[dict[str, Any]]:
             seen.add(link)
             out.append({
                 "id": f"hn-{hit.get('objectID')}",
-                "title": title,
+                "title": normalise_dashes(title),
                 "url": link,
                 "source": "Hacker News",
                 "summary": "",

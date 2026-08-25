@@ -5,12 +5,12 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 export type ThemeId = "midnight" | "crimson" | "matrix" | "amber" | "synthwave" | "paper" | "frost";
 
 export const THEMES: { id: ThemeId; label: string; blurb: string; swatch: string[] }[] = [
-  { id: "midnight",  label: "Midnight",  blurb: "The default cabinet — blue and gold.", swatch: ["#05070a", "#4fb3e0", "#f4c542"] },
+  { id: "midnight",  label: "Midnight",  blurb: "The default cabinet - blue and gold.", swatch: ["#05070a", "#4fb3e0", "#f4c542"] },
   { id: "crimson",   label: "Crimson",   blurb: "Red alert. Everything is a margin call.", swatch: ["#0b0405", "#ff7b6b", "#ffb43c"] },
   { id: "matrix",    label: "Matrix",    blurb: "Green phosphor terminal.",               swatch: ["#030805", "#4dff9f", "#b8ff5c"] },
   { id: "amber",     label: "Amber",     blurb: "Monochrome amber CRT.",                  swatch: ["#0a0703", "#ffcf7a", "#ffb347"] },
   { id: "synthwave", label: "Synthwave", blurb: "Magenta and cyan, 1984.",                swatch: ["#0c0618", "#ff5fd2", "#4de2ff"] },
-  { id: "paper",     label: "Paper",     blurb: "Warm light mode — cream and sepia.",       swatch: ["#f2eee6", "#1f6fb2", "#8a5c06"] },
+  { id: "paper",     label: "Paper",     blurb: "Warm light mode - cream and sepia.",       swatch: ["#f2eee6", "#1f6fb2", "#8a5c06"] },
   { id: "frost",     label: "Frost",      blurb: "Cool light mode, high contrast.",          swatch: ["#f8fafc", "#1259a8", "#92510a"] },
 ];
 

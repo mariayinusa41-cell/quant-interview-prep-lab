@@ -27,7 +27,7 @@ export default function MockInterviewBoard() {
     <section className="section">
       <h2>Mock Interview Lab</h2>
       <p className="section-intro">
-        An interviewer asks, you answer, and they push back on the reasoning — closer to the real
+        An interviewer asks, you answer, and they push back on the reasoning - closer to the real
         thing than a multiple-choice screen.
       </p>
 
@@ -52,7 +52,7 @@ export default function MockInterviewBoard() {
 
       <p className="assess-footnote">
         {gate.unlocked
-          ? "Requirements met — the mock interview lab is still being built."
+          ? "Requirements met - the mock interview lab is still being built."
           : "Same unlock as assessments: an Infinity Pass, the reps, and the accuracy to back it up."}
       </p>
     </section>

@@ -45,7 +45,7 @@ function PixelDuck({ legFrame }: { legFrame: 0 | 1 }) {
       <rect x="5" y="1" width="6" height="2" fill={bill} />
       {/* head */}
       <rect x="5" y="3" width="6" height="3" fill={body} />
-      {/* eyes, one each side — visible from directly above */}
+      {/* eyes, one each side - visible from directly above */}
       <rect x="5" y="3" width="1" height="1" fill={eye} />
       <rect x="10" y="3" width="1" height="1" fill={eye} />
       {/* neck taper into body */}
@@ -57,7 +57,7 @@ function PixelDuck({ legFrame }: { legFrame: 0 | 1 }) {
       <rect x="12" y="8" width="2" height="5" fill={wingShade} />
       {/* tail */}
       <rect x="6" y="14" width="4" height="2" fill={wingShade} />
-      {/* feet — swap which one is kicked outward between frames */}
+      {/* feet - swap which one is kicked outward between frames */}
       {legFrame === 0 ? (
         <>
           <rect x="3" y="15" width="2" height="2" fill={foot} />
@@ -251,7 +251,7 @@ export default function DuckIntersectionGame() {
               {currentTrial.type === "motion-congruence" ? "MOTION STREAM" : "CORNER MATH"}
             </span>
             <span className="fermi-hud-score">
-              Acc: {results.length > 0 ? `${Math.round((results.filter((r) => r.isCorrect).length / results.length) * 100)}%` : "—"}
+              Acc: {results.length > 0 ? `${Math.round((results.filter((r) => r.isCorrect).length / results.length) * 100)}%` : "-"}
             </span>
           </div>
 
@@ -281,7 +281,7 @@ export default function DuckIntersectionGame() {
               <strong className="corner-math">{currentTrial.corners.SE.expression}</strong>
             </div>
 
-            {/* Continuously-scrolling arrow strips, not static glyphs — each
+            {/* Continuously-scrolling arrow strips, not static glyphs - each
                 road channel flows along its own axis. A direction with no
                 meaning on that axis (e.g. EAST/WEST on the vertical road)
                 just idles, rather than sliding a certain way for no reason. */}
@@ -300,7 +300,7 @@ export default function DuckIntersectionGame() {
               </div>
             </div>
 
-            {/* Actually walks across the intersection and wraps around —
+            {/* Actually walks across the intersection and wraps around -
                 not a static badge that just sits in the middle. Key is on
                 the direction: React needs to treat a facing change as a
                 brand-new element so the walk animation restarts from the
