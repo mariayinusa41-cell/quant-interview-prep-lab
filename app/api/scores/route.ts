@@ -2,6 +2,7 @@ import { sql } from "drizzle-orm";
 import { getDb } from "../../../db";
 import { gameScores } from "../../../db/schema";
 import { getCurrentUser } from "../../../lib/auth";
+import { MAX_SUBMISSIONS_PER_HOUR, getGameLimit } from "../../../lib/gameLimits";
 
 // Per-game leaderboards.
 //
@@ -46,13 +47,26 @@ export async function POST(request: Request) {
     return Response.json({ error: "A gameId is required." }, { status: 400 });
   }
 
-  // Scores are client-reported, so they are range-checked rather than
-  // trusted outright. This is not tamper-proof — a determined player can
-  // still POST a number — but it keeps honest clients from writing junk
-  // (NaN, Infinity, a float) into a ranked integer column.
+  // Only known games have boards. Without this, anyone could invent a
+  // gameId and stand up an unbounded board nobody can moderate.
+  const limit = getGameLimit(gameId);
+  if (!limit) {
+    return Response.json({ error: "Unknown game." }, { status: 400 });
+  }
+
+  // Scores are computed in the browser, so this cannot verify the run
+  // happened — see lib/gameLimits.ts. What it can do is reject anything the
+  // game could not have awarded: every board has a known ceiling, so a
+  // score above it is provably fabricated rather than merely suspicious.
   const score = Number(body.score);
-  if (!Number.isFinite(score) || !Number.isInteger(score) || score < 0 || score > 1_000_000) {
-    return Response.json({ error: "Score must be a whole number between 0 and 1,000,000." }, { status: 400 });
+  if (!Number.isFinite(score) || !Number.isInteger(score) || score < 0) {
+    return Response.json({ error: "Score must be a whole number." }, { status: 400 });
+  }
+  if (score > limit.maxScore) {
+    return Response.json(
+      { error: `${limit.label} tops out at ${limit.maxScore} points.` },
+      { status: 400 },
+    );
   }
 
   const accuracyRaw = body.accuracy === null || body.accuracy === undefined ? null : Number(body.accuracy);
@@ -67,6 +81,13 @@ export async function POST(request: Request) {
       ? null
       : Math.round(durationRaw);
 
+  // A reported duration shorter than the game can physically be played is
+  // junk. Only checked when the game declares a floor and the client sent a
+  // duration, so games that do not time themselves are unaffected.
+  if (limit.minDurationMs !== undefined && durationMs !== null && durationMs < limit.minDurationMs) {
+    return Response.json({ error: "That run is too short to be real." }, { status: 400 });
+  }
+
   let metaJson: string | null = null;
   if (body.meta && typeof body.meta === "object") {
     const encoded = JSON.stringify(body.meta);
@@ -76,6 +97,25 @@ export async function POST(request: Request) {
 
   try {
     const db = getDb();
+
+    // Per-player, per-game rate limit. Does not stop a patient cheater, but
+    // it stops a script from stuffing a board in seconds, which is the
+    // difference between a board that degrades slowly and one that is
+    // useless immediately.
+    const recent = (await db.get(sql`
+      SELECT COUNT(*) AS n FROM game_scores
+      WHERE user_id = ${me.id}
+        AND game_id = ${gameId}
+        AND created_at > datetime('now', '-1 hour')
+    `)) as { n: number } | undefined;
+
+    if (recent && Number(recent.n) >= MAX_SUBMISSIONS_PER_HOUR) {
+      return Response.json(
+        { error: "Too many runs recorded for this game in the last hour." },
+        { status: 429 },
+      );
+    }
+
     await db.insert(gameScores).values({
       userId: me.id,
       gameId,
