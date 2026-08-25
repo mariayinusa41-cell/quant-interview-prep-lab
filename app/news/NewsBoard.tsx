@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import rawNews from "../../data/news.json";
 import rawAnnouncements from "../../data/announcements.json";
 
@@ -27,7 +27,10 @@ type Announcement = {
   body: string; code?: string; active: boolean;
 };
 
-const news = rawNews as { generatedAt: string; jobs: Job[]; articles: Article[] };
+// The bundled file is a fallback snapshot, not the live feed. The daily
+// cron writes to D1 and /api/news serves that; this is what shows on a
+// first deploy, or if the cron has not run yet, so the page is never empty.
+const fallback = rawNews as { generatedAt: string; jobs: Job[]; articles: Article[] };
 const announcements = (rawAnnouncements as { announcements: Announcement[] }).announcements;
 
 type Tab = "jobs" | "reading" | "site";
@@ -58,10 +61,33 @@ export default function NewsBoard() {
   const [tab, setTab] = useState<Tab>("jobs");
   const [jobFilter, setJobFilter] = useState<string>("all");
   const [firm, setFirm] = useState<string>("all");
+  const [news, setNews] = useState(fallback);
+  const [isLive, setIsLive] = useState(false);
+
+  // Swap in the cron-refreshed feed once it arrives. Deliberately starts
+  // from the bundled snapshot so the page renders immediately and still
+  // works if the request fails.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/news");
+        const data = (await res.json()) as {
+          generatedAt: string | null; jobs: Job[]; articles: Article[]; stale: boolean;
+        };
+        if (cancelled || data.stale || !data.jobs.length) return;
+        setNews({ generatedAt: data.generatedAt ?? fallback.generatedAt, jobs: data.jobs, articles: data.articles });
+        setIsLive(true);
+      } catch {
+        /* keep the bundled snapshot */
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   const firms = useMemo(
     () => [...new Set(news.jobs.map((j) => j.firm))].sort(),
-    [],
+    [news],
   );
 
   const visibleJobs = useMemo(
@@ -71,7 +97,7 @@ export default function NewsBoard() {
           (jobFilter === "all" || j.category === jobFilter) &&
           (firm === "all" || j.firm === firm),
       ),
-    [jobFilter, firm],
+    [news, jobFilter, firm],
   );
 
   const liveAnnouncements = announcements.filter((a) => a.active);
@@ -193,7 +219,8 @@ export default function NewsBoard() {
       )}
 
       <p className="news-generated">
-        Jobs and reading last refreshed {timeAgo(news.generatedAt)}. Openings come straight from each firm&rsquo;s own
+        Jobs and reading last refreshed {timeAgo(news.generatedAt)}
+        {isLive ? " by the daily job." : " (built-in snapshot)."} Openings come straight from each firm&rsquo;s own
         careers board.
       </p>
     </div>

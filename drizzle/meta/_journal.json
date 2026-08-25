@@ -50,6 +50,13 @@
       "when": 1787631319145,
       "tag": "0006_unknown_chronomancer",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1787634559141,
+      "tag": "0007_jittery_silver_fox",
+      "breakpoints": true
     }
   ]
 }

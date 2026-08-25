@@ -36,6 +36,12 @@ const localBindingConfig = {
         },
       ]
     : [],
+  // Daily news refresh. 06:15 UTC is deliberately off the hour: Cloudflare
+  // schedules a great many crons at :00, and the third-party APIs this hits
+  // are free public endpoints worth being unfashionable with.
+  triggers: {
+    crons: ["15 6 * * *"],
+  },
   // Keep the *.workers.dev URL alive. Wrangler DISABLES it by default the
   // moment it is not explicitly set, which silently 404'd the live site on
   // a deploy that was only meant to add a custom domain. It stays on as a

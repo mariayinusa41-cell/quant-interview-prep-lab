@@ -129,3 +129,40 @@ export const gameScores = sqliteTable(
     userGameIdx: index("game_scores_user_game_idx").on(table.userId, table.gameId),
   }),
 );
+
+// News fed by the daily cron (worker/news.ts), not by the build.
+//
+// Stored as rows rather than one JSON blob so the API can filter and page
+// server-side, and so a partially-failed refresh (one firm's board down)
+// leaves the rest of the feed intact instead of replacing everything with a
+// short list.
+//
+// `externalId` is the source's own id (e.g. "gh-janestreet-8631912002"), so
+// re-running the cron updates a posting in place rather than duplicating it
+// every day.
+export const newsItems = sqliteTable(
+  "news_items",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    externalId: text("external_id").notNull(),
+    /** "job" or "article" — the two scraped kinds. */
+    kind: text("kind").notNull(),
+    title: text("title").notNull(),
+    url: text("url").notNull(),
+    /** Firm name for a job, publication for an article. */
+    source: text("source").notNull(),
+    /** Job location; null for articles. */
+    location: text("location"),
+    /** Job category (trading/research/...) or article topic. */
+    category: text("category").notNull(),
+    summary: text("summary"),
+    /** Source's own timestamp, ISO-ish text as the source gave it. */
+    postedAt: text("posted_at"),
+    /** When the cron last saw this item. */
+    fetchedAt: text("fetched_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => ({
+    externalIdx: uniqueIndex("news_items_external_id_idx").on(table.externalId),
+    kindPostedIdx: index("news_items_kind_posted_idx").on(table.kind, table.postedAt),
+  }),
+);
