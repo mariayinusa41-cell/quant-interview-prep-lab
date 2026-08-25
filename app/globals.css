@@ -9586,3 +9586,63 @@ body.exam-mode::after { display: none !important; }
   color: var(--pixel-accent, #f5c542);
   padding: 4px 10px; border-radius: 4px;
 }
+
+/* Top-level result banner shown where the emailed verify link redirects.
+   Sits above the attract screen (z-index 100) and the highest overlay in
+   this stylesheet (120) — arriving from the email lands on the attract
+   screen, so anything lower is painted over and the confirmation is never
+   actually seen. */
+.verify-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 130;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 9px 44px 9px 16px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.verify-banner.is-ok {
+  background: rgba(71, 240, 194, 0.16);
+  border-bottom: 1px solid rgba(71, 240, 194, 0.5);
+  color: var(--pixel-good);
+}
+
+.verify-banner.is-bad {
+  background: rgba(231, 76, 76, 0.16);
+  border-bottom: 1px solid rgba(231, 76, 76, 0.5);
+  color: var(--pixel-bad);
+}
+
+.verify-banner-close {
+  position: absolute;
+  right: 12px;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+/* Billing terms shown at the point of purchase (pricing page). */
+.pricing-legal {
+  max-width: 620px;
+  margin: 14px auto 0;
+  padding-top: 12px;
+  border-top: 2px solid var(--pixel-border);
+  font-size: 0.78rem;
+  line-height: 1.65;
+  color: var(--ink-3);
+  text-align: center;
+}
+.pricing-legal strong { color: var(--pixel-white); }
+.pricing-legal a { color: var(--pixel-accent, #f5c542); }

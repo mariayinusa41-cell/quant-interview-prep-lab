@@ -179,6 +179,18 @@ export default function PricingTable() {
         Guest and Free-account access percentages are an approximate split of the current game catalog, not a hard
         technical count — they&rsquo;ll drift slightly as new games ship.
       </p>
+
+      {/* Billing terms stated at the point of purchase, not only buried in
+          the Terms page. The 2-Week Pass is a one-time charge and Monthly
+          auto-renews; several jurisdictions require that distinction to be
+          conspicuous before payment, and Stripe checks for these links
+          during business verification. */}
+      <p className="pricing-legal">
+        The 2-Week Pass is a <strong>one-time charge</strong> and does not renew. Monthly is a{" "}
+        <strong>recurring subscription</strong> that renews until you cancel. Full refund within 7 days, no
+        questions asked. See our <a href="/legal/terms">Terms</a>,{" "}
+        <a href="/legal/privacy">Privacy Policy</a> and <a href="/legal/refunds">Refund Policy</a>.
+      </p>
     </div>
   );
 }
