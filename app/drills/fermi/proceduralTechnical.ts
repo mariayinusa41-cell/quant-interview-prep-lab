@@ -120,8 +120,13 @@ function genPathQuestions(): TechnicalQuestion[] {
 // ---------------------------------------------------------------------------
 // C. Powers & factorials
 // ---------------------------------------------------------------------------
-const POWER_BASES = [7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 23];
-const EXPONENTS: (3 | 4 | 5)[] = [3, 4, 5];
+// Was 14 bases x {3,4,5} = 42 questions, 17% of the whole technical pool,
+// and the least representative thing in it: "estimate 21^5" is raw
+// arithmetic grinding, not the estimation skill this mode is meant to
+// drill. Cut to cubes of a few small bases, which are worth having at
+// hand (7^3, 12^3) and take one step rather than four.
+const POWER_BASES = [7, 8, 9, 12];
+const EXPONENTS: (3 | 4 | 5)[] = [3];
 
 function fact(n: number): number {
   let r = 1;
@@ -155,7 +160,9 @@ function genPowerFactorialQuestions(): TechnicalQuestion[] {
     }
   }
 
-  for (const n of [7, 8, 9, 10, 11, 12, 13, 14, 15]) {
+  // 13!-15! are pure multiplication under a clock; the small ones are
+  // genuinely worth recognising on sight.
+  for (const n of [7, 8, 9, 10]) {
     const val = fact(n);
     out.push({
       id: nextId("fact"),
@@ -325,7 +332,11 @@ function genMarketQuestions(): TechnicalQuestion[] {
   return out;
 }
 
-const FIBER_KM = [150, 300, 500, 750, 1000, 1500, 2000, 3500, 6000, 12000];
+// Ten routes x two media was the same two multiplications twenty times.
+// Kept the spread that actually matters (a metro hop, a domestic leg, a
+// transatlantic and a transpacific route) so the fibre-vs-microwave
+// comparison still lands without dominating the pool.
+const FIBER_KM = [300, 1000, 6000, 12000];
 
 function genLatencyQuestions(): TechnicalQuestion[] {
   const out: TechnicalQuestion[] = [];
@@ -361,13 +372,10 @@ function genLatencyQuestions(): TechnicalQuestion[] {
     });
   }
 
-  const CPU_CASES = [
-    { ghz: 3.0, ns: 100 },
-    { ghz: 3.5, ns: 150 },
-    { ghz: 4.0, ns: 250 },
-    { ghz: 4.5, ns: 80 },
-    { ghz: 5.0, ns: 300 },
-  ];
+  // Kept to a single representative case. The cycles-per-stall conversion
+  // is worth knowing once; five variants of the same one-step
+  // multiplication just crowded out the estimation questions.
+  const CPU_CASES = [{ ghz: 4.0, ns: 250 }];
   for (const c of CPU_CASES) {
     const cycles = Math.round(c.ghz * c.ns);
     out.push({
