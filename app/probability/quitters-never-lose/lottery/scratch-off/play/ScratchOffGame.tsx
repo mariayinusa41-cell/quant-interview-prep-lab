@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { useSearchParams } from "next/navigation";
+import { useAccess } from "../../../../../access/AccessContext";
+import { scratchEntryKey } from "../QuestionCountPicker";
 import { pickTemplate, drawOutcome, parseAnswer, type Template, type Outcome } from "./templates";
 import { buildQuestionSet, type QuestionInstance } from "./questions";
 import { TICKET_THEMES, PixelThemeIcon, type TicketTheme } from "./ticketThemes";
@@ -111,6 +113,39 @@ export default function ScratchOffGame() {
   const timed = searchParams.get("timed") === "1";
   const roundTimeBudget = timed ? questionsPerTicket * SECONDS_PER_QUESTION : null;
 
+  // Must match the id QuestionCountPicker.tsx gates on, or a free user would
+  // be charged against a different game's session pool than the one they
+  // bought.
+  const gameId = `probability-scratch-${timed ? "timed" : "untimed"}-${questionsPerTicket}`;
+  const { startGameEntry } = useAccess();
+
+  // A "round" is one TICKET, not one visit to this page. Previously nothing
+  // in here touched the access system at all: the only charge happened on
+  // the picker screen when navigating in, so a free user could buy an
+  // unlimited number of tickets as long as they never left the page, and
+  // the 3-round session only ticked down by going back and clicking through
+  // again.
+  //
+  // The picker's click already charged for a session, and that pays for the
+  // first ticket. It signals this by leaving a one-shot sessionStorage
+  // marker, which the first buyTicket consumes. Deliberately NOT a ref:
+  // a ref resets on reload, so refreshing the page would have granted an
+  // extra free ticket every time — the same unlimited-play hole in a
+  // different shape.
+  const [outOfRounds, setOutOfRounds] = useState(false);
+  const claimPrepaidEntry = () => {
+    try {
+      const key = scratchEntryKey(gameId);
+      if (window.sessionStorage.getItem(key) === "1") {
+        window.sessionStorage.removeItem(key);
+        return true;
+      }
+    } catch {
+      /* storage unavailable — fall through and charge normally */
+    }
+    return false;
+  };
+
   const [bankroll, setBankroll] = useState(STARTING_BANKROLL);
   const [history, setHistory] = useState<number[]>([STARTING_BANKROLL]);
   const [ticketsBought, setTicketsBought] = useState(0);
@@ -158,6 +193,19 @@ export default function ScratchOffGame() {
 
   const buyTicket = (price: number) => {
     if (round || price > bankroll || gameEnded) return;
+
+    // The first ticket rides on the entry that already charged for this
+    // session; every subsequent one spends a round (and buys a fresh
+    // session once the current one is used up). If the player can't afford
+    // another session, stop here rather than handing out a free ticket.
+    if (!claimPrepaidEntry()) {
+      if (!startGameEntry(gameId)) {
+        setOutOfRounds(true);
+        return;
+      }
+    }
+    setOutOfRounds(false);
+
     setCornerFlipped(false);
     setBankroll((b) => b - price);
     setTicketsBought((n) => n + 1);
@@ -386,6 +434,12 @@ export default function ScratchOffGame() {
               );
             })}
           </div>
+          {outOfRounds && (
+            <p className="quiz-q-explain is-wrong" style={{ marginTop: 10 }}>
+              You&rsquo;re out of rounds for this game and don&rsquo;t have enough tokens for another session. Cash
+              out to keep what you&rsquo;re holding, or come back with more tokens.
+            </p>
+          )}
           <button type="button" className="chip-btn scratch-cashout-alt" onClick={() => setCashedOut(true)}>
             Cash out instead
           </button>
@@ -572,6 +626,10 @@ export default function ScratchOffGame() {
               setTotalWon(0);
               setRound(null);
               setCashedOut(false);
+              // Not a free re-entry: the marker is already consumed, so the
+              // next ticket bought after restarting spends a round like any
+              // other.
+              setOutOfRounds(false);
             }}
           >
             Play again

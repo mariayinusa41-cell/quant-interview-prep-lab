@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { CASES, type ConcurrencyCase } from "../concurrencyBugs";
+import { useMemo, useRef, useState } from "react";
+import { generateCase, LEVEL_COUNT, type ConcurrencyCase } from "../concurrencyBugs";
 import { AccessStartButton } from "../../access/TokenPlayButton";
 import { useProgress } from "../../progress/ProgressContext";
 import { useSound } from "../../audio/SoundProvider";
@@ -22,26 +22,49 @@ export default function ConcurrencyGame() {
   const { playSfx, startMusic } = useSound();
 
   const [stage, setStage] = useState<Stage>("brief");
-  const [index, setIndex] = useState(0);
+  const [level, setLevel] = useState(1);
+  const [current, setCurrent] = useState<ConcurrencyCase | null>(null);
+  const lastTemplateIndex = useRef<number | undefined>(undefined);
+
   const [linePick, setLinePick] = useState<number | null>(null);
   const [lineChecked, setLineChecked] = useState(false);
   const [fixPick, setFixPick] = useState<number | null>(null);
   const [fixChecked, setFixChecked] = useState(false);
+
   const [lineScore, setLineScore] = useState(0);
   const [fixScore, setFixScore] = useState(0);
+  const [casesSeen, setCasesSeen] = useState(0);
+  const [retries, setRetries] = useState(0);
+  const [maxLevelReached, setMaxLevelReached] = useState(1);
 
-  const current: ConcurrencyCase = CASES[index];
   // Shuffled per case so the correct fix is not always in the same slot.
   const fixOrder = useMemo(
-    () => shuffle(current.fixes.map((_, i) => i)),
+    () => (current ? shuffle(current.fixes.map((_, i) => i)) : []),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [current.id],
+    [current?.id],
   );
 
-  const start = () => { setStage("findLine"); startMusic("game"); };
+  function loadCase(atLevel: number) {
+    const { case: next, templateIndex } = generateCase(atLevel, lastTemplateIndex.current);
+    lastTemplateIndex.current = templateIndex;
+    setCurrent(next);
+    setCasesSeen((n) => n + 1);
+    setMaxLevelReached((m) => Math.max(m, atLevel));
+    setStage("findLine");
+    setLinePick(null); setLineChecked(false);
+    setFixPick(null); setFixChecked(false);
+  }
+
+  const start = () => {
+    setLevel(1);
+    lastTemplateIndex.current = undefined;
+    setLineScore(0); setFixScore(0); setCasesSeen(0); setRetries(0); setMaxLevelReached(1);
+    loadCase(1);
+    startMusic("game");
+  };
 
   function checkLine() {
-    if (lineChecked || linePick === null) return;
+    if (lineChecked || linePick === null || !current) return;
     const ok = linePick === current.bugLine;
     recordAttempt("coding-implementation", ok ? "correct" : "incorrect");
     playSfx(ok ? "correct" : "wrong");
@@ -50,7 +73,7 @@ export default function ConcurrencyGame() {
   }
 
   function checkFix() {
-    if (fixChecked || fixPick === null) return;
+    if (fixChecked || fixPick === null || !current) return;
     const ok = current.fixes[fixPick].correct;
     recordAttempt("data-structures", ok ? "correct" : "incorrect");
     playSfx(ok ? "correct" : "wrong");
@@ -59,36 +82,44 @@ export default function ConcurrencyGame() {
   }
 
   function next() {
-    if (index + 1 >= CASES.length) { setStage("summary"); return; }
-    setIndex((i) => i + 1);
-    setStage("findLine");
-    setLinePick(null); setLineChecked(false);
-    setFixPick(null); setFixChecked(false);
+    if (!current) return;
+    const passed = linePick === current.bugLine && fixPick !== null && current.fixes[fixPick].correct;
+    if (passed) {
+      if (level >= LEVEL_COUNT) {
+        setStage("summary");
+        return;
+      }
+      const nextLevel = level + 1;
+      setLevel(nextLevel);
+      loadCase(nextLevel);
+    } else {
+      setRetries((r) => r + 1);
+      loadCase(level);
+    }
   }
 
   function restart() {
-    setIndex(0); setStage("findLine");
-    setLinePick(null); setLineChecked(false);
-    setFixPick(null); setFixChecked(false);
-    setLineScore(0); setFixScore(0);
+    start();
   }
 
   if (stage === "brief") {
     return (
       <div className="answer-content" style={{ padding: 0 }}>
         <div className="pixel-stage lab-briefing">
-          <p className="quiz-panel-title">Four snippets. Each one is already in production. Each one is broken.</p>
+          <p className="quiz-panel-title">Five levels. Every snippet is generated fresh. Each one is already in production, and each one is broken.</p>
           <p>
             Every case here compiles, passes review, and works on a developer laptop. They fail under
             load, on the wrong interleaving, on the wrong architecture. Find the line, then name the
-            fix.
+            fix. Clear a level to face a harder one; miss it and you get a new case at the same level,
+            never the one you just saw.
           </p>
           <div className="lab-topic-grid">
             {[
-              ["DATA RACES", "and why volatile is not the answer"],
-              ["CONDITION VARS", "spurious and lost wakeups"],
-              ["MEMORY ORDER", "release/acquire publishing"],
-              ["DEADLOCK", "lock ordering"],
+              ["LV.1 · DATA RACES", "and why volatile is not the answer"],
+              ["LV.2 · CONDITION VARS", "spurious wakeups, check-then-act"],
+              ["LV.3 · MEMORY ORDER", "release/acquire publishing"],
+              ["LV.4 · DEADLOCK", "lock ordering, lost wakeups"],
+              ["LV.5 · SUBTLE BUGS", "hidden ordering, ABA, red herrings"],
             ].map(([t, s]) => <div key={t}><strong>{t}</strong><span>{s}</span></div>)}
           </div>
           <p className="mm-step-hint">
@@ -111,21 +142,22 @@ export default function ConcurrencyGame() {
   }
 
   if (stage === "summary") {
-    const total = CASES.length * 2;
+    const total = casesSeen * 2;
     const got = lineScore + fixScore;
     return (
       <div className="answer-content" style={{ padding: 0 }}>
         <div className="lab-hud">
-          <span>DEFECTS FOUND <strong>{lineScore}/{CASES.length}</strong></span>
-          <span>FIXES CORRECT <strong>{fixScore}/{CASES.length}</strong></span>
+          <span>LEVEL REACHED <strong>{maxLevelReached}/{LEVEL_COUNT}</strong></span>
+          <span>RETRIES <strong>{retries}</strong></span>
           <span>TOTAL <strong>{got}/{total}</strong></span>
         </div>
         <div className="stochastic-explain">
-          <p className="quiz-panel-title">Review complete</p>
+          <p className="quiz-panel-title">Review complete — all five levels cleared</p>
           <p className="mm-step-hint">
-            The pattern across all four: none of these are bugs in the logic. Each one is code that
+            The pattern across all five: none of these are bugs in the logic. Each one is code that
             is correct as a sequence of statements and wrong as a concurrent program — which is why
-            reading for races is a separate skill from reading for correctness.
+            reading for races is a separate skill from reading for correctness. Run it again for a
+            fresh set of cases at every level.
           </p>
           <AccessStartButton
             gameId="quantdev-concurrency"
@@ -141,12 +173,15 @@ export default function ConcurrencyGame() {
     );
   }
 
+  if (!current) return null;
+
   return (
     <div className="answer-content" style={{ padding: 0 }}>
       <div className="lab-hud">
-        <span>CASE <strong>{index + 1}/{CASES.length}</strong></span>
+        <span>LEVEL <strong>{level}/{LEVEL_COUNT}</strong></span>
         <span>FOUND <strong>{lineScore}</strong></span>
         <span>FIXED <strong>{fixScore}</strong></span>
+        {retries > 0 && <span>RETRIES <strong>{retries}</strong></span>}
       </div>
 
       <div className="cc-premise">
@@ -236,7 +271,11 @@ export default function ConcurrencyGame() {
             </button>
           ) : (
             <button type="button" className="continue-btn" onClick={next}>
-              {index + 1 >= CASES.length ? "Finish review →" : "Next case →"}
+              {(() => {
+                const passed = linePick === current.bugLine && fixPick !== null && current.fixes[fixPick].correct;
+                if (passed) return level >= LEVEL_COUNT ? "Finish review →" : `Advance to level ${level + 1} →`;
+                return "Try level again →";
+              })()}
             </button>
           )}
         </div>
