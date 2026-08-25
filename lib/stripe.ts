@@ -5,6 +5,9 @@
 // key as the username and no password, and a form-urlencoded body.
 
 import { env } from "cloudflare:workers";
+import { passExpiryFor } from "./passWindow";
+
+export { passExpiryFor, TWO_WEEK_MS, isPassActive } from "./passWindow";
 
 export type PlanId = "two_week" | "monthly";
 
@@ -52,6 +55,11 @@ export async function createCheckoutSession(plan: PlanId, origin: string, userId
     // real tax-code categorization is a separate, later task, not something
     // to fake here.
     "managed_payments[enabled]": "false",
+    // Needed by both the return-verify and the webhook to know how long a
+    // grant should last. Without it a completed session says what was paid
+    // but not what was bought.
+    "metadata[plan]": plan,
+    "metadata[user_id]": String(userId),
   };
   if (config.mode === "subscription") {
     body["line_items[0][price_data][recurring][interval]"] = "month";
@@ -73,7 +81,18 @@ export async function createCheckoutSession(plan: PlanId, origin: string, userId
   return { url: data.url };
 }
 
-export type VerifyResult = { paid: boolean; userId: number | null } | { error: string };
+export type VerifyResult =
+  | {
+      paid: boolean;
+      userId: number | null;
+      /** Which plan was bought, from the metadata set at creation. */
+      plan: PlanId | null;
+      customerId: string | null;
+      subscriptionId: string | null;
+      /** For subscriptions: when the paid period ends, as a unix timestamp. */
+      periodEnd: number | null;
+    }
+  | { error: string };
 
 // Re-fetches the session from Stripe rather than trusting the success-page
 // redirect itself (a redirect is just a URL the browser was told to visit —
@@ -93,6 +112,9 @@ export async function retrieveCheckoutSession(sessionId: string): Promise<Verify
     payment_status?: string;
     status?: string;
     client_reference_id?: string | null;
+    customer?: string | { id?: string } | null;
+    subscription?: string | { id?: string; current_period_end?: number } | null;
+    metadata?: { plan?: string } | null;
     error?: { message?: string };
   };
   if (!res.ok) return { error: data.error?.message ?? "Stripe rejected the session lookup." };
@@ -103,5 +125,24 @@ export async function retrieveCheckoutSession(sessionId: string): Promise<Verify
   // (payment_status can read "no_payment_required" there in test mode).
   const paid = data.payment_status === "paid" || data.status === "complete";
   const userId = data.client_reference_id ? Number(data.client_reference_id) : null;
-  return { paid, userId: Number.isFinite(userId) ? userId : null };
+
+  const customerId = typeof data.customer === "string" ? data.customer : data.customer?.id ?? null;
+  const subscriptionId =
+    typeof data.subscription === "string" ? data.subscription : data.subscription?.id ?? null;
+  const periodEnd =
+    typeof data.subscription === "object" && data.subscription?.current_period_end
+      ? data.subscription.current_period_end
+      : null;
+
+  const rawPlan = data.metadata?.plan;
+  const plan: PlanId | null = rawPlan === "two_week" || rawPlan === "monthly" ? rawPlan : null;
+
+  return {
+    paid,
+    userId: Number.isFinite(userId) ? userId : null,
+    plan,
+    customerId,
+    subscriptionId,
+    periodEnd,
+  };
 }

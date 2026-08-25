@@ -1,7 +1,7 @@
 import { desc } from "drizzle-orm";
 import { getDb } from "../../../db";
 import { users } from "../../../db/schema";
-import { getCurrentUser } from "../../../lib/auth";
+import { getCurrentUser, isPassActive } from "../../../lib/auth";
 
 // Public — no auth required to view. Only rows with at least one ticket
 // show up, so a fresh account with zero progress doesn't clutter the board.
@@ -19,6 +19,7 @@ export async function GET(request: Request) {
         gradedCorrect: users.gradedCorrect,
         gradedTotal: users.gradedTotal,
         isPassHolder: users.isPassHolder,
+        passExpiresAt: users.passExpiresAt,
       })
       .from(users)
       .orderBy(desc(users.tickets))
@@ -34,7 +35,7 @@ export async function GET(request: Request) {
         name: r.username ?? r.displayName ?? "anonymous",
         tickets: r.tickets,
         accuracy: r.gradedTotal > 0 ? Math.round((r.gradedCorrect / r.gradedTotal) * 100) : null,
-        isPassHolder: r.isPassHolder === 1,
+        isPassHolder: isPassActive(r.isPassHolder, r.passExpiresAt),
         isYou: me ? r.id === me.id : false,
       }));
 

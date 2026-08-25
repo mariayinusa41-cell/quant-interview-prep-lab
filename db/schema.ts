@@ -57,6 +57,22 @@ export const users = sqliteTable(
     // (renewal, cancellation, expiry) — see that route's comments for what
     // "wire up next" means here.
     isPassHolder: integer("is_pass_holder").notNull().default(0),
+    /**
+     * When the pass stops being valid, ISO text.
+     *
+     * isPassHolder alone was a one-way switch: it was set to 1 on payment
+     * and never set back, so a "2-Week Pass" granted permanent access and a
+     * cancelled monthly subscription kept working forever. Access is now
+     * granted until a date, and the date is what Stripe says it is.
+     *
+     * Null with isPassHolder = 1 means an unbounded grant, which only
+     * happens if it is set by hand.
+     */
+    passExpiresAt: text("pass_expires_at"),
+    /** Stripe customer, so webhook events can be matched back to an account. */
+    stripeCustomerId: text("stripe_customer_id"),
+    /** Live subscription, for the monthly plan. Null for the 2-week pass. */
+    stripeSubscriptionId: text("stripe_subscription_id"),
     // Personalization, so a profile follows the account across devices
     // instead of living only in one browser's localStorage. All nullable:
     // an account that has never finished the avatar/tracks flow simply has

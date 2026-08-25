@@ -71,6 +71,13 @@
       "when": 1787681503424,
       "tag": "0009_fluffy_lily_hollister",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1787693068999,
+      "tag": "0010_early_human_torch",
+      "breakpoints": true
     }
   ]
 }

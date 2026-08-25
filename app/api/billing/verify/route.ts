@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { getDb } from "../../../../db";
 import { users } from "../../../../db/schema";
 import { getCurrentUser } from "../../../../lib/auth";
-import { retrieveCheckoutSession } from "../../../../lib/stripe";
+import { passExpiryFor, retrieveCheckoutSession } from "../../../../lib/stripe";
 
 // Called by the pricing page the moment it loads with ?session_id=... —
 // see lib/stripe.ts's retrieveCheckoutSession for why this exists instead
@@ -26,10 +26,23 @@ export async function POST(request: Request) {
       return Response.json({ error: "This checkout session belongs to a different account." }, { status: 403 });
     }
 
-    const db = getDb();
-    await db.update(users).set({ isPassHolder: 1 }).where(eq(users.id, me.id));
+    // Grant until a DATE, not forever. Setting isPassHolder alone made a
+    // 2-week pass permanent and let a cancelled subscription keep working.
+    const plan = result.plan ?? "two_week";
+    const expiresAt = passExpiryFor(plan, result.periodEnd);
 
-    return Response.json({ passHolder: true });
+    const db = getDb();
+    await db
+      .update(users)
+      .set({
+        isPassHolder: 1,
+        passExpiresAt: expiresAt,
+        stripeCustomerId: result.customerId,
+        stripeSubscriptionId: result.subscriptionId,
+      })
+      .where(eq(users.id, me.id));
+
+    return Response.json({ passHolder: true, expiresAt });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unexpected error";
     return Response.json({ error: message }, { status: 500 });

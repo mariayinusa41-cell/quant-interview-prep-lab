@@ -8,6 +8,9 @@
 // handlers, which run on the Worker, not the browser.
 
 import { eq } from "drizzle-orm";
+import { isPassActive } from "./passWindow";
+
+export { isPassActive } from "./passWindow";
 import { getDb } from "../db";
 import { sessions, users } from "../db/schema";
 
@@ -214,7 +217,11 @@ export async function getCurrentUser(request: Request): Promise<CurrentUser | nu
         displayName: user.displayName,
         emailVerified: user.emailVerifiedAt !== null,
         welcomeBonusClaimed: user.welcomeBonusClaimedAt !== null,
-        isPassHolder: user.isPassHolder === 1,
+        // Checked against the expiry, not just the flag. A stored flag with
+        // no date comparison is how a 2-week pass became permanent: the
+        // webhook may not have fired yet, or may have failed, and access
+        // should end on time regardless of whether Stripe reached us.
+        isPassHolder: isPassActive(user.isPassHolder, user.passExpiresAt),
         avatar: user.avatar,
         tracks: parseTracks(user.tracksJson),
         major: user.major,
