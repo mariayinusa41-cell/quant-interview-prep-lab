@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import GameLeaderboard from "../../scores/GameLeaderboard";
 import { fermiQuestions, type FermiQuestion } from "./fermiQuestions";
 import { getProceduralFermiQuestions } from "./proceduralFermi";
 import { curatedTechnicalQuestions, scoreTechnicalInterval, type TechnicalQuestion } from "./technicalQuestions";
@@ -590,6 +591,17 @@ export default function FermiGame() {
             <span className="fermi-score-of">/ {maxPts}</span>
           </div>
           <p className="fermi-pct">{pct}% accuracy</p>
+
+          {/* Separate boards per mode. The two score on different scales
+              (4 points per question in classic, 3 in technical) and are
+              gated separately, so a single mixed board would rank two
+              different games against each other. */}
+          <GameLeaderboard
+            gameId={isTech ? "drills-fermi-technical" : "drills-fermi-classic"}
+            score={score}
+            accuracy={pct}
+            title={isTech ? "Technical Estimation leaderboard" : "Fermi Estimation leaderboard"}
+          />
 
           <div className="fermi-review">
             {list.map((a, i) => (

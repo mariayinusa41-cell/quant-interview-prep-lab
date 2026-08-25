@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import GameLeaderboard from "../../scores/GameLeaderboard";
 import {
   equityCurve,
   expectedMaxSharpe,
@@ -275,6 +276,11 @@ export default function BacktestGame() {
             outcome={score >= 600 ? "win" : "loss"}
             title={score >= 600 ? "CAPITAL PRESERVED" : "SESSION OVER"}
             sub={`${score} points across ${LEVELS.length} levels`}
+          />
+          <GameLeaderboard
+            gameId="statistics-twenty-backtests"
+            score={score}
+            title="Twenty Backtests leaderboard"
           />
           <p className="mm-teach-note" style={{ marginTop: 12 }}>
             The habit worth keeping: before believing any backtest, ask how many were tried to find it, and what the best

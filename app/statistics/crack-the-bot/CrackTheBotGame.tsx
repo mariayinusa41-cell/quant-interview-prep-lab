@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import GameLeaderboard from "../../scores/GameLeaderboard";
 import {
   PREDICTORS,
   RULE_LABEL,
@@ -452,6 +453,11 @@ export default function CrackTheBotGame() {
             outcome={totalScore >= 300 ? "win" : "loss"}
             title={totalScore >= 300 ? "DESK CLEARED" : "SESSION OVER"}
             sub={`${totalScore} points across ${CASES.length} cases`}
+          />
+          <GameLeaderboard
+            gameId="statistics-crack-the-bot"
+            score={totalScore}
+            title="Crack the Bot leaderboard"
           />
           <button
             type="button"

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import GameLeaderboard from "../../scores/GameLeaderboard";
 import {
   ALL_DISTS,
   buildSpec,
@@ -382,6 +383,11 @@ export default function DistributionsGame() {
             outcome={totalScore >= 400 ? "win" : "loss"}
             title={totalScore >= 400 ? "SHAPES READ" : "SESSION OVER"}
             sub={`${totalScore} points`}
+          />
+          <GameLeaderboard
+            gameId="statistics-read-the-shape"
+            score={totalScore}
+            title="Read the Shape leaderboard"
           />
           <button
             type="button"
