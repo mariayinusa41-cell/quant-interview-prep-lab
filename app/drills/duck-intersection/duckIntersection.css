@@ -48,13 +48,32 @@
 }
 
 /* Prompt Banner */
+/* Fixed height, not content height.
+
+   The two prompts are very different lengths ("Does duck direction MATCH
+   road arrows?" versus "Is the result in [NW] EVEN?"), so a content-sized
+   banner grew a line taller for the motion prompt. The panel visibly
+   resized between trials, which is both distracting and a layout tell.
+   The height is now fixed with the text centred inside, so wrapping
+   changes nothing.
+
+   The per-type COLOURS below are deliberate and stay: this is a cued
+   task-switching paradigm (the HUD names the task and the run reports a
+   switch cost), so the player is meant to know which task they are on.
+   The colour reinforces that cue — the thing being measured is how fast
+   you switch, not whether you noticed. */
 .duck-prompt-banner {
   border: 3px solid var(--pixel-border);
   border-radius: 6px;
-  padding: 12px;
+  padding: 10px 12px;
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   font-family: var(--font-pixel);
   font-size: 0.76rem;
+  line-height: 1.45;
   margin-bottom: 12px;
   background: rgba(var(--void-rgb), 0.4);
 }
@@ -259,10 +278,19 @@
 }
 
 /* 4 Corner Math Pods */
+/* Sized as a share of the stage, not fixed pixels.
+   
+   These were 110x90px inside a stage that is `width: 100%` with a 1/1
+   aspect ratio. On a wide screen that left a comfortable road channel
+   between the left and right cards, but the stage shrinks with the
+   viewport while the cards did not — so on a phone the four cards crowded
+   the crossing and looked like they were sitting on the road. Percentages
+   keep the same proportions at every width. */
 .duck-corner {
   position: absolute;
-  width: 110px;
-  height: 90px;
+  width: 32%;
+  height: 26%;
+  min-width: 0;
   background: rgba(15, 26, 43, 0.88);
   border: 3px solid var(--pixel-border);
   border-radius: 8px;
@@ -274,10 +302,10 @@
   transition: all 0.15s ease-in-out;
 }
 
-.duck-corner.nw { top: 12px; left: 12px; }
-.duck-corner.ne { top: 12px; right: 12px; }
-.duck-corner.sw { bottom: 12px; left: 12px; }
-.duck-corner.se { bottom: 12px; right: 12px; }
+.duck-corner.nw { top: 3.5%; left: 3.5%; }
+.duck-corner.ne { top: 3.5%; right: 3.5%; }
+.duck-corner.sw { bottom: 3.5%; left: 3.5%; }
+.duck-corner.se { bottom: 3.5%; right: 3.5%; }
 
 .duck-corner.active-corner {
   border-color: var(--pixel-primary);
@@ -288,7 +316,7 @@
 
 .corner-tag {
   font-family: var(--font-pixel);
-  font-size: 0.55rem;
+  font-size: clamp(0.42rem, 1.5vw, 0.55rem);
   color: var(--ink-3);
 }
 
@@ -298,10 +326,15 @@
 
 .corner-math {
   font-family: var(--font-pixel);
-  font-size: 0.95rem;
+  /* Scales with the stage and never wraps: "25 - 18" was breaking across
+     two lines mid-expression, which reads as a broken card and pushed the
+     content past the card's height. */
+  font-size: clamp(0.62rem, 2.6vw, 0.95rem);
   color: var(--pixel-white);
   text-align: center;
   margin: auto 0;
+  white-space: nowrap;
+  line-height: 1.2;
 }
 
 .duck-hud-icon {
