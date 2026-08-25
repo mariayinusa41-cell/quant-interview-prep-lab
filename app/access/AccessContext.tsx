@@ -39,6 +39,39 @@ type AccessContextValue = {
 
 const MODE_KEY = "quant_access_mode";
 const TOKENS_KEY = "quant_access_tokens";
+// Marks that the legacy 100-token starting wallet has been cleared for this
+// browser. Setting STARTING_TOKENS to 0 only ever affected a *fresh* wallet:
+// anyone who had already loaded the site kept the 100 that was written to
+// localStorage before the change, which is why guests were still showing a
+// full wallet long after the constant was fixed.
+const WALLET_MIGRATION_KEY = "quant_access_wallet_migrated";
+
+/**
+ * Whether this browser's saved balance is the old free-for-everyone grant
+ * rather than tokens the player actually came by.
+ *
+ * A guest is the safe, provable case: guests cannot claim the welcome gift
+ * (it needs a verified account), cannot play the daily challenge, and cannot
+ * buy tokens — so any balance they hold can only have come from the old
+ * STARTING_TOKENS default. Account holders are left alone, because their
+ * 100 may well be a legitimately claimed welcome gift and the two are
+ * indistinguishable from the client side.
+ */
+function isLegacyGuestWallet(): boolean {
+  try {
+    if (window.localStorage.getItem(WALLET_MIGRATION_KEY) === "1") return false;
+    const raw = window.localStorage.getItem(PROFILE_KEY_FOR_WALLET);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw) as { account?: unknown };
+    return parsed.account !== "account";
+  } catch {
+    return false;
+  }
+}
+
+// Read directly rather than importing from ProfileContext: this runs inside
+// AccessProvider, which sits *above* ProfileProvider in the tree.
+const PROFILE_KEY_FOR_WALLET = "quant_profile_v1";
 const SESSIONS_KEY = "quant_game_sessions";
 // How many times each lifetime-capped game has had a brand-new paid session
 // started, ever — separate from SESSIONS_KEY, which only tracks rounds left
@@ -230,6 +263,17 @@ export function AccessProvider({ children }: { children: React.ReactNode }) {
     const savedTokens = Number(savedTokensRaw);
     if (savedTokensRaw !== null && Number.isFinite(savedTokens) && savedTokens >= 0) {
       currentTokens = savedTokens;
+    }
+
+    // One-time cleanup of the pre-fix wallet. Runs once per browser, and only
+    // for guests — see isLegacyGuestWallet.
+    if (isLegacyGuestWallet()) {
+      currentTokens = STARTING_TOKENS;
+    }
+    try {
+      window.localStorage.setItem(WALLET_MIGRATION_KEY, "1");
+    } catch {
+      /* storage unavailable — the wallet stays as-is, which is the safe way to fail */
     }
 
     setTokens(currentTokens);
