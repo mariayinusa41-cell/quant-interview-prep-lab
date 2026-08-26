@@ -1,6 +1,7 @@
 import { getDb } from "../../db";
 import { sql } from "drizzle-orm";
 import { STATIC_ROUTES } from "./routes";
+import { FIRMS, JOB_CATEGORIES } from "../../lib/jobsDirectory";
 
 // Sitemap.
 //
@@ -30,6 +31,18 @@ export async function GET() {
   for (const route of STATIC_ROUTES) {
     parts.push(urlEntry(route.path, route.changefreq, route.priority, today));
   }
+
+  // The programmatic job pages. Listed explicitly because they are dynamic
+  // routes and cannot be discovered by walking page.tsx files, and they are
+  // the highest-value pages here for search: real openings at named firms,
+  // updated daily, which is content nobody else has in this combination.
+  for (const firm of FIRMS) {
+    parts.push(urlEntry(`/jobs/${firm.slug}`, "daily", "0.9", today));
+  }
+  for (const cat of JOB_CATEGORIES) {
+    parts.push(urlEntry(`/jobs/roles/${cat.slug}`, "daily", "0.9", today));
+  }
+  parts.push(urlEntry("/jobs", "daily", "0.9", today));
 
   // The jobs board is the one part of the site that genuinely changes daily,
   // so it gets its own entry with a real lastmod rather than sharing the
